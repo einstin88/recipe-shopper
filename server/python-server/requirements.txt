@@ -1,0 +1,6 @@
+Django
+selenium
+beautifulsoup4
+mysqlclient
+lxml
+chromedriver-py
