@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from os import getenv
 import os
 from pathlib import Path
 
@@ -22,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = getenv('SERVER_KEY')
+SECRET_KEY = os.environ['SERVER_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['dreary-rest-production.up.railway.app', '.localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*', '.localhost', '127.0.0.1']
 
 
 # Application definition
@@ -82,12 +81,12 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'user': getenv('MYSQLUSER'),
-            'password': getenv('MYSQLPASSWORD'),
-            'host': getenv('MYSQLHOST'),
-            'port': int(getenv('MYSQLPORT')),
+            'user': os.environ['MYSQLUSER'],
+            'password': os.environ['MYSQLPASSWORD'],
+            'host': os.environ['MYSQLHOST'],
+            'port': int(os.environ['MYSQLPORT']),
             # TODO Create separate DB on the cloud
-            'database': getenv('MYSQL_DB')
+            'database': os.environ['MYSQL_DB']
         }
     }
 }
