@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from os import getenv
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +27,7 @@ SECRET_KEY = getenv('SERVER_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dreary-rest-production.up.railway.app', '.localhost', '127.0.0.1']
 
 
 # Application definition
@@ -80,11 +81,14 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
-        'user': getenv('MYSQLUSER'),
-        'password': getenv('MYSQLPASSWORD'),
-        'host': getenv('MYSQL_URL'),
-        'port': getenv('MYSQLPORT'),
-        'database': getenv('MYSQL_DATABASE') # TODO Create separate DB on the cloud
+        'OPTIONS': {
+            'user': getenv('MYSQLUSER'),
+            'password': getenv('MYSQLPASSWORD'),
+            'host': getenv('MYSQLHOST'),
+            'port': int(getenv('MYSQLPORT')),
+            # TODO Create separate DB on the cloud
+            'database': getenv('MYSQL_DB')
+        }
     }
 }
 
@@ -124,6 +128,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
+                    os.path.join(BASE_DIR, "product_scrapper", "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

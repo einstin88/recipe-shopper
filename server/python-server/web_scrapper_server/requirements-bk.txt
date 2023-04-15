@@ -4,3 +4,5 @@ beautifulsoup4
 mysqlclient
 lxml
 chromedriver-py
+jsonpickle
+gunicorn
