@@ -1,8 +1,9 @@
 Django
 selenium
 beautifulsoup4
-mysqlclient
+# mysqlclient
 lxml
 chromedriver-py
 jsonpickle
 gunicorn
+mysql-connector-python

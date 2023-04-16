@@ -4,7 +4,7 @@
         "builder": "NIXPACKS"
     },
     "deploy": {
-        "startCommand": "python manage.py migrate && gunicorn web_scrapper_server.wsgi",
+        "startCommand": "python manage.py migrate && gunicorn -w 2 --log-level debug web_scrapper_server.wsgi",
         "restartPolicyType": "ON_FAILURE",
         "restartPolicyMaxRetries": 10
     }

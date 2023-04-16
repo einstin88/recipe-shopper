@@ -79,15 +79,21 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'user': os.environ['MYSQLUSER'],
-            'password': os.environ['MYSQLPASSWORD'],
-            'host': os.environ['MYSQLHOST'],
-            'port': int(os.environ['MYSQLPORT']),
-            # TODO Create separate DB on the cloud
-            'database': os.environ['MYSQL_DB']
-        }
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'OPTIONS': {
+        #     'user': os.environ['MYSQLUSER'],
+        #     'password': os.environ['MYSQLPASSWORD'],
+        #     'host': os.environ['MYSQLHOST'],
+        #     'port': int(os.environ['MYSQLPORT']),
+        #     # TODO Create separate DB on the cloud
+        #     'database': os.environ['MYSQL_DB']
+        # }
+        'ENGINE': 'mysql.connector.django',
+        'HOST': os.environ['MYSQLHOST'],
+        'PORT': int(os.environ['MYSQLPORT']),
+        'USER': os.environ['MYSQLUSER'],
+        'PASSWORD': os.environ['MYSQLPASSWORD'],
+        'NAME': os.environ['MYSQL_DB']
     }
 }
 
@@ -127,8 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
-                    os.path.join(BASE_DIR, "product_scrapper", "static")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
