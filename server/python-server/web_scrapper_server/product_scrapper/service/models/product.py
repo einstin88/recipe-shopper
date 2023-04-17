@@ -5,7 +5,7 @@ class Product:
     def __init__(self,
                  name: str,
                  url: str,
-                 pack_size: int,
+                 pack_size: str,
                  #  pack_size_unit: str,
                  price: float,
                  img: str) -> None:

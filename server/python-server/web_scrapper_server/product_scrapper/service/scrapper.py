@@ -1,4 +1,4 @@
-from asyncio import sleep
+import time
 import json
 
 from bs4 import BeautifulSoup
@@ -16,7 +16,7 @@ from .utils import price_in_float
 
 
 WEBPAGE_LOAD_TIME_LIMIT = 5
-WEBSITE_SCROLL_LIMIT = 5
+WEBSITE_SCROLL_LIMIT = 2
 
 
 class Scrapper:
@@ -28,13 +28,14 @@ class Scrapper:
         self.url = url
         self.products_html = ''
 
-    async def fetch_html(self) -> None:
+    def fetch_html(self) -> None:
         '''
         Use selenium to load and scroll the page before saving the loaded html
         '''
         # Set options of selenium webdriver
         options = Options()
         options.add_argument('--headless')
+        # options.add_argument('--start-maximized')
         # options.add_argument('--incognito')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
@@ -54,7 +55,7 @@ class Scrapper:
         footer = browser.find_element(By.CLASS_NAME, SS_PAGE_FOOTER)
         for _ in range(WEBSITE_SCROLL_LIMIT):
             ActionChains(browser).scroll_to_element(footer).perform()
-            await sleep(WEBPAGE_LOAD_TIME_LIMIT + 2)
+            time.sleep(WEBPAGE_LOAD_TIME_LIMIT + 2)
 
         # Saves the raw html in memory for further processing
         self.products_html = browser.page_source
