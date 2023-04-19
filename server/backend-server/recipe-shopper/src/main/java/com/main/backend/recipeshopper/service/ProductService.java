@@ -5,12 +5,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -28,9 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class ShopperService {
-    private static final RestTemplate client = new RestTemplate();
-
+public class ProductService {
     @Value("${SCRAPPER_URL}")
     private String DJANGO_URL;
 
@@ -39,13 +41,8 @@ public class ShopperService {
 
     @Transactional(rollbackFor = { ProductUpsertException.class })
     public List<Product> scrapeFromUrl(String category) {
-
         // Checks if category is valid
-        if (!PRODUCT_CATEGORIES.contains(category)) {
-            String errMsg = "'%s' is not valid category".formatted(category);
-            log.error("--- " + errMsg);
-            throw new IllegalRequestException(errMsg);
-        }
+        validateCategory(category);
 
         // Build URL for API call to Django
         URI url = UriComponentsBuilder
@@ -55,15 +52,56 @@ public class ShopperService {
                 .build().toUri();
         log.info(">>> API URL to call: %s".formatted(url.toString()));
 
-        // Build request
+        // Build request entity
         RequestEntity<Void> request = RequestEntity
                 .get(url)
                 .accept(MediaType.APPLICATION_JSON)
                 .build();
 
         // Call API
+        return handleDjangoCallback(category, request);
+    }
+
+    @Transactional(rollbackFor = { ProductUpsertException.class })
+    public List<Product> scrapeFromHtml(String category, Resource file) {
+        // Validate given category
+        validateCategory(category);
+
+        // Build URL for API call to Django
+        URI url = UriComponentsBuilder
+                .fromHttpUrl(DJANGO_URL)
+                .pathSegment(DJ_PARSE_HTML)
+                .build().toUri();
+
+        // Build body as form-data
+        MultipartBodyBuilder body = new MultipartBodyBuilder();
+        body.part("category", category);
+        body.part("file", file);
+
+        // Build request entity (content type is set implicitly)
+        RequestEntity<MultiValueMap<String, HttpEntity<?>>> request = RequestEntity
+                .post(url)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(body.build());
+
+        return handleDjangoCallback(category, request);
+    }
+
+    private void validateCategory(String category) {
+        if (!PRODUCT_CATEGORIES.contains(category)) {
+            String errMsg = "'%s' is not valid category".formatted(category);
+            log.error("--- " + errMsg);
+            throw new IllegalRequestException(errMsg);
+        }
+    }
+
+    private List<Product> handleDjangoCallback(
+            String category, RequestEntity<?> request) {
+        // Make API call and handle any errors
+        ResponseEntity<String> response;
+        RestTemplate client = new RestTemplate();
         try {
-            ResponseEntity<String> response = client.exchange(request, String.class);
+            response = client.exchange(request, String.class);
 
             // Check response status code and content
             if (response.getStatusCode() != HttpStatus.OK)
@@ -73,27 +111,29 @@ public class ShopperService {
                 throw new DjangoBadResponseException(
                         "Missing response body fron Django backend...");
 
+            // Else, log the response and let the logic flow through
             log.debug(">>> Response: \n" + response.getBody());
 
-            // Parse response into products
-            List<Product> products = Utils.parseForProducts(response.getBody())
-                    .peek(product -> {
-                        if (!repo.upsertProduct(product, category)) {
-                            throw new ProductUpsertException(
-                                    "Failed to upsert category-%s product: %s".formatted(
-                                            category, product));
-                        }
-                    })
-                    .toList();
-
-            log.debug(String.valueOf(products.size()));
-
-            return products;
-
         } catch (RestClientException e) {
+            // Handle unexpected errors from API call
             log.error("--- Error response from Django API -> " + e.getMessage());
             throw new DjangoBadResponseException(
                     "Request URL is invalid or Django backend is down...");
         }
+
+        // Parse response into products
+        List<Product> products = Utils.parseForProducts(response.getBody())
+                .peek(product -> {
+                    if (!repo.upsertProduct(product, category)) {
+                        throw new ProductUpsertException(
+                                "Failed to upsert category-%s product: %s".formatted(
+                                        category, product));
+                    }
+                })
+                .toList();
+
+        log.debug(String.valueOf(products.size()));
+
+        return products;
     }
 }

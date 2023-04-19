@@ -10,6 +10,9 @@ import jakarta.json.Json;
 import jakarta.json.JsonValue;
 
 public class Utils {
+    private static final String PREFIX_PRODUCT = "SS_";
+    private static final String PREFIX_RECIPE = "RP_";
+
     public static String createErrorResponseMsg(String errMsg) {
         return Json.createObjectBuilder()
                 .add("error", errMsg)
@@ -24,7 +27,7 @@ public class Utils {
                 .map(JsonValue::asJsonObject)
                 .map(result -> {
                     return new Product(
-                            "SS_" + UUID.randomUUID().toString().substring(0, 8),
+                            PREFIX_PRODUCT + UUID.randomUUID().toString().substring(0, 8),
                             result.getString("name"),
                             result.getString("url"),
                             result.getString("pack_size"),

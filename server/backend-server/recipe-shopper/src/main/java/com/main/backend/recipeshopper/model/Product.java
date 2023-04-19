@@ -1,7 +1,7 @@
 package com.main.backend.recipeshopper.model;
 
 public record Product(
-    String id,
+    String productId,
     String name,
     String url,
     String pack_size,

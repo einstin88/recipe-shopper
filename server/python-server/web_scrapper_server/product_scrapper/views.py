@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .service.scrapper import Scrapper
 from .service.constants import SS_URLS
+from .utils import create_json_response
 
 
 @require_GET
@@ -36,7 +37,7 @@ def parse_from_url(request: HttpRequest):
     # Validate category
     if category not in SS_URLS.keys():
         return JsonResponse({"error": f"'{category}' is not a valid category"},
-                            status=HTTPStatus.BAD_REQUEST)
+                            status=HTTPStatus.NOT_FOUND)
 
     # Parse for products
     url = SS_URLS[category]
@@ -46,10 +47,7 @@ def parse_from_url(request: HttpRequest):
     products = scrapper.parse_for_products()
     print(f'>>> Found {len(products)} products.')
 
-    return JsonResponse({
-        "category": category,
-        "resultSize": len(products),
-        "results": products})
+    return JsonResponse(create_json_response(category, products))
 
 
 @require_POST
@@ -59,8 +57,10 @@ def parse_from_html(request: HttpRequest):
     Endpoint 2: returns a json array of products based on given html
     '''
     print('>>> Getting html source from file...')
+    
+    category = request.POST['category']
 
-    file: UploadedFile = request.FILES['file']
+    file = request.FILES['file']
     print('>>> File size: ' + str(file.size))
     print('>>> File name: ' + file.name)
 
@@ -70,10 +70,7 @@ def parse_from_html(request: HttpRequest):
     # Parse for products
     products = scrapper.parse_for_products()
 
-    return JsonResponse({
-        "resultSize": len(products),
-        "results": products
-    })
+    return JsonResponse(create_json_response(category, products))
 
 
 def custom_404_response(request: HttpRequest, exception):

@@ -32,4 +32,26 @@ public class Queries {
                 AND category = ?
                     """;
 
+    public static final String SQL_FIND_PRODUCTS = """
+            SELECT *
+            FROM products
+            LIMIT ? OFFSET ?
+            WHERE category = ?
+                """;
+
+    public static final String SQL_FIND_RECIPES = """
+            SELECT *
+            FROM recipes
+            LIMIT ? OFFSET ?
+                """;
+
+    public static final String SQL_INSERT_RECIPE = """
+            INSERT INTO recipes (
+                    recipe_id,
+                    recipe_name,
+                    recipe_creator,
+                    timeStamp
+                )
+            VALUES (?, ?, ?, ?)
+                    """;
 }

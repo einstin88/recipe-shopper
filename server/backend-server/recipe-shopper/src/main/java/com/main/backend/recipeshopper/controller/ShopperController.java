@@ -3,6 +3,7 @@ package com.main.backend.recipeshopper.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.main.backend.recipeshopper.model.Product;
-import com.main.backend.recipeshopper.service.ShopperService;
+import com.main.backend.recipeshopper.model.Recipe;
+import com.main.backend.recipeshopper.service.ProductService;
+import com.main.backend.recipeshopper.service.RecipeService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,12 +27,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ShopperController {
     @Autowired
-    private ShopperService svc;
+    private ProductService productSvc;
+
+    @Autowired
+    private RecipeService recipeSvc;
 
     /**
      * Test Endpoint 0: test point for server health check
      * 
-     * @return msg from server
+     * @return message from server if it's running
      */
     @GetMapping("/health")
     public ResponseEntity<String> healthCheck() {
@@ -35,9 +43,12 @@ public class ShopperController {
     }
 
     /**
-     * Test Endpoint 1: a test point for making API calls to Django web scrapper
+     * Test Endpoint 1: a test point for making API call to Django web scrapper
+     * - errors from api call or product insertion to DB will be handled by
+     * ErrorController
      * 
-     * @Return list of Products
+     * @param category (in String) is required and is mapped to a URL for scraping
+     * @Return List of Products
      */
     @GetMapping(path = "/parse-url")
     public ResponseEntity<List<Product>> getProductList(
@@ -46,40 +57,55 @@ public class ShopperController {
         log.info(">>> Test parsing products for category -> %s".formatted(category));
 
         return ResponseEntity
-                .ok(svc.scrapeFromUrl(category.strip().toLowerCase()));
+                .ok(productSvc.scrapeFromUrl(category.strip().toLowerCase()));
     }
 
     /**
-     * Endpoint 1: a test point for passing html to Django web scrapper for parsing
+     * Endpoint 1: receive html to pass to Django web scrapper for parsing
      * 
-     * @return
+     * @return List of Products
      */
-    @PostMapping(path = "/1")
-    public ResponseEntity<Product[]> parseHtml() {
-        return null;
+    @PostMapping(path = "/parse-html", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<Product>> parseHtml(
+            @RequestParam String category,
+            @RequestPart MultipartFile file) {
+
+        log.info(">>> Request to parse html-%s in category %s".formatted(
+                file.getOriginalFilename(), category));
+
+        return ResponseEntity
+                .ok(productSvc.scrapeFromHtml(category, file.getResource()));
     }
 
-    @GetMapping(path = "/2")
-    public ResponseEntity<String> getRecipeList() {
-        return null;
+    @GetMapping(path = "/recipes")
+    public ResponseEntity<List<Recipe>> getRecipeList(
+            @RequestParam(defaultValue = "10") Integer limit,
+            @RequestParam(defaultValue = "0") Integer offset) {
+
+        log.info(">>> Request for recipe list...");
+
+        return ResponseEntity
+                .ok(recipeSvc.getRecipeList(limit, offset));
     }
 
-    @GetMapping(path = "/3")
-    public ResponseEntity<String> getRecipeIngredientList() {
-        return null;
+    @PostMapping(path = "/recipe/new")
+    public ResponseEntity<Void> postNewRecipe(
+            Recipe recipe) {
+
+        log.info(">>> Posting new recipe: " + recipe);
+        recipeSvc.insertNewRecipe(recipe);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 
-    @PostMapping(path = "/4")
-    public ResponseEntity<Void> postNewRecipe() {
-        return null;
-    }
-
-    @PutMapping(path = "/5")
+    @PutMapping(path = "/recipe/update")
     public ResponseEntity<Void> updateRecipe() {
         return null;
     }
 
-    @PostMapping("/6")
+    @PostMapping("/checkout")
     public ResponseEntity<Void> checkoutCart() {
         return null;
     }

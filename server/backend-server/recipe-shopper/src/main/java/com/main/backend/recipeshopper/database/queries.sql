@@ -25,3 +25,23 @@ FROM products
 WHERE name = ?
     AND pack_size = ?
     AND category = ?;
+
+-- Query for products
+SELECT *
+FROM products
+LIMIT ? OFFSET ?
+WHERE category = ?;
+
+-- Query for recipes
+SELECT *
+FROM recipes
+LIMIT ? OFFSET ?;
+
+-- Insert new recipe
+INSERT INTO recipes (
+        recipe_id,
+        recipe_name,
+        recipe_creator,
+        timeStamp
+    )
+VALUES (?, ?, ?, ?);

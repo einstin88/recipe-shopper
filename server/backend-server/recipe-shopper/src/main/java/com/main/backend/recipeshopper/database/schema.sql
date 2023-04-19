@@ -1,10 +1,8 @@
 SHOW DATABASES;
 
 -- DB creation
-DROP DATABASE IF EXISTS recipe_shopper;
-
-CREATE DATABASE recipe_shopper;
-
+-- DROP DATABASE IF EXISTS recipe_shopper;
+-- CREATE DATABASE recipe_shopper;
 USE recipe_shopper;
 
 -- Table: Categories
@@ -33,7 +31,29 @@ CREATE TABLE products(
     img VARCHAR(400),
     category VARCHAR(20) NOT NULL,
     PRIMARY KEY (product_id),
-    CONSTRAINT FOREIGN KEY (category) REFERENCES categories(name)
+    CONSTRAINT fk_category FOREIGN KEY (category) REFERENCES categories(name)
 );
 
--- Table:
+-- Table: Recipes
+DROP TABLE IF EXISTS recipes;
+
+CREATE TABLE recipes(
+    id INT UNSIGNED AUTO_INCREMENT,
+    recipe_id VARCHAR(11) NOT NULL,
+    recipe_name VARCHAR(30) NOT NULL,
+    recipe_creator VARCHAR(40) NULL,
+    timeStamp TIMESTAMP NOT NULL,
+    PRIMARY KEY (id)
+);
+
+-- Intermediate Table: recipe x ingredients 
+DROP TABLE IF EXISTS recipe_ingredients;
+
+CREATE TABLE recipe_ingredients(
+    id INT UNSIGNED AUTO_INCREMENT,
+    recipe_id VARCHAR(11) NOT NULL,
+    product_id VARCHAR(11) NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_recipe FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
+    CONSTRAINT fk_ingredient FOREIGN KEY (product_id) REFERENCES products(product_id)
+);

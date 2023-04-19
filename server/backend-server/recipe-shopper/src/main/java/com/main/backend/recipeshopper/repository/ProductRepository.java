@@ -10,6 +10,7 @@ import com.main.backend.recipeshopper.model.Product;
 
 import static com.main.backend.recipeshopper.database.Queries.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,13 +19,14 @@ public class ProductRepository {
     @Autowired
     private JdbcTemplate template;
 
+    // TODO: testing pending
     public Boolean upsertProduct(Product product, String category) {
         int result;
         if (findProductByName(
                 product.name(), product.pack_size(), category).isEmpty()) {
 
             result = template.update(SQL_INSERT_PRODUCT,
-                    product.id(),
+                    product.productId(),
                     product.name(),
                     product.url(),
                     product.pack_size(),
@@ -60,5 +62,15 @@ public class ProductRepository {
         } catch (DataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    // TODO: testing pending
+    public List<Product> getProductList(
+            String category, Integer limit, Integer offset) {
+
+        return template.query(
+                SQL_FIND_PRODUCTS,
+                DataClassRowMapper.newInstance(Product.class),
+                limit, offset, category);
     }
 }
