@@ -6,14 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -39,6 +38,17 @@ public class ProductService {
     @Autowired
     private ProductRepository repo;
 
+    /**
+     * A function to be called by the controller OR at scheduled interval to scrape
+     * for products from a given category via an external Django-served backend.
+     * Results are saved to the DB.
+     * 
+     * @param category - the category of products to scrape from the site
+     * @return List of product scraped from the URL of the given category
+     * @throws IllegalRequestException
+     * @throws DjangoBadResponseException
+     * @throws ProductUpsertException
+     */
     @Transactional(rollbackFor = { ProductUpsertException.class })
     public List<Product> scrapeFromUrl(String category) {
         // Checks if category is valid
@@ -62,6 +72,17 @@ public class ProductService {
         return handleDjangoCallback(category, request);
     }
 
+    /**
+     * A function called by the controller to scrape for products from the given
+     * html file via an external Django backend. Results are saved on DB.
+     * 
+     * @param category - the category of products that the uploaded html represents
+     * @param file     - the manually saved html file to parse for products
+     * @return List of product scraped from the URL of the given category
+     * @throws IllegalRequestException
+     * @throws DjangoBadResponseException
+     * @throws ProductUpsertException
+     */
     @Transactional(rollbackFor = { ProductUpsertException.class })
     public List<Product> scrapeFromHtml(String category, Resource file) {
         // Validate given category
@@ -74,19 +95,28 @@ public class ProductService {
                 .build().toUri();
 
         // Build body as form-data
-        MultipartBodyBuilder body = new MultipartBodyBuilder();
-        body.part("category", category);
-        body.part("file", file);
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("category", category);
+        body.add("file", file);
 
         // Build request entity (content type is set implicitly)
-        RequestEntity<MultiValueMap<String, HttpEntity<?>>> request = RequestEntity
+        RequestEntity<MultiValueMap<String, Object>> request = RequestEntity
                 .post(url)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(body.build());
+                .body(body);
 
         return handleDjangoCallback(category, request);
     }
 
+    /**
+     * Internal use.
+     * An abstracted function to check if the supplied category is one of the
+     * accepted categories.
+     * 
+     * @param category - the category received by the controller that requires
+     *                 checking
+     * @throws IllegalRequestException
+     */
     private void validateCategory(String category) {
         if (!PRODUCT_CATEGORIES.contains(category)) {
             String errMsg = "'%s' is not valid category".formatted(category);
@@ -95,6 +125,19 @@ public class ProductService {
         }
     }
 
+    /**
+     * Internal use.
+     * An abstracted function to handle API call to Django scrapper server and
+     * marshalling the Json response to a List of Product to be inserted into the
+     * DB.
+     * 
+     * @param category - the category associated with the products to be scraped
+     * @param request  - a request entity that will be used for the API call
+     * @return List of Product
+     * @throws DjangoBadResponseException represents any unexpected response from
+     *                                    Django backend
+     * @throws ProductUpsertException
+     */
     private List<Product> handleDjangoCallback(
             String category, RequestEntity<?> request) {
         // Make API call and handle any errors
@@ -135,5 +178,23 @@ public class ProductService {
         log.debug(String.valueOf(products.size()));
 
         return products;
+    }
+
+    /**
+     * Attempt to retrieve the products within a given category
+     * 
+     * @param category - the category to retrieve products from
+     * @param limit    - max number of results to be returned as response
+     * @param offset   - for pagination
+     * @return List of product in the given category
+     * 
+     * @throws IllegalRequestException
+     */
+    public List<Product> getProductListByCategory(
+            String category, Integer limit, Integer offset) {
+
+        validateCategory(category);
+
+        return repo.findProductsByCategory(category, limit, offset);
     }
 }

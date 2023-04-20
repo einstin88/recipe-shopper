@@ -24,12 +24,13 @@ DROP TABLE IF EXISTS products;
 
 CREATE TABLE products(
     product_id VARCHAR(11),
-    name VARCHAR(40) NOT NULL,
+    name VARCHAR(64) NOT NULL,
     url VARCHAR(200),
     pack_size VARCHAR(20),
     price DECIMAL(6, 2) NOT NULL,
     img VARCHAR(400),
     category VARCHAR(20) NOT NULL,
+    timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (product_id),
     CONSTRAINT fk_category FOREIGN KEY (category) REFERENCES categories(name)
 );
@@ -40,7 +41,7 @@ DROP TABLE IF EXISTS recipes;
 CREATE TABLE recipes(
     id INT UNSIGNED AUTO_INCREMENT,
     recipe_id VARCHAR(11) NOT NULL,
-    recipe_name VARCHAR(30) NOT NULL,
+    recipe_name VARCHAR(40) NOT NULL,
     recipe_creator VARCHAR(40) NULL,
     timeStamp TIMESTAMP NOT NULL,
     PRIMARY KEY (id)

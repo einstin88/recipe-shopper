@@ -69,6 +69,7 @@ def parse_from_html(request: HttpRequest):
 
     # Parse for products
     products = scrapper.parse_for_products()
+    print(f'>>> Found {len(products)} products.')
 
     return JsonResponse(create_json_response(category, products))
 

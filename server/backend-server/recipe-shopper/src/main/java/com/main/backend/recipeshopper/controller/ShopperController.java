@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +52,7 @@ public class ShopperController {
      * @Return List of Products
      */
     @GetMapping(path = "/parse-url")
-    public ResponseEntity<List<Product>> getProductList(
+    public ResponseEntity<List<Product>> parseUrl(
             @RequestParam(required = true) String category) {
 
         log.info(">>> Test parsing products for category -> %s".formatted(category));
@@ -67,14 +68,29 @@ public class ShopperController {
      */
     @PostMapping(path = "/parse-html", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<Product>> parseHtml(
-            @RequestParam String category,
-            @RequestPart MultipartFile file) {
+            @RequestParam(required = true) String category,
+            @RequestPart(required = true) MultipartFile file) {
 
-        log.info(">>> Request to parse html-%s in category %s".formatted(
+        log.info(">>> Request to parse '%s' in category '%s'".formatted(
                 file.getOriginalFilename(), category));
 
+        // return null;
         return ResponseEntity
                 .ok(productSvc.scrapeFromHtml(category, file.getResource()));
+    }
+
+    // Tested
+    @GetMapping(path = "/products/{category}")
+    public ResponseEntity<List<Product>> getProductList(
+            @PathVariable(required = true) String category,
+            @RequestParam(defaultValue = "20") Integer limit,
+            @RequestParam(defaultValue = "0") Integer offset) {
+
+        log.info(">>> Request for products in category '%s' with limit-%d, offset-%d"
+                .formatted(category, limit, offset));
+
+        return ResponseEntity
+                .ok(productSvc.getProductListByCategory(category, limit, offset));
     }
 
     @GetMapping(path = "/recipes")

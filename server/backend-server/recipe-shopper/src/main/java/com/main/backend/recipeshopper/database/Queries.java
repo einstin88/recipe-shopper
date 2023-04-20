@@ -15,7 +15,7 @@ public class Queries {
                 """;
 
     public static final String SQL_UPDATE_PRODUCT = """
-            UPDATE products (url, price, img)
+            UPDATE products
             SET url = ?,
                 price = ?,
                 img = ?
@@ -35,8 +35,8 @@ public class Queries {
     public static final String SQL_FIND_PRODUCTS = """
             SELECT *
             FROM products
-            LIMIT ? OFFSET ?
             WHERE category = ?
+            LIMIT ? OFFSET ?
                 """;
 
     public static final String SQL_FIND_RECIPES = """

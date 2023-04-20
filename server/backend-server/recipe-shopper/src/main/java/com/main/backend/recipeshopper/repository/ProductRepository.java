@@ -19,7 +19,13 @@ public class ProductRepository {
     @Autowired
     private JdbcTemplate template;
 
-    // TODO: testing pending
+    /**
+     * Insert product to DB if it doesn't exist, otherwise product is updated.
+     * 
+     * @param product - Product to be inserted/updated. Timestamp attribute is ommitted when writing to DB.
+     * @param category - Category that the product belongs to.
+     * @return True if exactly one row is updated, False otherwise.
+     */
     public Boolean upsertProduct(Product product, String category) {
         int result;
         if (findProductByName(
@@ -64,13 +70,12 @@ public class ProductRepository {
         }
     }
 
-    // TODO: testing pending
-    public List<Product> getProductList(
+    public List<Product> findProductsByCategory(
             String category, Integer limit, Integer offset) {
 
         return template.query(
                 SQL_FIND_PRODUCTS,
                 DataClassRowMapper.newInstance(Product.class),
-                limit, offset, category);
+                category, limit, offset);
     }
 }

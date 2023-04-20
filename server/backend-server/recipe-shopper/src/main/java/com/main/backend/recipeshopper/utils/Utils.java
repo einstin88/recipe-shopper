@@ -32,7 +32,8 @@ public class Utils {
                             result.getString("url"),
                             result.getString("pack_size"),
                             result.getJsonNumber("price").doubleValue(),
-                            result.getString("img"));
+                            result.getString("img"),
+                            null);
                 });
     }
 }

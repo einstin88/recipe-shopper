@@ -11,7 +11,7 @@ INSERT INTO products (
 VALUES (?, ?, ?, ?, ?, ?, ?);
 
 -- Update product in table
-UPDATE products (url, price, img)
+UPDATE products
 SET url = ?,
     price = ?,
     img = ?
