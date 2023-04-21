@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.main.backend.recipeshopper.exceptions.DjangoBadResponseException;
-import com.main.backend.recipeshopper.exceptions.IllegalRequestException;
+import com.main.backend.recipeshopper.exceptions.IncorrectRequestException;
 import com.main.backend.recipeshopper.exceptions.ProductUpsertException;
 import com.main.backend.recipeshopper.model.Product;
 import com.main.backend.recipeshopper.repository.ProductRepository;
@@ -45,7 +45,7 @@ public class ProductService {
      * 
      * @param category - the category of products to scrape from the site
      * @return List of product scraped from the URL of the given category
-     * @throws IllegalRequestException
+     * @throws IncorrectRequestException
      * @throws DjangoBadResponseException
      * @throws ProductUpsertException
      */
@@ -79,7 +79,7 @@ public class ProductService {
      * @param category - the category of products that the uploaded html represents
      * @param file     - the manually saved html file to parse for products
      * @return List of product scraped from the URL of the given category
-     * @throws IllegalRequestException
+     * @throws IncorrectRequestException
      * @throws DjangoBadResponseException
      * @throws ProductUpsertException
      */
@@ -115,13 +115,13 @@ public class ProductService {
      * 
      * @param category - the category received by the controller that requires
      *                 checking
-     * @throws IllegalRequestException
+     * @throws IncorrectRequestException
      */
     private void validateCategory(String category) {
         if (!PRODUCT_CATEGORIES.contains(category)) {
             String errMsg = "'%s' is not valid category".formatted(category);
             log.error("--- " + errMsg);
-            throw new IllegalRequestException(errMsg);
+            throw new IncorrectRequestException(errMsg);
         }
     }
 
@@ -181,14 +181,14 @@ public class ProductService {
     }
 
     /**
-     * Attempt to retrieve the products within a given category
+     * Retrieve the products within a given category
      * 
      * @param category - the category to retrieve products from
      * @param limit    - max number of results to be returned as response
      * @param offset   - for pagination
      * @return List of product in the given category
      * 
-     * @throws IllegalRequestException
+     * @throws IncorrectRequestException
      */
     public List<Product> getProductListByCategory(
             String category, Integer limit, Integer offset) {

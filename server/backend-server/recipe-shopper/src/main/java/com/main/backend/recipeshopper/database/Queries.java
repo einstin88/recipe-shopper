@@ -45,13 +45,50 @@ public class Queries {
             LIMIT ? OFFSET ?
                 """;
 
+    public static final String SQL_FIND_RECIPE_INGREDIENTS = """
+            SELECT pdt.product_id,
+                pdt.name,
+                pdt.url,
+                pdt.pack_size,
+                pdt.price,
+                pdt.img,
+                pdt.category,
+                pdt.timeStamp
+            FROM recipe_ingredients AS ri
+                INNER JOIN products AS pdt ON ri.product_id = pdt.product_id
+            WHERE ri.recipe_id = ?
+                """;
+
+    public static final String SQL_FIND_RECIPE_NAME_CREATOR = """
+            SELECT *
+            FROM recipes
+            WHERE recipe_name = ?
+                AND recipe_creator = ?
+                """;
+
     public static final String SQL_INSERT_RECIPE = """
             INSERT INTO recipes (
                     recipe_id,
                     recipe_name,
-                    recipe_creator,
-                    timeStamp
+                    recipe_creator
                 )
-            VALUES (?, ?, ?, ?)
-                    """;
+            VALUES (?, ?, ?)
+                """;
+
+    public static final String SQL_INSERT_RECIPE_INGREDIENT = """
+            INSERT INTO recipe_ingredients (recipe_id, product_id)
+            VALUES (?, ?)
+                """;
+
+    public static final String SQL_UPDATE_RECIPE = """
+            UPDATE recipes
+            SET recipe_name = ?,
+                recipe_creator = ?
+            WHERE recipe_id = ?;
+                """;
+
+    public static final String SQL_DEL_INGREDIENT = """
+            DELETE FROM recipe_ingredients
+            WHERE product_id = ?
+                """;
 }

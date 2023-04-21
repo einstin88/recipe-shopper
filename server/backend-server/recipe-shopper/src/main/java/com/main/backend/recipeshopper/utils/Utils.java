@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import com.main.backend.recipeshopper.model.Product;
+import com.main.backend.recipeshopper.model.Recipe;
 
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
@@ -35,5 +36,15 @@ public class Utils {
                             result.getString("img"),
                             null);
                 });
+    }
+
+    public static Recipe generateRecipeId(Recipe recipe) {
+        String id = UUID.randomUUID().toString().substring(0, 8);
+        return new Recipe(
+                PREFIX_RECIPE + id,
+                recipe.recipeName(),
+                recipe.recipeCreator(),
+                recipe.ingredients(),
+                null);
     }
 }

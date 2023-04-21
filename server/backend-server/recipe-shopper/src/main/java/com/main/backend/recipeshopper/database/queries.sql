@@ -37,11 +37,43 @@ SELECT *
 FROM recipes
 LIMIT ? OFFSET ?;
 
+-- Query for recipe ingredients
+SELECT pdt.product_id,
+    pdt.name,
+    pdt.url,
+    pdt.pack_size,
+    pdt.price,
+    pdt.img,
+    pdt.category,
+    pdt.timeStamp
+FROM recipe_ingredients AS ri
+    INNER JOIN products AS pdt ON ri.product_id = pdt.product_id
+WHERE ri.recipe_id = ?;
+
+-- Query for recipe by name and creator
+SELECT *
+FROM recipes
+WHERE recipe_name = ?
+    AND recipe_creator = ?;
+
 -- Insert new recipe
 INSERT INTO recipes (
         recipe_id,
         recipe_name,
-        recipe_creator,
-        timeStamp
+        recipe_creator
     )
-VALUES (?, ?, ?, ?);
+VALUES (?, ?, ?);
+
+-- Insert recipe ingredients
+INSERT INTO recipe_ingredients (recipe_id, product_id)
+VALUES (?, ?);
+
+-- Update recipe details
+UPDATE recipes
+SET recipe_name = ?,
+    recipe_creator = ?
+WHERE recipe_id = ?;
+
+-- Delete recipe ingredient
+DELETE FROM recipe_ingredients
+WHERE product_id = ?;

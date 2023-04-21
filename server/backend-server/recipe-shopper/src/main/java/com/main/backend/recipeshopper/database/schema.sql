@@ -39,12 +39,11 @@ CREATE TABLE products(
 DROP TABLE IF EXISTS recipes;
 
 CREATE TABLE recipes(
-    id INT UNSIGNED AUTO_INCREMENT,
     recipe_id VARCHAR(11) NOT NULL,
     recipe_name VARCHAR(40) NOT NULL,
     recipe_creator VARCHAR(40) NULL,
-    timeStamp TIMESTAMP NOT NULL,
-    PRIMARY KEY (id)
+    timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (recipe_id)
 );
 
 -- Intermediate Table: recipe x ingredients 
@@ -52,9 +51,9 @@ DROP TABLE IF EXISTS recipe_ingredients;
 
 CREATE TABLE recipe_ingredients(
     id INT UNSIGNED AUTO_INCREMENT,
-    recipe_id VARCHAR(11) NOT NULL,
+    recipe_id VARCHAR(11) NULL,
     product_id VARCHAR(11) NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT fk_recipe FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
-    CONSTRAINT fk_ingredient FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE RESTRICT
 );
