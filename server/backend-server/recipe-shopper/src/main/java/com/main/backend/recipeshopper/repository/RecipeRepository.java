@@ -1,6 +1,7 @@
 package com.main.backend.recipeshopper.repository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -11,30 +12,46 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
-import com.main.backend.recipeshopper.model.Product;
+import com.main.backend.recipeshopper.model.Ingredients;
 import com.main.backend.recipeshopper.model.Recipe;
 import static com.main.backend.recipeshopper.database.Queries.*;
 
 @Repository
 public class RecipeRepository {
+    private class RecipeRowMapper implements RowMapper<Recipe<Ingredients>> {
+        @Override
+        @Nullable
+        public Recipe<Ingredients> mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new Recipe<>(
+                    rs.getString("recipeId"),
+                    rs.getString("recipeName"),
+                    rs.getString("recipeCreator"),
+                    rs.getString("procedures"),
+                    findRecipeIngredients(rs.getString("recipeId")).toList(),
+                    rs.getTimestamp("timeStamp").toLocalDateTime());
+        }
+    }
+
     @Autowired
     private JdbcTemplate template;
 
-    public Stream<Recipe> findRecipes(Integer offset, Integer limit) {
-        return template.queryForStream(
+    public List<Recipe<Ingredients>> findRecipes(Integer offset, Integer limit) {
+        return template.query(
                 SQL_FIND_RECIPES,
-                DataClassRowMapper.newInstance(Recipe.class),
+                new RecipeRowMapper(),
                 limit, offset);
     }
 
-    public Optional<Recipe> findRecipeByNameCreator(String name, String creator) {
+    public Optional<Recipe<Ingredients>> findRecipeByNameCreator(String name, String creator) {
         try {
             return Optional.of(
                     template.queryForObject(
                             SQL_FIND_RECIPE_NAME_CREATOR,
-                            DataClassRowMapper.newInstance(Recipe.class),
+                            new RecipeRowMapper(),
                             name, creator));
 
         } catch (DataAccessException e) {
@@ -42,15 +59,16 @@ public class RecipeRepository {
         }
     }
 
-    public Boolean insertRecipe(Recipe recipe) {
+    public Boolean insertRecipe(Recipe<Ingredients> recipe) {
         return template.update(
                 SQL_INSERT_RECIPE,
                 recipe.recipeId(),
                 recipe.recipeName(),
-                recipe.recipeCreator()) == 1;
+                recipe.recipeCreator(),
+                recipe.procedures()) == 1;
     }
 
-    public Boolean insertRecipeIngredient(String recipeId, List<String> products) {
+    public Boolean insertRecipeIngredient(String recipeId, List<Ingredients> products) {
         int[] results = template.batchUpdate(
                 SQL_INSERT_RECIPE_INGREDIENT,
                 new BatchPreparedStatementSetter() {
@@ -62,7 +80,8 @@ public class RecipeRepository {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
                         ps.setString(1, recipeId);
-                        ps.setString(2, products.get(i));
+                        ps.setString(2, products.get(i).getProductId());
+                        ps.setInt(3, products.get(i).getQuantity());
                     }
                 });
 
@@ -73,19 +92,20 @@ public class RecipeRepository {
         return true;
     }
 
-    public Stream<Product> findRecipeIngredients(String recipeId) {
+    public Stream<Ingredients> findRecipeIngredients(String recipeId) {
         return template.queryForStream(
                 SQL_FIND_RECIPE_INGREDIENTS,
-                DataClassRowMapper.newInstance(Product.class),
+                DataClassRowMapper.newInstance(Ingredients.class),
                 recipeId);
     }
 
-    public Boolean updateRecipe(Recipe recipe) {
+    public Boolean updateRecipe(Recipe<Ingredients> recipe) {
         return template.update(
                 SQL_UPDATE_RECIPE,
                 recipe.recipeName(),
                 recipe.recipeCreator(),
-                recipe.recipeId()) == 1;
+                recipe.recipeId(),
+                recipe.procedures()) == 1;
     }
 
     public Boolean deleteIngredient(String productId) {

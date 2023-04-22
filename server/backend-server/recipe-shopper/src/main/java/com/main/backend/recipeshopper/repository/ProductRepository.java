@@ -29,23 +29,23 @@ public class ProductRepository {
     public Boolean upsertProduct(Product product, String category) {
         int result;
         if (findProductByName(
-                product.name(), product.pack_size(), category).isEmpty()) {
+                product.getName(), product.getPack_size(), category).isEmpty()) {
 
             result = template.update(SQL_INSERT_PRODUCT,
-                    product.productId(),
-                    product.name(),
-                    product.url(),
-                    product.pack_size(),
-                    product.price(),
-                    product.img(),
+                    product.getPack_size(),
+                    product.getName(),
+                    product.getUrl(),
+                    product.getPack_size(),
+                    product.getPrice(),
+                    product.getImg(),
                     category);
         } else {
             result = template.update(SQL_UPDATE_PRODUCT,
-                    product.url(),
-                    product.price(),
-                    product.img(),
-                    product.name(),
-                    product.pack_size(),
+                    product.getUrl(),
+                    product.getPrice(),
+                    product.getImg(),
+                    product.getName(),
+                    product.getPack_size(),
                     category);
         }
 

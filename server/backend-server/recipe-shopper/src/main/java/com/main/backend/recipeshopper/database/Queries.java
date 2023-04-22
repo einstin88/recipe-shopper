@@ -70,20 +70,22 @@ public class Queries {
             INSERT INTO recipes (
                     recipe_id,
                     recipe_name,
-                    recipe_creator
+                    recipe_creator,
+                    procedures
                 )
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
                 """;
 
     public static final String SQL_INSERT_RECIPE_INGREDIENT = """
-            INSERT INTO recipe_ingredients (recipe_id, product_id)
-            VALUES (?, ?)
+            INSERT INTO recipe_ingredients (recipe_id, product_id, quantity)
+            VALUES (?, ?, ?)
                 """;
 
     public static final String SQL_UPDATE_RECIPE = """
             UPDATE recipes
             SET recipe_name = ?,
-                recipe_creator = ?
+                recipe_creator = ?,
+                procedures = ?
             WHERE recipe_id = ?;
                 """;
 

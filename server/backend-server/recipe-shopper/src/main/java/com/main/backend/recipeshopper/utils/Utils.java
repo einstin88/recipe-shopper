@@ -4,6 +4,7 @@ import java.io.StringReader;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import com.main.backend.recipeshopper.model.Ingredients;
 import com.main.backend.recipeshopper.model.Product;
 import com.main.backend.recipeshopper.model.Recipe;
 
@@ -13,6 +14,12 @@ import jakarta.json.JsonValue;
 public class Utils {
     private static final String PREFIX_PRODUCT = "SS_";
     private static final String PREFIX_RECIPE = "RP_";
+
+    public static String serverOkResponse() {
+        return Json.createObjectBuilder()
+                .add("message", "Server is up!")
+                .build().toString();
+    }
 
     public static String createErrorResponseMsg(String errMsg) {
         return Json.createObjectBuilder()
@@ -38,12 +45,13 @@ public class Utils {
                 });
     }
 
-    public static Recipe generateRecipeId(Recipe recipe) {
+    public static Recipe<Ingredients> generateRecipeId(Recipe<Ingredients> recipe) {
         String id = UUID.randomUUID().toString().substring(0, 8);
-        return new Recipe(
+        return new Recipe<>(
                 PREFIX_RECIPE + id,
                 recipe.recipeName(),
                 recipe.recipeCreator(),
+                recipe.procedures(),
                 recipe.ingredients(),
                 null);
     }

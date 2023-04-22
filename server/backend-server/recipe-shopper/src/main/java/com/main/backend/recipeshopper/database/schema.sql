@@ -1,8 +1,10 @@
 SHOW DATABASES;
 
 -- DB creation
--- DROP DATABASE IF EXISTS recipe_shopper;
--- CREATE DATABASE recipe_shopper;
+DROP DATABASE IF EXISTS recipe_shopper;
+
+CREATE DATABASE recipe_shopper;
+
 USE recipe_shopper;
 
 -- Table: Categories
@@ -42,6 +44,7 @@ CREATE TABLE recipes(
     recipe_id VARCHAR(11) NOT NULL,
     recipe_name VARCHAR(40) NOT NULL,
     recipe_creator VARCHAR(40) NULL,
+    procedures text NOT NULL,
     timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (recipe_id)
 );
@@ -53,6 +56,7 @@ CREATE TABLE recipe_ingredients(
     id INT UNSIGNED AUTO_INCREMENT,
     recipe_id VARCHAR(11) NULL,
     product_id VARCHAR(11) NOT NULL,
+    quantity smallint UNSIGNED NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE RESTRICT

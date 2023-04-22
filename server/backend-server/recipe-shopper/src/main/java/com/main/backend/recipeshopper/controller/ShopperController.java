@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.main.backend.recipeshopper.model.Cart;
+import com.main.backend.recipeshopper.model.Ingredients;
 import com.main.backend.recipeshopper.model.Product;
 import com.main.backend.recipeshopper.model.Recipe;
-import com.main.backend.recipeshopper.model.RecipeDetails;
 import com.main.backend.recipeshopper.service.ProductService;
 import com.main.backend.recipeshopper.service.RecipeService;
+import com.main.backend.recipeshopper.utils.Utils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,9 +41,10 @@ public class ShopperController {
          * 
          * @return message from server if it's running
          */
-        @GetMapping("/health")
+        @GetMapping(path = "/health", produces = MediaType.TEXT_PLAIN_VALUE)
         public ResponseEntity<String> healthCheck() {
-                return ResponseEntity.ok("Server is up");
+                return ResponseEntity
+                                .ok(Utils.serverOkResponse());
         }
 
         /**
@@ -95,7 +97,7 @@ public class ShopperController {
         }
 
         @GetMapping(path = "/recipes")
-        public ResponseEntity<List<RecipeDetails>> getRecipeList(
+        public ResponseEntity<List<Recipe<Ingredients>>> getRecipeList(
                         @RequestParam(defaultValue = "10") Integer limit,
                         @RequestParam(defaultValue = "0") Integer offset) {
 
@@ -107,7 +109,7 @@ public class ShopperController {
 
         @PostMapping(path = "/recipe/new")
         public ResponseEntity<Void> postNewRecipe(
-                        Recipe recipe) {
+                        Recipe<Ingredients> recipe) {
 
                 log.info(">>> Posting new recipe: " + recipe);
                 recipeSvc.insertNewRecipe(recipe);
@@ -119,7 +121,7 @@ public class ShopperController {
 
         @PutMapping(path = "/recipe/update")
         public ResponseEntity<Void> updateRecipe(
-                        Recipe recipe) {
+                        Recipe<Ingredients> recipe) {
 
                 log.info(">>> Updating new recipe: " + recipe);
                 recipeSvc.updateRecipe(recipe);

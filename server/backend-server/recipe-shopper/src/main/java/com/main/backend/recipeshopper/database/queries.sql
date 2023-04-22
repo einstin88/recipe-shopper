@@ -60,18 +60,20 @@ WHERE recipe_name = ?
 INSERT INTO recipes (
         recipe_id,
         recipe_name,
-        recipe_creator
+        recipe_creator,
+        procedures
     )
-VALUES (?, ?, ?);
+VALUES (?, ?, ?, ?);
 
 -- Insert recipe ingredients
-INSERT INTO recipe_ingredients (recipe_id, product_id)
-VALUES (?, ?);
+INSERT INTO recipe_ingredients (recipe_id, product_id, quantity)
+VALUES (?, ?, ?);
 
 -- Update recipe details
 UPDATE recipes
 SET recipe_name = ?,
-    recipe_creator = ?
+    recipe_creator = ?,
+    procedures = ?
 WHERE recipe_id = ?;
 
 -- Delete recipe ingredient

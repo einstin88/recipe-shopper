@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.main.backend.recipeshopper.exceptions.IncorrectRequestException;
 import com.main.backend.recipeshopper.exceptions.RecipeTransactionException;
-import com.main.backend.recipeshopper.model.Product;
+import com.main.backend.recipeshopper.model.Ingredients;
 import com.main.backend.recipeshopper.model.Recipe;
-import com.main.backend.recipeshopper.model.RecipeDetails;
 import com.main.backend.recipeshopper.repository.RecipeRepository;
 import com.main.backend.recipeshopper.utils.Utils;
 
@@ -22,29 +21,16 @@ public class RecipeService {
     @Autowired
     private RecipeRepository repo;
 
-    public List<RecipeDetails> getRecipeList(Integer limit, Integer offset) {
+    public List<Recipe<Ingredients>> getRecipeList(Integer limit, Integer offset) {
         log.info(">>> Retrieving recipes from DB...");
 
-        return repo.findRecipes(offset, limit)
-                .map(recipe -> {
-                    List<Product> ingredients = repo
-                            .findRecipeIngredients(recipe.recipeId())
-                            .toList();
-
-                    return new RecipeDetails(
-                            recipe.recipeId(),
-                            recipe.recipeName(),
-                            recipe.recipeCreator(),
-                            ingredients,
-                            recipe.timeStamp());
-                })
-                .toList();
+        return repo.findRecipes(offset, limit);
     }
 
     @Transactional(rollbackFor = { RecipeTransactionException.class })
-    public void insertNewRecipe(Recipe recipe) {
+    public void insertNewRecipe(Recipe<Ingredients> recipe) {
 
-        // Check if recipe by the same user exists already, throws error
+        // Check if recipe by the same user exists already, else throw error
         if (repo.findRecipeByNameCreator(
                 recipe.recipeName(), recipe.recipeCreator())
                 .isPresent()) {
@@ -72,11 +58,11 @@ public class RecipeService {
     }
 
     @Transactional(rollbackFor = { RecipeTransactionException.class })
-    public void updateRecipe(Recipe recipe) {
+    public void updateRecipe(Recipe<Ingredients> recipe) {
 
         String repId = recipe.recipeId();
 
-        // Check if recipe exists
+        // Check if recipe exists, else throw error
         if (repo.findRecipeByNameCreator(
                 repId, recipe.recipeCreator())
                 .isEmpty()) {
@@ -96,12 +82,12 @@ public class RecipeService {
         // Loop through the old ingredient list
         // if any element has reference in the new list, remove it
         // Else, remove the entry from the db
-        List<String> newIngredients = recipe.ingredients();
+        List<Ingredients> newIngredients = recipe.ingredients();
         repo.findRecipeIngredients(repId)
                 .forEach(ingredient -> {
-                    String prodId = ingredient.productId();
+                    String prodId = ingredient.getProductId();
 
-                    if (!newIngredients.remove(prodId)) {
+                    if (!newIngredients.remove(ingredient)) {
                         if (!repo.deleteIngredient(prodId)) {
                             String errMsg = "Could not delete ingredient-id=%s from recipe=%s"
                                     .formatted(prodId, repId);

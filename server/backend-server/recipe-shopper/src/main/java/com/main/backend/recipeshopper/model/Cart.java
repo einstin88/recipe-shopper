@@ -5,7 +5,7 @@ import java.util.List;
 public record Cart(
     String username,
     String address,
-    List<Recipe> cartItems,
+    List<Recipe<Ingredients>> cartItems,
     Double total
 ) {
     
