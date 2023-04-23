@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.main.backend.recipeshopper.model.Cart;
-import com.main.backend.recipeshopper.model.Ingredients;
+import com.main.backend.recipeshopper.model.Ingredient;
 import com.main.backend.recipeshopper.model.Product;
 import com.main.backend.recipeshopper.model.Recipe;
 import com.main.backend.recipeshopper.service.ProductService;
@@ -97,7 +98,7 @@ public class ShopperController {
         }
 
         @GetMapping(path = "/recipes")
-        public ResponseEntity<List<Recipe<Ingredients>>> getRecipeList(
+        public ResponseEntity<List<Recipe<Ingredient>>> getRecipeList(
                         @RequestParam(defaultValue = "10") Integer limit,
                         @RequestParam(defaultValue = "0") Integer offset) {
 
@@ -107,9 +108,9 @@ public class ShopperController {
                                 .ok(recipeSvc.getRecipeList(limit, offset));
         }
 
-        @PostMapping(path = "/recipe/new")
+        @PostMapping(path = "/recipe/new", consumes = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<Void> postNewRecipe(
-                        Recipe<Ingredients> recipe) {
+                        @RequestBody Recipe<Ingredient> recipe) {
 
                 log.info(">>> Posting new recipe: " + recipe);
                 recipeSvc.insertNewRecipe(recipe);
@@ -119,9 +120,9 @@ public class ShopperController {
                                 .build();
         }
 
-        @PutMapping(path = "/recipe/update")
+        @PutMapping(path = "/recipe/update", consumes = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<Void> updateRecipe(
-                        Recipe<Ingredients> recipe) {
+                        @RequestBody Recipe<Ingredient> recipe) {
 
                 log.info(">>> Updating new recipe: " + recipe);
                 recipeSvc.updateRecipe(recipe);

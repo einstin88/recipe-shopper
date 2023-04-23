@@ -15,8 +15,8 @@ from .models.product import Product
 from .utils import price_in_float
 
 
-WEBPAGE_LOAD_TIME_LIMIT = 5
-WEBSITE_SCROLL_LIMIT = 2
+WEBPAGE_LOAD_TIME_LIMIT = 3
+WEBSITE_SCROLL_LIMIT = 3
 
 
 class Scrapper:
@@ -35,8 +35,6 @@ class Scrapper:
         # Set options of selenium webdriver
         options = Options()
         options.add_argument('--headless')
-        # options.add_argument('--start-maximized')
-        # options.add_argument('--incognito')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--blink-settings=imagesEnabled=false')

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ShopperDataService } from './services/shopper-data.service';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +6,5 @@ import { ShopperDataService } from './services/shopper-data.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-
+  title = 'Recipe Shopper'
 }

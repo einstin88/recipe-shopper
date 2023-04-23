@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.main.backend.recipeshopper.exceptions.IncorrectRequestException;
 import com.main.backend.recipeshopper.exceptions.RecipeTransactionException;
-import com.main.backend.recipeshopper.model.Ingredients;
+import com.main.backend.recipeshopper.model.Ingredient;
 import com.main.backend.recipeshopper.model.Recipe;
 import com.main.backend.recipeshopper.repository.RecipeRepository;
 import com.main.backend.recipeshopper.utils.Utils;
@@ -21,14 +21,14 @@ public class RecipeService {
     @Autowired
     private RecipeRepository repo;
 
-    public List<Recipe<Ingredients>> getRecipeList(Integer limit, Integer offset) {
+    public List<Recipe<Ingredient>> getRecipeList(Integer limit, Integer offset) {
         log.info(">>> Retrieving recipes from DB...");
 
         return repo.findRecipes(offset, limit);
     }
 
     @Transactional(rollbackFor = { RecipeTransactionException.class })
-    public void insertNewRecipe(Recipe<Ingredients> recipe) {
+    public void insertNewRecipe(Recipe<Ingredient> recipe) {
 
         // Check if recipe by the same user exists already, else throw error
         if (repo.findRecipeByNameCreator(
@@ -58,7 +58,7 @@ public class RecipeService {
     }
 
     @Transactional(rollbackFor = { RecipeTransactionException.class })
-    public void updateRecipe(Recipe<Ingredients> recipe) {
+    public void updateRecipe(Recipe<Ingredient> recipe) {
 
         String repId = recipe.recipeId();
 
@@ -82,7 +82,7 @@ public class RecipeService {
         // Loop through the old ingredient list
         // if any element has reference in the new list, remove it
         // Else, remove the entry from the db
-        List<Ingredients> newIngredients = recipe.ingredients();
+        List<Ingredient> newIngredients = recipe.ingredients();
         repo.findRecipeIngredients(repId)
                 .forEach(ingredient -> {
                     String prodId = ingredient.getProductId();
@@ -100,8 +100,8 @@ public class RecipeService {
         // Any remaining new ingredients in the list will be added to DB
         if (newIngredients.size() > 0 &&
                 !repo.insertRecipeIngredient(repId, newIngredients)) {
-            log.error("--- New ingredients are not added...");
-            throw new RecipeTransactionException("Failed to add new ingredients");
+            log.error("--- New ingredients are not updated...");
+            throw new RecipeTransactionException("Failed to update new ingredients");
         }
         // If function runs up to this point, recipe has been successfully updated
     }

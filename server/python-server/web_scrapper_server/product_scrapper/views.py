@@ -9,6 +9,7 @@ from .service.scrapper import Scrapper
 from .service.constants import SS_URLS
 from .utils import create_json_response
 
+API_KEY = ''
 
 @require_GET
 def health(reqeust):
@@ -16,14 +17,14 @@ def health(reqeust):
     return HttpResponse('Server is up.')
 
 
-def test(request):
-    category = 'dairies'
-    url = SS_URLS[category]
-    worker = Scrapper(url)
-    worker.fetch_html()
-    products = worker.parse_for_products()
+# def test(request):
+#     category = 'dairies'
+#     url = SS_URLS[category]
+#     worker = Scrapper(url)
+#     worker.fetch_html()
+#     products = worker.parse_for_products()
 
-    return JsonResponse({category: products})
+#     return JsonResponse({category: products})
 
 
 @require_GET

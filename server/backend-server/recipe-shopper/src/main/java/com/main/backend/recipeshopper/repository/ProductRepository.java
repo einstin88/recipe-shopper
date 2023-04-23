@@ -32,7 +32,7 @@ public class ProductRepository {
                 product.getName(), product.getPack_size(), category).isEmpty()) {
 
             result = template.update(SQL_INSERT_PRODUCT,
-                    product.getPack_size(),
+                    product.getProductId(),
                     product.getName(),
                     product.getUrl(),
                     product.getPack_size(),

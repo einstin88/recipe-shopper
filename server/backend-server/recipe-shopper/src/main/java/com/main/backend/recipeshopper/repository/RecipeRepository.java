@@ -16,16 +16,16 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
-import com.main.backend.recipeshopper.model.Ingredients;
+import com.main.backend.recipeshopper.model.Ingredient;
 import com.main.backend.recipeshopper.model.Recipe;
 import static com.main.backend.recipeshopper.database.Queries.*;
 
 @Repository
 public class RecipeRepository {
-    private class RecipeRowMapper implements RowMapper<Recipe<Ingredients>> {
+    private class RecipeRowMapper implements RowMapper<Recipe<Ingredient>> {
         @Override
         @Nullable
-        public Recipe<Ingredients> mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public Recipe<Ingredient> mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Recipe<>(
                     rs.getString("recipeId"),
                     rs.getString("recipeName"),
@@ -39,14 +39,14 @@ public class RecipeRepository {
     @Autowired
     private JdbcTemplate template;
 
-    public List<Recipe<Ingredients>> findRecipes(Integer offset, Integer limit) {
+    public List<Recipe<Ingredient>> findRecipes(Integer offset, Integer limit) {
         return template.query(
                 SQL_FIND_RECIPES,
                 new RecipeRowMapper(),
                 limit, offset);
     }
 
-    public Optional<Recipe<Ingredients>> findRecipeByNameCreator(String name, String creator) {
+    public Optional<Recipe<Ingredient>> findRecipeByNameCreator(String name, String creator) {
         try {
             return Optional.of(
                     template.queryForObject(
@@ -59,7 +59,7 @@ public class RecipeRepository {
         }
     }
 
-    public Boolean insertRecipe(Recipe<Ingredients> recipe) {
+    public Boolean insertRecipe(Recipe<Ingredient> recipe) {
         return template.update(
                 SQL_INSERT_RECIPE,
                 recipe.recipeId(),
@@ -68,7 +68,7 @@ public class RecipeRepository {
                 recipe.procedures()) == 1;
     }
 
-    public Boolean insertRecipeIngredient(String recipeId, List<Ingredients> products) {
+    public Boolean insertRecipeIngredient(String recipeId, List<Ingredient> products) {
         int[] results = template.batchUpdate(
                 SQL_INSERT_RECIPE_INGREDIENT,
                 new BatchPreparedStatementSetter() {
@@ -92,14 +92,14 @@ public class RecipeRepository {
         return true;
     }
 
-    public Stream<Ingredients> findRecipeIngredients(String recipeId) {
+    public Stream<Ingredient> findRecipeIngredients(String recipeId) {
         return template.queryForStream(
                 SQL_FIND_RECIPE_INGREDIENTS,
-                DataClassRowMapper.newInstance(Ingredients.class),
+                DataClassRowMapper.newInstance(Ingredient.class),
                 recipeId);
     }
 
-    public Boolean updateRecipe(Recipe<Ingredients> recipe) {
+    public Boolean updateRecipe(Recipe<Ingredient> recipe) {
         return template.update(
                 SQL_UPDATE_RECIPE,
                 recipe.recipeName(),

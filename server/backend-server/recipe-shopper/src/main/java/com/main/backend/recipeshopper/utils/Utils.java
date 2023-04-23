@@ -4,7 +4,7 @@ import java.io.StringReader;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import com.main.backend.recipeshopper.model.Ingredients;
+import com.main.backend.recipeshopper.model.Ingredient;
 import com.main.backend.recipeshopper.model.Product;
 import com.main.backend.recipeshopper.model.Recipe;
 
@@ -45,7 +45,7 @@ public class Utils {
                 });
     }
 
-    public static Recipe<Ingredients> generateRecipeId(Recipe<Ingredients> recipe) {
+    public static Recipe<Ingredient> generateRecipeId(Recipe<Ingredient> recipe) {
         String id = UUID.randomUUID().toString().substring(0, 8);
         return new Recipe<>(
                 PREFIX_RECIPE + id,

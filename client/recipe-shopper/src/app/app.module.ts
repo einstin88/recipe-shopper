@@ -6,10 +6,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav/nav-bar/nav-bar.component';
-import { ShopperDataService } from './services/shopper-data.service';
+import { RecipeDataService } from './services/recipe-data.service';
 import { NewRecipeComponent } from './components/new-recipe/new-recipe.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 import { UpdateRecipeComponent } from './components/update-recipe/update-recipe.component';
+import { ParseHtmlComponent } from './components/parse-html/parse-html.component';
+import { ProductDataService } from './services/product-data.service';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { UpdateRecipeComponent } from './components/update-recipe/update-recipe.
     NavBarComponent,
     NewRecipeComponent,
     RecipeListComponent,
-    UpdateRecipeComponent
+    UpdateRecipeComponent,
+    ParseHtmlComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,7 @@ import { UpdateRecipeComponent } from './components/update-recipe/update-recipe.
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [ShopperDataService],
+  providers: [RecipeDataService, ProductDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,82 @@
+<form [formGroup]="recipeForm" (ngSubmit)="processForm()">
+  <table>
+    <tr>
+      <td>Recipe Name:</td>
+      <td><input type="text" formControlName="recipeName" /></td>
+    </tr>
+    <tr>
+      <td>Your Name:</td>
+      <td><input type="text" formControlName="recipeCreator" /></td>
+    </tr>
+    <tr>
+      <td>Procedures:</td>
+      <td>
+        <textarea cols="30" rows="10" formControlName="procedures"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <!-- <button type="button" (click)="addIngredient()">Add Ingredient</button> -->
+        <button type="submit" [disabled]="recipeForm.invalid">
+          Add recipe!
+        </button>
+      </td>
+    </tr>
+  </table>
+  <ng-container *ngIf="recipeIngredients.length; else emptyMsg">
+    <table formArrayName="ingredients">
+      <tr>
+        <th>Product ID</th>
+        <th>Name</th>
+        <th>Pack Size</th>
+        <th>Quantity</th>
+      </tr>
+      <tr
+        *ngFor="let ingredient of recipeIngredients.controls; index as idx"
+        [formGroupName]="idx"
+      >
+        <td>
+          <input type="text" formControlName="productId" />
+        </td>
+        <td>
+          <input type="text" formControlName="name" />
+        </td>
+        <td>
+          <input type="text" formControlName="pack_size" />
+        </td>
+        <td>
+          <input type="number" formControlName="quantity" step="1" />
+        </td>
+      </tr>
+    </table>
+  </ng-container>
+  <ng-template #emptyMsg>Please add at least one ingredient..</ng-template>
+</form>
+<tr>
+  <td>Choose a category:</td>
+  <td>
+    <select [formControl]="category" (change)="loadProducts()">
+      <option value=""></option>
+      <option *ngFor="let category of categories" [value]="category">
+        {{ category | titlecase }}
+      </option>
+    </select>
+  </td>
+</tr>
+<table>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>Pack Size</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let product of products; index as idx">
+    <td>{{ idx + 1 }}</td>
+    <td>{{ product.name }}</td>
+    <td>{{ product.pack_size }}</td>
+    <td><img [src]="product.img" /></td>
+    <td><button type="button" (click)="addIngredient(product)">Add</button></td>
+  </tr>
+</table>

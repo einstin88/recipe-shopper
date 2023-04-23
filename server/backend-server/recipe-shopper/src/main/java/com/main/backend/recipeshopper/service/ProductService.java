@@ -109,6 +109,24 @@ public class ProductService {
     }
 
     /**
+     * Retrieve the products within a given category
+     * 
+     * @param category - the category to retrieve products from
+     * @param limit    - max number of results to be returned as response
+     * @param offset   - for pagination
+     * @return List of product in the given category
+     * 
+     * @throws IncorrectRequestException
+     */
+    public List<Product> getProductListByCategory(
+            String category, Integer limit, Integer offset) {
+
+        validateCategory(category);
+
+        return repo.findProductsByCategory(category, limit, offset);
+    }
+
+    /**
      * Internal use.
      * An abstracted function to check if the supplied category is one of the
      * accepted categories.
@@ -155,7 +173,7 @@ public class ProductService {
                         "Missing response body fron Django backend...");
 
             // Else, log the response and let the logic flow through
-            log.debug(">>> Response: \n" + response.getBody());
+            // log.debug(">>> Response: \n" + response.getBody());
 
         } catch (RestClientException e) {
             // Handle unexpected errors from API call
@@ -175,26 +193,8 @@ public class ProductService {
                 })
                 .toList();
 
-        log.debug(String.valueOf(products.size()));
+        log.debug(">>> Product amt: " + String.valueOf(products.size()));
 
         return products;
-    }
-
-    /**
-     * Retrieve the products within a given category
-     * 
-     * @param category - the category to retrieve products from
-     * @param limit    - max number of results to be returned as response
-     * @param offset   - for pagination
-     * @return List of product in the given category
-     * 
-     * @throws IncorrectRequestException
-     */
-    public List<Product> getProductListByCategory(
-            String category, Integer limit, Integer offset) {
-
-        validateCategory(category);
-
-        return repo.findProductsByCategory(category, limit, offset);
     }
 }
