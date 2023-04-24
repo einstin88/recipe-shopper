@@ -1,0 +1,61 @@
+<div *ngIf="recipeError" class="error">
+    {{ recipeError }}
+  </div>
+  
+  <form [formGroup]="recipeForm" (ngSubmit)="processForm()">
+    <table>
+      <tr>
+        <td>Recipe Name:</td>
+        <td><input type="text" formControlName="recipeName" /></td>
+      </tr>
+      <tr>
+        <td>Your Name:</td>
+        <td><input type="text" formControlName="recipeCreator" /></td>
+      </tr>
+      <tr>
+        <td>Procedures:</td>
+        <td>
+          <textarea cols="30" rows="10" formControlName="procedures"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <button type="submit" [disabled]="recipeForm.invalid">
+            Add recipe!
+          </button>
+        </td>
+      </tr>
+    </table>
+    <br />
+  
+    <ng-container *ngIf="recipeIngredients.length; else emptyMsg">
+      <table formArrayName="ingredients">
+        <tr>
+          <th>Name</th>
+          <th>Pack Size</th>
+          <th>Quantity</th>
+        </tr>
+        <tr
+          *ngFor="let ingredient of recipeIngredients.controls; index as idx"
+          [formGroupName]="idx"
+        >
+          <td>
+            {{ recipeIngredients.at(idx).get("name")?.value }}
+          </td>
+          <td>
+            {{ recipeIngredients.at(idx).get("pack_size")?.value }}
+          </td>
+          <td>
+            <input type="number" formControlName="quantity" step="1" />
+          </td>
+          <td>
+            <button type="button" (click)="removeIngredient(idx)">X</button>
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+    <ng-template #emptyMsg>
+      <h4>Please add at least one ingredient..</h4>
+    </ng-template>
+  </form>

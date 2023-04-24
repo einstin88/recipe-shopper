@@ -1,0 +1,19 @@
+<table *ngIf="products.length">
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>Pack Size</th>
+    <th>Product Image</th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let product of products; index as idx">
+    <td>{{ idx + offset + 1 }}</td>
+    <td>{{ product.name }}</td>
+    <td>{{ product.pack_size }}</td>
+    <td><img [src]="product.img" /></td>
+    <td><button type="button" (click)="addIngredient(product)">Add</button></td>
+  </tr>
+</table>
+<div>
+  <ng-content></ng-content>
+</div>

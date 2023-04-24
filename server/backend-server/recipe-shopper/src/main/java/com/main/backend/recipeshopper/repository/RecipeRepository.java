@@ -27,11 +27,11 @@ public class RecipeRepository {
         @Nullable
         public Recipe<Ingredient> mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Recipe<>(
-                    rs.getString("recipeId"),
-                    rs.getString("recipeName"),
-                    rs.getString("recipeCreator"),
+                    rs.getString("recipe_id"),
+                    rs.getString("recipe_name"),
+                    rs.getString("recipe_creator"),
                     rs.getString("procedures"),
-                    findRecipeIngredients(rs.getString("recipeId")).toList(),
+                    findRecipeIngredients(rs.getString("recipe_id")).toList(),
                     rs.getTimestamp("timeStamp").toLocalDateTime());
         }
     }

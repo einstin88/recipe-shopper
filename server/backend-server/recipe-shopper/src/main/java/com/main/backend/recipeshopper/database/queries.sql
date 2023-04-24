@@ -45,7 +45,8 @@ SELECT pdt.product_id,
     pdt.price,
     pdt.img,
     pdt.category,
-    pdt.timeStamp
+    pdt.timeStamp,
+    ri.quantity
 FROM recipe_ingredients AS ri
     INNER JOIN products AS pdt ON ri.product_id = pdt.product_id
 WHERE ri.recipe_id = ?;

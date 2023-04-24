@@ -2,11 +2,13 @@
 <div *ngIf="!resultsLoading; else loadingMsg">
   <ng-container *ngIf="recipes.length; else emptyMsg">
     <div *ngFor="let recipe of recipes">
-      <p>{{ recipe.recipeId }}</p>
+      <!-- <p>{{ recipe.recipeId }}</p>
       <p>{{ recipe.recipeName }}</p>
       <p>{{ recipe.recipeCreator }}</p>
+      <p>{{ recipe.ingredients | json }}</p> -->
+      <p>{{ recipe | json }}</p>
     </div>
   </ng-container>
   <ng-template #emptyMsg>No recipes found.</ng-template>
 </div>
-<ng-template #loadingMsg>Loading...</ng-template>
+<ng-template #loadingMsg>{{ resultsLoading }}</ng-template>

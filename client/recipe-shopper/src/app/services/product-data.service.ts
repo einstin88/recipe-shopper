@@ -12,10 +12,10 @@ export class ProductDataService {
   #API_URL = 'api/';
   #API_PRODUCTS = 'products/';
 
-  getProducts(category: string) {
+  getProducts(category: string, limit: number, offset: number) {
     const url = this.#API_URL + this.#API_PRODUCTS + category;
-    // const params = new HttpParams()
+    const params = new HttpParams().appendAll({ limit, offset });
 
-    return firstValueFrom(this.http.get<Product[]>(url));
+    return firstValueFrom(this.http.get<Product[]>(url, { params }));
   }
 }

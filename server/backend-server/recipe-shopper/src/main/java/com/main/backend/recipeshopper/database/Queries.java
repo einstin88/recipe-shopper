@@ -53,10 +53,11 @@ public class Queries {
                 pdt.price,
                 pdt.img,
                 pdt.category,
-                pdt.timeStamp
+                pdt.timeStamp,
+                ri.quantity
             FROM recipe_ingredients AS ri
                 INNER JOIN products AS pdt ON ri.product_id = pdt.product_id
-            WHERE ri.recipe_id = ?
+            WHERE ri.recipe_id = ?;
                 """;
 
     public static final String SQL_FIND_RECIPE_NAME_CREATOR = """

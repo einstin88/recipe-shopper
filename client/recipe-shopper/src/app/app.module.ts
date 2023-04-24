@@ -12,6 +12,10 @@ import { RecipeListComponent } from './components/recipe-list/recipe-list.compon
 import { UpdateRecipeComponent } from './components/update-recipe/update-recipe.component';
 import { ParseHtmlComponent } from './components/parse-html/parse-html.component';
 import { ProductDataService } from './services/product-data.service';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
+import { CategoryChoserComponent } from './components/category-choser/category-choser.component';
+import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import { ProductDataService } from './services/product-data.service';
     NewRecipeComponent,
     RecipeListComponent,
     UpdateRecipeComponent,
-    ParseHtmlComponent
+    ParseHtmlComponent,
+    ProductListComponent,
+    RecipeIngredientsComponent,
+    CategoryChoserComponent,
+    RecipeFormComponent
   ],
   imports: [
     BrowserModule,

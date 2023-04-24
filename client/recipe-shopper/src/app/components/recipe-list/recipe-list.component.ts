@@ -13,12 +13,15 @@ export class RecipeListComponent implements OnInit {
   recipes!: Recipe[];
   limit: number = 10;
   offset: number = 0;
-  resultsLoading: boolean = true;
+  resultsLoading: string = "Loading...";
 
   ngOnInit(): void {
     this.svc.getRecipes(this.limit, this.offset).then((recipes) => {
       this.recipes = recipes;
-      this.resultsLoading = false;
+      this.resultsLoading = "";
+    })
+    .catch(() => {
+      this.resultsLoading = "Error communicating with server."
     });
   }
 }

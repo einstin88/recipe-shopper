@@ -8,7 +8,6 @@ import com.main.backend.recipeshopper.exceptions.DjangoBadResponseException;
 import com.main.backend.recipeshopper.exceptions.IncorrectRequestException;
 import com.main.backend.recipeshopper.exceptions.ProductUpsertException;
 import com.main.backend.recipeshopper.exceptions.RecipeTransactionException;
-import com.main.backend.recipeshopper.utils.Utils;
 
 @RestControllerAdvice(basePackageClasses = ShopperController.class)
 public class ErrorController {
@@ -20,7 +19,7 @@ public class ErrorController {
         public ResponseEntity<String> handleDjangoErrors(RuntimeException err) {
                 return ResponseEntity
                                 .internalServerError()
-                                .body(Utils.createErrorResponseMsg(err.getMessage()));
+                                .body(err.getMessage());
         }
 
         @ExceptionHandler({
@@ -29,6 +28,6 @@ public class ErrorController {
         public ResponseEntity<String> handleIllegalRequests(RuntimeException err) {
                 return ResponseEntity
                                 .badRequest()
-                                .body(Utils.createErrorResponseMsg(err.getMessage()));
+                                .body(err.getMessage());
         }
 }
