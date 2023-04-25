@@ -59,6 +59,19 @@ public class RecipeRepository {
         }
     }
 
+    public Optional<Recipe<Ingredient>> findRecipeById(String recipeId){
+        try {
+            return Optional.of(
+                    template.queryForObject(
+                            SQL_FIND_RECIPE_ID,
+                            new RecipeRowMapper(),
+                            recipeId));
+
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
     public Boolean insertRecipe(Recipe<Ingredient> recipe) {
         return template.update(
                 SQL_INSERT_RECIPE,

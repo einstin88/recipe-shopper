@@ -67,6 +67,12 @@ public class Queries {
                 AND recipe_creator = ?
                 """;
 
+    public static final String SQL_FIND_RECIPE_ID = """
+            SELECT *
+            FROM recipes
+            WHERE recipe_id = ?;
+                """;
+
     public static final String SQL_INSERT_RECIPE = """
             INSERT INTO recipes (
                     recipe_id,

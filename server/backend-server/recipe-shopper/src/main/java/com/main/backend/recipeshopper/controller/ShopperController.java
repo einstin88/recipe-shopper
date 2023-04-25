@@ -108,6 +108,16 @@ public class ShopperController {
                                 .ok(recipeSvc.getRecipeList(limit, offset));
         }
 
+        @GetMapping(path = "/recipe/view/{recipeId}")
+        public ResponseEntity<Recipe<Ingredient>> getRecipeById(
+                        @PathVariable String recipeId) {
+
+                log.info(">>> Request for recipe with id: " + recipeId);
+
+                return ResponseEntity
+                                .ok(recipeSvc.getRecipeById(recipeId));
+        }
+
         @PostMapping(path = "/recipe/new", consumes = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<Void> postNewRecipe(
                         @RequestBody Recipe<Ingredient> recipe) {

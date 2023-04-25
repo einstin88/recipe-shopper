@@ -11,6 +11,7 @@ export class RecipeDataService {
 
   #API_URL = 'api/';
   #API_RECIPES = 'recipes';
+  #API_VIEW_RECIPE = 'recipe/view/';
   #API_NEW_RECIPE = 'recipe/new';
   #API_UPDATE_RECIPE = 'recipe/update';
 
@@ -22,6 +23,12 @@ export class RecipeDataService {
     const params = new HttpParams().appendAll({ limit, offset });
 
     return firstValueFrom(this.http.get<Recipe[]>(url, { headers, params }));
+  }
+
+  getRecipeById(recipeId: string) {
+    const url = this.#API_URL + this.#API_VIEW_RECIPE + recipeId;
+
+    return firstValueFrom(this.http.get<Recipe>(url));
   }
 
   postNewRecipe(newRecipe: Recipe) {

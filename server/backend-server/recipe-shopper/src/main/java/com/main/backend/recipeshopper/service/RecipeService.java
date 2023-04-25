@@ -1,6 +1,7 @@
 package com.main.backend.recipeshopper.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,18 @@ public class RecipeService {
         log.info(">>> Retrieving recipes from DB...");
 
         return repo.findRecipes(offset, limit);
+    }
+
+    public Recipe<Ingredient> getRecipeById(String recipeId) {
+        Optional<Recipe<Ingredient>> result = repo.findRecipeById(recipeId);
+
+        if (result.isEmpty()) {
+            String errMsg = "Recipe id %s does not exist".formatted(recipeId);
+            log.info("--- " + errMsg);
+            throw new IncorrectRequestException(errMsg);
+        }
+
+        return result.get();
     }
 
     @Transactional(rollbackFor = { RecipeTransactionException.class })

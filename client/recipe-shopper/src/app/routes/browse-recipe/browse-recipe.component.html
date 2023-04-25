@@ -6,7 +6,9 @@
       <p>{{ recipe.recipeName }}</p>
       <p>{{ recipe.recipeCreator }}</p>
       <p>{{ recipe.ingredients | json }}</p> -->
-      <p>{{ recipe | json }}</p>
+      <p [routerLink]="['/recipe/view', recipe.recipeId]">
+        {{ recipe | json }}
+      </p>
     </div>
   </ng-container>
   <ng-template #emptyMsg>No recipes found.</ng-template>

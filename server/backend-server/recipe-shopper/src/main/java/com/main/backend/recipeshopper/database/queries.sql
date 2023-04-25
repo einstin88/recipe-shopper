@@ -57,6 +57,11 @@ FROM recipes
 WHERE recipe_name = ?
     AND recipe_creator = ?;
 
+-- Query for recipe by id
+SELECT *
+FROM recipes
+WHERE recipe_id = ?;
+
 -- Insert new recipe
 INSERT INTO recipes (
         recipe_id,

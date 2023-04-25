@@ -1,0 +1,5 @@
+<div *ngIf="!errMsg; else err">
+  <h2>{{ recipeId }}</h2>
+  <p>{{ recipe | json }}</p>
+</div>
+<ng-template #err>{{ errMsg }}</ng-template>
