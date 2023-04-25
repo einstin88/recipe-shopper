@@ -1,8 +1,9 @@
 <div *ngIf="recipeError" class="error">
-    {{ recipeError }}
-  </div>
-  
-  <form [formGroup]="recipeForm" (ngSubmit)="processForm()">
+  {{ recipeError }}
+</div>
+
+<ng-container *ngIf="!loading; else loadingMsg">
+  <form [formGroup]="recipeForm">
     <table>
       <tr>
         <td>Recipe Name:</td>
@@ -21,16 +22,14 @@
       <tr>
         <td></td>
         <td>
-          <button type="submit" [disabled]="recipeForm.invalid">
-            Add recipe!
-          </button>
+          <ng-content></ng-content>
         </td>
       </tr>
     </table>
     <br />
-  
+
     <ng-container *ngIf="recipeIngredients.length; else emptyMsg">
-      <table formArrayName="ingredients">
+      <table formGroupName="ingredients">
         <tr>
           <th>Name</th>
           <th>Pack Size</th>
@@ -59,3 +58,5 @@
       <h4>Please add at least one ingredient..</h4>
     </ng-template>
   </form>
+</ng-container>
+<ng-template #loadingMsg>Loading Recipe...</ng-template>

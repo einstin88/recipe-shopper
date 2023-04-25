@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, map } from 'rxjs';
 import { Product } from 'src/app/model/product.model';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
@@ -16,38 +16,37 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   @Input()
   newIngredients!: Subject<Product>;
 
+  @Input()
+  recipeId: string = '';
+
+  get recipeData() {
+    return this.recipeForm.value as Recipe;
+  }
+
+  get isInvalid$() {
+    return this.recipeForm.statusChanges.pipe(
+      map((status) => status == 'INVALID')
+    );
+  }
+
+  set reset(_: boolean) {
+    this.recipeForm.reset();
+  }
+
+  set recipeErr(msg: string) {
+    this.recipeError = msg;
+  }
+
   sub$!: Subscription;
+
+  loading!: boolean;
 
   recipeError = '';
   recipeForm!: FormGroup;
   recipeIngredients!: FormArray;
 
   ngOnInit(): void {
-    this.recipeIngredients = this.fb.array(
-      [],
-      [Validators.required, Validators.minLength(1)]
-    );
-
-    this.recipeForm = this.fb.group({
-      recipeName: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(40),
-        ],
-      ],
-      recipeCreator: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(40),
-        ],
-      ],
-      procedures: ['', [Validators.required, Validators.minLength(10)]],
-      ingredients: this.recipeIngredients,
-    });
+    this.createForm();
 
     this.sub$ = this.newIngredients.subscribe((ingredient) =>
       this.addIngredient(ingredient)
@@ -58,26 +57,68 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     this.sub$.unsubscribe();
   }
 
-  processForm() {
-    const formData = this.recipeForm.value as Recipe;
-    // console.info(formData);
+  async createForm() {
+    let recipe!: Recipe | null;
+    this.loading = true;
 
-    this.recipeSvc
-      .postNewRecipe(formData)
-      .then(() => {
-        this.recipeForm.reset();
-      })
-      .catch((err) => {
-        this.recipeError = err.error;
-      });
+    this.recipeIngredients = this.fb.array(
+      [],
+      [Validators.required, Validators.minLength(1)]
+    );
+
+    if (this.recipeId) {
+      // console.log('>> Recipe ID: ', this.recipeId);
+      await this.recipeSvc
+        .getRecipeById(this.recipeId)
+        .then((res) => {
+          // console.log(res);
+          recipe = res;
+          recipe.ingredients.forEach((ingredient) => {
+            this.addIngredient(ingredient, ingredient.quantity);
+          });
+        })
+        .catch((err) => {
+          this.recipeError = err.error;
+          return;
+        });
+    } else {
+      recipe = null;
+    }
+
+    this.recipeForm = this.fb.group({
+      recipeId: [recipe?.recipeId ?? ''],
+      recipeName: [
+        recipe?.recipeName ?? '',
+        [
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(40),
+        ],
+      ],
+      recipeCreator: [
+        recipe?.recipeCreator ?? '',
+        [
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(40),
+        ],
+      ],
+      procedures: [
+        recipe?.procedures ?? '',
+        [Validators.required, Validators.minLength(10)],
+      ],
+      ingredients: this.recipeIngredients,
+    });
+
+    this.loading = false;
   }
 
-  addIngredient({ productId, name, pack_size }: Product) {
+  addIngredient({ productId, name, pack_size }: Product, quantity?: number) {
     const newIngredient = this.fb.group({
       productId: [productId],
       name: [name],
       pack_size: [pack_size],
-      quantity: [1, [Validators.required, Validators.min(1)]],
+      quantity: [quantity ?? 1, [Validators.required, Validators.min(1)]],
     });
 
     this.recipeIngredients.push(newIngredient);

@@ -77,7 +77,7 @@ public class RecipeService {
 
         // Check if recipe exists, else throw error
         if (repo.findRecipeByNameCreator(
-                repId, recipe.recipeCreator())
+                recipe.recipeName(), recipe.recipeCreator())
                 .isEmpty()) {
 
             String errMsg = "Recipe %s by %s does not exist!"

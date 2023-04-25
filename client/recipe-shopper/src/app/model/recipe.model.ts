@@ -6,6 +6,6 @@ export type Recipe = {
   recipeName: string;
   recipeCreator: string;
   procedures: string;
-  ingredients: Product[] | Ingredient[];
+  ingredients: Ingredient[];
   timeStamp: Date;
 };

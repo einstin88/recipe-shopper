@@ -1,18 +1,10 @@
-<app-recipe-form [newIngredients]="ingredientToAdd"></app-recipe-form>
+<app-recipe-form [newIngredients]="ingredientToAdd" [recipeId]="''">
+  <button type="button" (click)="processForm()" [disabled]="isValid$ | async">
+    Add Recipe!
+  </button>
+</app-recipe-form>
 
 <hr />
-<app-category-choser (category)="updateCategory($event)"></app-category-choser>
 
-<app-product-list
-  [offset]="offset"
-  (addProduct)="addIngredient($event)"
->
-  <ng-container *ngIf="category">
-    <button type="button" (click)="updateProductList(offset - limit)">
-      Prev
-    </button>
-    <button type="button" (click)="updateProductList(offset + limit)">
-      Next
-    </button>
-  </ng-container>
+<app-product-list (addProduct)="addIngredient($event)">
 </app-product-list>

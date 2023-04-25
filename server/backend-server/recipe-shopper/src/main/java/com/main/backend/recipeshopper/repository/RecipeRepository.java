@@ -59,7 +59,7 @@ public class RecipeRepository {
         }
     }
 
-    public Optional<Recipe<Ingredient>> findRecipeById(String recipeId){
+    public Optional<Recipe<Ingredient>> findRecipeById(String recipeId) {
         try {
             return Optional.of(
                     template.queryForObject(
@@ -117,8 +117,8 @@ public class RecipeRepository {
                 SQL_UPDATE_RECIPE,
                 recipe.recipeName(),
                 recipe.recipeCreator(),
-                recipe.recipeId(),
-                recipe.procedures()) == 1;
+                recipe.procedures(),
+                recipe.recipeId()) == 1;
     }
 
     public Boolean deleteIngredient(String productId) {

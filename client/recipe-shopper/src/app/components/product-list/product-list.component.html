@@ -1,3 +1,5 @@
+<app-category-choser (category)="updateCategory($event)"></app-category-choser>
+
 <table *ngIf="products.length">
   <tr>
     <th></th>
@@ -14,6 +16,11 @@
     <td><button type="button" (click)="addIngredient(product)">Add</button></td>
   </tr>
 </table>
-<div>
-  <ng-content></ng-content>
+<div *ngIf="category">
+  <button type="button" (click)="updateProductList(offset - limit)">
+    Prev
+  </button>
+  <button type="button" (click)="updateProductList(offset + limit)">
+    Next
+  </button>
 </div>

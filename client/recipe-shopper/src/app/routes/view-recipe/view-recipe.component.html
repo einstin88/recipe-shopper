@@ -1,5 +1,6 @@
 <div *ngIf="!errMsg; else err">
   <h2>{{ recipeId }}</h2>
+  <button type="button" (click)="updateRecipe()">Update Recipe</button>
   <p>{{ recipe | json }}</p>
 </div>
 <ng-template #err>{{ errMsg }}</ng-template>

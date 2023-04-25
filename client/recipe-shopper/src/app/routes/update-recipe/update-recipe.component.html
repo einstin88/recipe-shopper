@@ -1,1 +1,9 @@
-<p>update-recipe works!</p>
+<app-recipe-form [newIngredients]="ingredientToAdd" [recipeId]="recipeId">
+  <button type="button" (click)="processForm()" [disabled]="isValid$ | async">
+    Update
+  </button>
+</app-recipe-form>
+
+<hr />
+
+<app-product-list (addProduct)="addIngredient($event)"> </app-product-list>

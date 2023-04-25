@@ -29,8 +29,9 @@ public class Ingredient extends Product {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
+        result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
         return result;
     }
 
@@ -38,11 +39,16 @@ public class Ingredient extends Product {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
         Ingredient other = (Ingredient) obj;
+        if (quantity == null) {
+            if (other.quantity != null)
+                return false;
+        } else if (!quantity.equals(other.quantity))
+            return false;
         if (!getProductId().equals(other.getProductId()))
             return false;
         return true;

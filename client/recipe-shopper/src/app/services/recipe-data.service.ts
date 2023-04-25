@@ -11,9 +11,9 @@ export class RecipeDataService {
 
   #API_URL = 'api/';
   #API_RECIPES = 'recipes';
-  #API_VIEW_RECIPE = 'recipe/view/';
+  API_VIEW_RECIPE = 'recipe/view/';
   #API_NEW_RECIPE = 'recipe/new';
-  #API_UPDATE_RECIPE = 'recipe/update';
+  API_UPDATE_RECIPE = 'recipe/update';
 
   #Content_JSON = 'application/json';
 
@@ -26,7 +26,7 @@ export class RecipeDataService {
   }
 
   getRecipeById(recipeId: string) {
-    const url = this.#API_URL + this.#API_VIEW_RECIPE + recipeId;
+    const url = this.#API_URL + this.API_VIEW_RECIPE + recipeId;
 
     return firstValueFrom(this.http.get<Recipe>(url));
   }
@@ -38,7 +38,7 @@ export class RecipeDataService {
   }
 
   updateRecipe(recipe: Recipe) {
-    const url = this.#API_URL + this.#API_UPDATE_RECIPE;
+    const url = this.#API_URL + this.API_UPDATE_RECIPE;
 
     return firstValueFrom(this.http.put<void>(url, recipe));
   }
