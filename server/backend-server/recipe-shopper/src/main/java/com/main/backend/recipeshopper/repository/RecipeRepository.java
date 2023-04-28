@@ -113,7 +113,7 @@ public class RecipeRepository {
      * @param products
      * @return
      */
-    public Boolean insertRecipeIngredient(String recipeId, List<Ingredient> products) {
+    public Boolean insertRecipeIngredients(String recipeId, List<Ingredient> products) {
         int[] results = template.batchUpdate(
                 SQL_INSERT_RECIPE_INGREDIENT,
                 new BatchPreparedStatementSetter() {

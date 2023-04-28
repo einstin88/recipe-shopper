@@ -1,7 +1,6 @@
 package com.main.backend.recipeshopper.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,15 +39,12 @@ public class RecipeService {
      * @return
      */
     public Recipe<Ingredient> getRecipeById(String recipeId) {
-        Optional<Recipe<Ingredient>> result = repo.findRecipeById(recipeId);
-
-        if (result.isEmpty()) {
-            String errMsg = "Recipe id %s does not exist".formatted(recipeId);
-            log.info("--- " + errMsg);
-            throw new IncorrectRequestException(errMsg);
-        }
-
-        return result.get();
+        return repo.findRecipeById(recipeId)
+                .orElseThrow(() -> {
+                    String errMsg = "Recipe id %s does not exist".formatted(recipeId);
+                    log.info("--- " + errMsg);
+                    return new IncorrectRequestException(errMsg);
+                });
     }
 
     /**
@@ -59,16 +55,13 @@ public class RecipeService {
     public void insertNewRecipe(Recipe<Ingredient> recipe) {
 
         // Check if recipe by the same user exists already, else throw error
-        if (repo.findRecipeByNameCreator(
-                recipe.recipeName(), recipe.recipeCreator())
-                .isPresent()) {
-
-            String errMsg = "Recipe '%s' by '%s' already exist"
-                    .formatted(recipe.recipeName(), recipe.recipeCreator());
-
-            log.info("--- " + errMsg);
-            throw new IncorrectRequestException(errMsg);
-        }
+        repo.findRecipeByNameCreator(recipe.recipeName(), recipe.recipeCreator())
+                .ifPresent((res) -> {
+                    String errMsg = "Recipe '%s' by '%s' already exist"
+                            .formatted(res.recipeName(), res.recipeCreator());
+                    log.info("--- " + errMsg);
+                    throw new IncorrectRequestException(errMsg);
+                });
 
         // Proceed to insert new recipe to both recipe & recipe_ingredients table
         // Handle any errors
@@ -78,7 +71,7 @@ public class RecipeService {
             log.error("--- Recipe not created...");
             throw new RecipeTransactionException("Failed to create recipe");
         }
-        if (!repo.insertRecipeIngredient(recipe.recipeId(), recipe.ingredients())) {
+        if (!repo.insertRecipeIngredients(recipe.recipeId(), recipe.ingredients())) {
             log.error("--- Recipe ingredients not added");
             throw new RecipeTransactionException("Failed to add recipe ingredients");
         }
@@ -95,15 +88,13 @@ public class RecipeService {
         String repId = recipe.recipeId();
 
         // Check if recipe exists, else throw error
-        if (repo.findRecipeByNameCreator(
-                recipe.recipeName(), recipe.recipeCreator())
-                .isEmpty()) {
-
-            String errMsg = "Recipe %s by %s does not exist!"
-                    .formatted(repId, recipe.recipeCreator());
-            log.info("--- " + errMsg);
-            throw new IncorrectRequestException(errMsg);
-        }
+        repo.findRecipeById(repId)
+                .orElseThrow(() -> {
+                    String errMsg = "Recipe id: %s by %s does not exist!"
+                            .formatted(repId, recipe.recipeCreator());
+                    log.info("--- " + errMsg);
+                    return new IncorrectRequestException(errMsg);
+                });
 
         // Proceed to update recipe details and handle any errors
         if (!repo.updateRecipe(recipe)) {
@@ -131,7 +122,7 @@ public class RecipeService {
 
         // Any remaining new ingredients in the list will be added to DB
         if (newIngredients.size() > 0 &&
-                !repo.insertRecipeIngredient(repId, newIngredients)) {
+                !repo.insertRecipeIngredients(repId, newIngredients)) {
             log.error("--- New ingredients are not updated...");
             throw new RecipeTransactionException("Failed to update new ingredients");
         }
