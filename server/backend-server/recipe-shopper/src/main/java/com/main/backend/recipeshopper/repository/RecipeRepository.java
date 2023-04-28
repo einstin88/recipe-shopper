@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.DataClassRowMapper;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.Nullable;
@@ -22,6 +22,9 @@ import static com.main.backend.recipeshopper.database.Queries.*;
 
 @Repository
 public class RecipeRepository {
+    /**
+     * Custom RowMapper implementation to populate row data to {@link Recipe} object
+     */
     private class RecipeRowMapper implements RowMapper<Recipe<Ingredient>> {
         @Override
         @Nullable
@@ -39,6 +42,13 @@ public class RecipeRepository {
     @Autowired
     private JdbcTemplate template;
 
+    /**
+     * Retrieves a list of recipes from the 'recipes' and 'recipe_ingredients' table 
+     * 
+     * @param offset
+     * @param limit
+     * @return List of {@link Recipe}
+     */
     public List<Recipe<Ingredient>> findRecipes(Integer offset, Integer limit) {
         return template.query(
                 SQL_FIND_RECIPES,
@@ -46,6 +56,12 @@ public class RecipeRepository {
                 limit, offset);
     }
 
+    /**
+     * 
+     * @param name
+     * @param creator
+     * @return
+     */
     public Optional<Recipe<Ingredient>> findRecipeByNameCreator(String name, String creator) {
         try {
             return Optional.of(
@@ -59,6 +75,11 @@ public class RecipeRepository {
         }
     }
 
+    /**
+     * 
+     * @param recipeId
+     * @return
+     */
     public Optional<Recipe<Ingredient>> findRecipeById(String recipeId) {
         try {
             return Optional.of(
@@ -72,6 +93,11 @@ public class RecipeRepository {
         }
     }
 
+    /**
+     * 
+     * @param recipe
+     * @return
+     */
     public Boolean insertRecipe(Recipe<Ingredient> recipe) {
         return template.update(
                 SQL_INSERT_RECIPE,
@@ -81,6 +107,12 @@ public class RecipeRepository {
                 recipe.procedures()) == 1;
     }
 
+    /**
+     * 
+     * @param recipeId - Unique 11 alphanumeric characters
+     * @param products
+     * @return
+     */
     public Boolean insertRecipeIngredient(String recipeId, List<Ingredient> products) {
         int[] results = template.batchUpdate(
                 SQL_INSERT_RECIPE_INGREDIENT,
@@ -105,13 +137,23 @@ public class RecipeRepository {
         return true;
     }
 
+    /**
+     * 
+     * @param recipeId - Unique 11 alphanumeric characters
+     * @return
+     */
     public Stream<Ingredient> findRecipeIngredients(String recipeId) {
         return template.queryForStream(
                 SQL_FIND_RECIPE_INGREDIENTS,
-                DataClassRowMapper.newInstance(Ingredient.class),
+                BeanPropertyRowMapper.newInstance(Ingredient.class),
                 recipeId);
     }
 
+    /**
+     * 
+     * @param recipe
+     * @return
+     */
     public Boolean updateRecipe(Recipe<Ingredient> recipe) {
         return template.update(
                 SQL_UPDATE_RECIPE,
@@ -121,6 +163,11 @@ public class RecipeRepository {
                 recipe.recipeId()) == 1;
     }
 
+    /**
+     * 
+     * @param productId - Unique 11 alphanumeric characters 
+     * @return (Boolean) true if exactly ONE row is deleted
+     */
     public Boolean deleteIngredient(String productId) {
         return template.update(
                 SQL_DEL_INGREDIENT,

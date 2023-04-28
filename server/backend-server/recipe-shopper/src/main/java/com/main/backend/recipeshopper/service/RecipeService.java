@@ -22,12 +22,23 @@ public class RecipeService {
     @Autowired
     private RecipeRepository repo;
 
+    /**
+     * 
+     * @param limit
+     * @param offset
+     * @return
+     */
     public List<Recipe<Ingredient>> getRecipeList(Integer limit, Integer offset) {
         log.info(">>> Retrieving recipes from DB...");
 
         return repo.findRecipes(offset, limit);
     }
 
+    /**
+     * 
+     * @param recipeId
+     * @return
+     */
     public Recipe<Ingredient> getRecipeById(String recipeId) {
         Optional<Recipe<Ingredient>> result = repo.findRecipeById(recipeId);
 
@@ -40,6 +51,10 @@ public class RecipeService {
         return result.get();
     }
 
+    /**
+     * 
+     * @param recipe
+     */
     @Transactional(rollbackFor = { RecipeTransactionException.class })
     public void insertNewRecipe(Recipe<Ingredient> recipe) {
 
@@ -70,6 +85,10 @@ public class RecipeService {
         // If function runs up to this point, recipe is sucessfully update
     }
 
+    /**
+     * 
+     * @param recipe
+     */
     @Transactional(rollbackFor = { RecipeTransactionException.class })
     public void updateRecipe(Recipe<Ingredient> recipe) {
 

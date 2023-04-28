@@ -15,18 +15,33 @@ public class Utils {
     private static final String PREFIX_PRODUCT = "SS_";
     private static final String PREFIX_RECIPE = "RP_";
 
+    /**
+     * 
+     * @return
+     */
     public static String serverOkResponse() {
         return Json.createObjectBuilder()
                 .add("message", "Server is up!")
                 .build().toString();
     }
 
+    // TODO: Function is not used, tb be deleted
+    /**
+     * @deprecated
+     * @param errMsg
+     * @return
+     */
     public static String createErrorResponseMsg(String errMsg) {
         return Json.createObjectBuilder()
                 .add("error", errMsg)
                 .build().toString();
     }
 
+    /**
+     * 
+     * @param body
+     * @return
+     */
     public static Stream<Product> parseForProducts(String body) {
         return Json.createReader(new StringReader(body))
                 .readObject()
@@ -45,6 +60,11 @@ public class Utils {
                 });
     }
 
+    /**
+     * 
+     * @param recipe
+     * @return
+     */
     public static Recipe<Ingredient> generateRecipeId(Recipe<Ingredient> recipe) {
         String id = UUID.randomUUID().toString().substring(0, 8);
         return new Recipe<>(

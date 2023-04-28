@@ -16,6 +16,9 @@ public class ScheduleTask {
     @Autowired
     ProductService svc;
 
+    /**
+     * 
+     */
     @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 5)
     public void scheduleScraping() {
         log.info(">>> Running scheduled product scrapping...");

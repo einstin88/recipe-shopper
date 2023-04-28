@@ -2,6 +2,9 @@ package com.main.backend.recipeshopper.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * POJO to represent details of a product
+ */
 public class Product {
     private String productId;
     private String name;

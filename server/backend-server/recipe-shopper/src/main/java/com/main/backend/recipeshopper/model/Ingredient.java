@@ -2,6 +2,9 @@ package com.main.backend.recipeshopper.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * POJO to represent the details of an ingredient
+ */
 public class Ingredient extends Product {
     private Integer quantity;
 

@@ -1,6 +1,8 @@
 import { Ingredient } from './ingredient.model';
-import { Product } from './product.model';
 
+/**
+ * @description Type representing the details of a recipe 
+ */
 export type Recipe = {
   recipeId: string;
   recipeName: string;

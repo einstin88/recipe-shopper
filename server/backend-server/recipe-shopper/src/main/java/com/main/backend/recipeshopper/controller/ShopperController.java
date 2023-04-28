@@ -51,10 +51,10 @@ public class ShopperController {
         /**
          * Test Endpoint 1: a test point for making API call to Django web scrapper
          * - errors from api call or product insertion to DB will be handled by
-         * ErrorController
+         * {@link ErrorController}
          * 
-         * @param category (in String) is required and is mapped to a URL for scraping
-         * @Return List of Products
+         * @param category (String, mandatory) a parameter mapped to a URL for scraping
+         * @return List of Product objects
          */
         @GetMapping(path = "/parse-url")
         public ResponseEntity<List<Product>> parseUrl(
@@ -67,9 +67,17 @@ public class ShopperController {
         }
 
         /**
-         * Endpoint 1: receive html to pass to Django web scrapper for parsing
+         * Endpoint 1 (POST): receive html to pass to Django web scrapper for parsing
+         * - errors will be handled by {@link ErrorController} and rollback any DB
+         * transactions
          * 
-         * @return List of Products
+         * @see ProductService
+         * 
+         * @param category (String, mandatory) parameter to associate with the parsed
+         *                 Products when saving to DB
+         * @param file     (File, mandatory) HTML file of a supermarket's products
+         *                 listing
+         * @return List of Product objects
          */
         @PostMapping(path = "/parse-html", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         public ResponseEntity<List<Product>> parseHtml(
@@ -83,7 +91,16 @@ public class ShopperController {
                                 .ok(productSvc.scrapeFromHtml(category, file.getResource()));
         }
 
-        // Tested
+        /**
+         * Endpoint 2 (GET): Retrieves a list of products from the given category
+         * 
+         * @param category (String, mandatory) The category of products to retrieve from
+         *                 DB
+         * @param limit    (Integer, default = 20) Max number of results
+         * @param offset   (Integer, default = 0) Starting index of the results to
+         *                 retrieve
+         * @return List of products
+         */
         @GetMapping(path = "/products/{category}")
         public ResponseEntity<List<Product>> getProductList(
                         @PathVariable(required = true) String category,
@@ -97,6 +114,14 @@ public class ShopperController {
                                 .ok(productSvc.getProductListByCategory(category, limit, offset));
         }
 
+        /**
+         * Endpoint 3 (GET): Retrieves the list of recipes
+         * 
+         * @param limit  (Integer, default = 10) Max number of results
+         * @param offset (Integer, default = 0) Starting index of the results to
+         *               retrieve
+         * @return List of recipes
+         */
         @GetMapping(path = "/recipes")
         public ResponseEntity<List<Recipe<Ingredient>>> getRecipeList(
                         @RequestParam(defaultValue = "10") Integer limit,
@@ -108,9 +133,15 @@ public class ShopperController {
                                 .ok(recipeSvc.getRecipeList(limit, offset));
         }
 
+        /**
+         * Endpoint 4 (GET): Retrieves a recipe by its ID
+         * 
+         * @param recipeId (String, mandatory)
+         * @return A {@link Recipe} object
+         */
         @GetMapping(path = "/recipe/view/{recipeId}")
         public ResponseEntity<Recipe<Ingredient>> getRecipeById(
-                        @PathVariable String recipeId) {
+                        @PathVariable(required = true) String recipeId) {
 
                 log.info(">>> Request for recipe with id: " + recipeId);
 
@@ -118,6 +149,16 @@ public class ShopperController {
                                 .ok(recipeSvc.getRecipeById(recipeId));
         }
 
+        /**
+         * Endpoint 5 (POST): Receives a new recipe to be added to the DB
+         * - Errors will be handled by {@link ErrorController} and rollback any DB
+         * transactions
+         * 
+         * @see RecipeService
+         * 
+         * @param recipe - mapped {@link Recipe} object
+         * @return Response status 201
+         */
         @PostMapping(path = "/recipe/new", consumes = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<Void> postNewRecipe(
                         @RequestBody Recipe<Ingredient> recipe) {
@@ -130,6 +171,14 @@ public class ShopperController {
                                 .build();
         }
 
+        /**
+         * Endpoint 6 (PUT): Receives an updated recipe
+         * - Errors will be handled by {@link ErrorController} and rollback any DB
+         * transactions
+         * 
+         * @param recipe - mapped {@link Recipe} object
+         * @return Response status 202
+         */
         @PutMapping(path = "/recipe/update", consumes = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<Void> updateRecipe(
                         @RequestBody Recipe<Ingredient> recipe) {
@@ -142,6 +191,12 @@ public class ShopperController {
                                 .build();
         }
 
+        /**
+         * Endpoint 7:
+         * 
+         * @param cart
+         * @return
+         */
         @PostMapping("/checkout")
         public ResponseEntity<Void> checkoutCart(
                         Cart cart) {

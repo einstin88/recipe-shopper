@@ -5,6 +5,9 @@ import { Product } from 'src/app/model/product.model';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
 
+/**
+ * @description A reusable component designed to display the recipe form - a populated form if {@link recipeId} input is provided, else empty form
+ */
 @Component({
   selector: 'app-recipe-form',
   templateUrl: './recipe-form.component.html',
@@ -19,6 +22,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   @Input()
   recipeId: string = '';
 
+  // Getters and setters to work with View Projection
   get recipeData() {
     return this.recipeForm.value as Recipe;
   }
@@ -37,7 +41,8 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     this.recipeError = msg;
   }
 
-  sub$!: Subscription;
+  // Variables
+  private sub$!: Subscription;
 
   loading!: boolean;
 
@@ -45,8 +50,9 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   recipeForm!: FormGroup;
   recipeIngredients!: FormArray;
 
+  // Interface methods
   ngOnInit(): void {
-    this.createForm();
+    this.initForm();
 
     this.sub$ = this.newIngredients.subscribe((ingredient) =>
       this.addIngredient(ingredient)
@@ -57,10 +63,15 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     this.sub$.unsubscribe();
   }
 
-  async createForm() {
+  /**
+   * @description A function to initialize a reactive form for creating or updating recipes
+   *
+   */
+  private async initForm() {
     let recipe!: Recipe | null;
     this.loading = true;
 
+    // Initialize the ingredients FormArray
     this.recipeIngredients = this.fb.array(
       [],
       [Validators.required, Validators.minLength(1)]
@@ -85,6 +96,8 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
       recipe = null;
     }
 
+    // Initialize the recipe form
+    // Note: some FormControls are not displayed to prohibit their values from being modified
     this.recipeForm = this.fb.group({
       recipeId: [recipe?.recipeId ?? ''],
       recipeName: [
@@ -113,6 +126,11 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
+  /**
+   * @description A function to add neccessary attributes into the {@link recipeIngredients} FormArray 
+   * @param {Product | Ingredient} product the Product to add to the ingredient list
+   * @param {number} quantity An optional argument to populate the quantity input field
+   */
   addIngredient({ productId, name, pack_size }: Product, quantity?: number) {
     const newIngredient = this.fb.group({
       productId: [productId],
@@ -124,6 +142,10 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     this.recipeIngredients.push(newIngredient);
   }
 
+  /**
+   * @description Removes the ingredient at the specified index from the {@link recipeIngredients}
+   * @param idx Index of the ingredient to remove
+   */
   removeIngredient(idx: number) {
     this.recipeIngredients.removeAt(idx);
   }

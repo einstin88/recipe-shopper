@@ -1,1 +1,24 @@
-<p>parse-html works!</p>
+<h2>Submit a HTML for products parsing</h2>
+<form [formGroup]="form" (ngSubmit)="processForm()">
+  <table>
+    <tr>
+      <td>Category:</td>
+      <td>
+        <select formControlName="category">
+          <option value=""></option>
+          <option *ngFor="let category of categories" [value]="category">
+            {{ category | titlecase }}
+          </option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>HTML file:</td>
+      <td><input type="file" formControlName="file" #htmlFile /></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><button type="submit" [disabled]="form.invalid">Upload</button></td>
+    </tr>
+  </table>
+</form>
