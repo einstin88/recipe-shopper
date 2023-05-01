@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
@@ -14,7 +15,8 @@ export class ViewRecipeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private svc: RecipeDataService
+    private svc: RecipeDataService,
+    private title: Title
   ) {}
 
   errMsg: string = '';
@@ -25,7 +27,7 @@ export class ViewRecipeComponent implements OnInit {
   ngOnInit(): void {
     this.recipeId = this.route.snapshot.params['recipeId'];
 
-    this.fetchRecipe()
+    this.fetchRecipe();
   }
 
   /**
@@ -34,12 +36,18 @@ export class ViewRecipeComponent implements OnInit {
   private fetchRecipe() {
     this.svc
       .getRecipeById(this.recipeId)
-      .then((recipe) => (this.recipe = recipe))
-      .catch((err) => (this.errMsg = err.error));
+      .then((recipe) => {
+        this.recipe = recipe;
+        this.title.setTitle(`View Recipe: ${this.recipe.recipeName}`);
+      })
+      .catch((err) => {
+        this.errMsg = err.error;
+        this.title.setTitle(`Recipe ${this.recipeId} Not Found`);
+      });
   }
 
   /**
-   * @description Function to handle the clicking of the 'Update' button. Navigates to the Update Recipe path. 
+   * @description Function to handle the clicking of the 'Update' button. Navigates to the Update Recipe path.
    */
   updateRecipe() {
     this.router.navigate([this.svc.API_UPDATE_RECIPE, this.recipeId]);

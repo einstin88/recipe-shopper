@@ -1,0 +1,15 @@
+# Redis
+spring:
+    redis:
+        host: ${REDISHOST}
+        port: ${REDISPORT}
+        database: 0
+        user: ${REDISUSER}
+        password: ${REDISPASSWORD}
+    datasource:
+        url: ${MYSQL_URL_JDBC}
+        username: ${MYSQLUSER}
+        password: ${MYSQLPASSWORD}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+

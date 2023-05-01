@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.Nullable;
@@ -145,7 +145,7 @@ public class RecipeRepository {
     public Stream<Ingredient> findRecipeIngredients(String recipeId) {
         return template.queryForStream(
                 SQL_FIND_RECIPE_INGREDIENTS,
-                BeanPropertyRowMapper.newInstance(Ingredient.class),
+                DataClassRowMapper.newInstance(Ingredient.class),
                 recipeId);
     }
 

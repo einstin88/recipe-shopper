@@ -1,0 +1,23 @@
+server:
+    port: 8090
+
+# Logging
+logging:
+    level:
+        web: debug
+        org:
+            springframework:
+                security: debug
+                jdbc:
+                    core:
+                        JdbcTemplate: debug
+                        StatementCreatorUtils: trace
+
+# Overrides
+spring:
+    redis:
+        user: 
+        password: 
+
+
+

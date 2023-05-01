@@ -1,4 +1,5 @@
 import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { RecipeFormComponent } from 'src/app/components/recipe-form/recipe-form.component';
@@ -18,7 +19,8 @@ export class UpdateRecipeComponent
 {
   constructor(
     private recipeSvc: RecipeDataService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private title: Title
   ) {}
 
   @ViewChild(RecipeFormComponent)
@@ -32,6 +34,8 @@ export class UpdateRecipeComponent
 
   ngOnInit(): void {
     this.recipeId = this.route.snapshot.params['recipeId'];
+
+    this.title.setTitle(`Update Recipe: ${this.recipeId}`);
   }
 
   ngAfterViewChecked(): void {

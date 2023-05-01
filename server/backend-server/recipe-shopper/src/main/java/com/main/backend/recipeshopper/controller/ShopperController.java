@@ -44,6 +44,7 @@ public class ShopperController {
          */
         @GetMapping(path = "/health", produces = MediaType.TEXT_PLAIN_VALUE)
         public ResponseEntity<String> healthCheck() {
+                log.info(">>> Test point called...");
                 return ResponseEntity
                                 .ok(Utils.serverOkResponse());
         }

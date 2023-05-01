@@ -193,7 +193,7 @@ public class ProductService {
                 })
                 .toList();
 
-        log.debug(">>> Product amt: " + String.valueOf(products.size()));
+        log.info(">>> Products saved to DB: " + String.valueOf(products.size()));
 
         return products;
     }

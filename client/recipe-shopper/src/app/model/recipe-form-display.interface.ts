@@ -3,7 +3,7 @@ import { Product } from './product.model';
 import { RecipeFormComponent } from '../components/recipe-form/recipe-form.component';
 
 /**
- * Interface that standardizes the class structure and attributes of the component which displays a recipe form
+ * @description Interface that standardizes the class structure and attributes of the component which displays a recipe form
  */
 export interface RecipeFormDisplay {
   /**

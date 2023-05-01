@@ -8,12 +8,16 @@ import { ViewRecipeComponent } from './routes/view-recipe/view-recipe.component'
 import { ViewCartComponent } from './routes/view-cart/view-cart.component';
 
 const routes: Routes = [
-  { path: 'cart/view', component: ViewCartComponent },
-  { path: 'parse-html', component: ParseHtmlComponent },
-  { path: 'recipe/new', component: NewRecipeComponent },
+  { path: 'cart/view', component: ViewCartComponent, title: 'View Cart' },
+  { path: 'parse-html', component: ParseHtmlComponent, title: 'Parse HTML' },
+  {
+    path: 'recipe/new',
+    component: NewRecipeComponent,
+    title: 'Create New Recipe',
+  },
   { path: 'recipe/update/:recipeId', component: UpdateRecipeComponent },
   { path: 'recipe/view/:recipeId', component: ViewRecipeComponent },
-  { path: '', component: BrowseRecipeComponent },
+  { path: '', component: BrowseRecipeComponent, title: 'Browse Recipes' },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
