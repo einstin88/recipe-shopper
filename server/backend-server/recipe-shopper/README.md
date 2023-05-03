@@ -22,8 +22,8 @@
 
 ### Spring Security
 
-1. [OAuth Server]()
-2. [OAuth Client](https://docs.spring.io/spring-authorization-server/docs/current/reference/html/core-model-components.html#registered-client)
+1. [OAuth Server](https://docs.spring.io/spring-authorization-server/docs/current/reference/html/getting-started.html)
+2. [OAuth authenticated Client](https://docs.spring.io/spring-authorization-server/docs/current/reference/html/core-model-components.html#registered-client)
 3. [OAuth Resource Server](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/index.html)
 4. [Resource Server JWT](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html)
    - filter(request) => bearer token

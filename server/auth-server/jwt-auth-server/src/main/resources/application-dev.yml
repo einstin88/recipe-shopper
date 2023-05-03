@@ -1,0 +1,20 @@
+# development server
+server:
+    port: 8090
+
+# Logging
+logging:
+    level:
+        org:
+            springframework:
+                security: debug
+                jdbc:
+                    core:
+                        JdbcTemplate: debug
+                        StatementCreatorUtils: trace
+        web: debug
+
+# Overrides
+
+
+

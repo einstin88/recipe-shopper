@@ -2,7 +2,7 @@ package com.main.backend.recipeshopper.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -72,7 +72,7 @@ public class ProductRepository {
             return Optional.of(
                     template.queryForObject(
                             SQL_FIND_PRODUCT,
-                            BeanPropertyRowMapper.newInstance(Product.class),
+                            DataClassRowMapper.newInstance(Product.class),
                             name, pack_size, category));
 
         } catch (DataAccessException e) {
@@ -93,7 +93,7 @@ public class ProductRepository {
 
         return template.query(
                 SQL_FIND_PRODUCTS,
-                BeanPropertyRowMapper.newInstance(Product.class),
+                DataClassRowMapper.newInstance(Product.class),
                 category, limit, offset);
     }
 }
