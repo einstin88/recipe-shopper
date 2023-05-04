@@ -10,7 +10,9 @@ import com.main.backend.recipeshopper.model.Recipe;
 
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Utils {
     private static final String PREFIX_PRODUCT = "SS_";
     private static final String PREFIX_RECIPE = "RP_";
@@ -31,11 +33,11 @@ public class Utils {
      * @param errMsg
      * @return
      */
-    public static String createErrorResponseMsg(String errMsg) {
-        return Json.createObjectBuilder()
-                .add("error", errMsg)
-                .build().toString();
-    }
+    // private static String createErrorResponseMsg(String errMsg) {
+    //     return Json.createObjectBuilder()
+    //             .add("error", errMsg)
+    //             .build().toString();
+    // }
 
     /**
      * 
@@ -74,5 +76,20 @@ public class Utils {
                 recipe.procedures(),
                 recipe.ingredients(),
                 null);
+    }
+
+    public static <T extends RuntimeException> void generateServerError(
+            String errMsg, Class<T> exceptionClass, Object... args) {
+
+        errMsg = errMsg.formatted(args);
+        log.info("--- {}", errMsg);
+        try {
+            throw exceptionClass
+                    .getConstructor(String.class)
+                    .newInstance(errMsg);
+
+        } catch (Exception e) {
+            log.error("Internal Error! {}", e.getMessage());
+        }
     }
 }

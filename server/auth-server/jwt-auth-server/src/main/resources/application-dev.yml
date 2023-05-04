@@ -15,6 +15,7 @@ logging:
         web: debug
 
 # Overrides
-
-
-
+spring:
+    redis:
+        user: 
+        password: 

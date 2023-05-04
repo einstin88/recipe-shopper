@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class AppUser implements UserDetails {
@@ -20,10 +19,10 @@ public class AppUser implements UserDetails {
 
     private LocalDateTime timestamp;
 
-    private List<SimpleGrantedAuthority> authorities;
+    private List<? extends GrantedAuthority> authorities;
 
     public AppUser(String id, String username, String password, String firstName, String lastName, String email,
-            List<SimpleGrantedAuthority> authorities) {
+            List<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;

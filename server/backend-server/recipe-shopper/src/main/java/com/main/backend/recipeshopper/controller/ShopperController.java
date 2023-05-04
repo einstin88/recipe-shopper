@@ -59,7 +59,7 @@ public class ShopperController {
          */
         @GetMapping(path = "/parse-url")
         public ResponseEntity<List<Product>> parseUrl(
-                        @RequestParam(required = true) String category) {
+                        @RequestParam String category) {
 
                 log.info(">>> Test parsing products for category -> %s".formatted(category));
 
@@ -82,8 +82,8 @@ public class ShopperController {
          */
         @PostMapping(path = "/parse-html", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         public ResponseEntity<List<Product>> parseHtml(
-                        @RequestParam(required = true) String category,
-                        @RequestPart(required = true) MultipartFile file) {
+                        @RequestParam String category,
+                        @RequestPart MultipartFile file) {
 
                 log.info(">>> Request to parse '%s' in category '%s'".formatted(
                                 file.getOriginalFilename(), category));
@@ -104,7 +104,7 @@ public class ShopperController {
          */
         @GetMapping(path = "/products/{category}")
         public ResponseEntity<List<Product>> getProductList(
-                        @PathVariable(required = true) String category,
+                        @PathVariable String category,
                         @RequestParam(defaultValue = "20") Integer limit,
                         @RequestParam(defaultValue = "0") Integer offset) {
 
@@ -142,7 +142,7 @@ public class ShopperController {
          */
         @GetMapping(path = "/recipe/view/{recipeId}")
         public ResponseEntity<Recipe<Ingredient>> getRecipeById(
-                        @PathVariable(required = true) String recipeId) {
+                        @PathVariable String recipeId) {
 
                 log.info(">>> Request for recipe with id: " + recipeId);
 

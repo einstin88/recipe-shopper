@@ -1,49 +1,74 @@
 package com.recipeshopper.jwtauthserver.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import com.recipeshopper.jwtauthserver.service.AppUserService;
+import static com.recipeshopper.jwtauthserver.Utils.Urls.*;
+import static org.springframework.security.config.Customizer.withDefaults;
 
-@Configuration
+import org.springframework.beans.factory.annotation.Autowired;
+
+@Configuration(proxyBeanMethods = false)
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class AuthFilterChainConfig {
+
     @Autowired
-    AppUserService userSvc;
+    private DaoAuthenticationProvider daoAuthenticationProvider;
 
-    /**
-     * For Validating authentication with username & password
-     * 
-     * @see <a href=
-     *      "https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html">Documentation</a>
-     */
-    @Bean
-    public DaoAuthenticationProvider basicAuthProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userSvc);
-        authProvider.setPasswordEncoder(pwEncoder());
+    @Autowired
+    private JwtAuthFilter jwtAuthFilter;
 
-        return authProvider;
-    }
+    @Autowired
+    private LogoutHandler logoutHandler;
 
     @Bean
-    public PasswordEncoder pwEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public SecurityFilterChain authFilterChain(HttpSecurity security) throws Exception {
+        // @formatter:off
+        security
+            .cors(withDefaults())
+            .csrf(CsrfConfigurer::disable)
+            .authorizeHttpRequests(requests -> {
+                requests
+                    .requestMatchers(HttpMethod.GET, 
+                        EP_HEALTH,
+                        "/error"
+                            ).permitAll()
+                    .requestMatchers(HttpMethod.POST, 
+                        EP_SIGN_IN_BASIC
+                            ).authenticated()
+                    .anyRequest().authenticated(); 
+            })
+            .sessionManagement(session -> {
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            })
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .authenticationManager(new ProviderManager(
+                daoAuthenticationProvider
+                ))
+            .logout(logoutRequest -> {
+                logoutRequest
+                    .logoutUrl(EP_LOG_OUT)
+                    .addLogoutHandler(logoutHandler)
+                    .logoutSuccessHandler((request, response, auth) -> {
+                        SecurityContextHolder.clearContext();
+                    });
+            });
+            // .httpBasic(withDefaults())
+        // @formatter:on
 
-    /**
-     * FUTURE: For validating authentication with JWT
-     * 
-     * @see <a href=
-     *      "https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html">Documentation</a>
-     */
-    // @Bean
-    public JwtAuthenticationProvider jwtAuthProvider() {
-        return null;
+        return security.build();
     }
-
 }

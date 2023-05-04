@@ -18,4 +18,10 @@ public class Queries {
             FROM users
             WHERE username = ?;
                 """;
+
+    public static final String SQL_FIND_USER_AUTHORITIES = """
+            SELECT *
+            FROM user_authorities
+            WHERE username = ?;
+                """;
 }
