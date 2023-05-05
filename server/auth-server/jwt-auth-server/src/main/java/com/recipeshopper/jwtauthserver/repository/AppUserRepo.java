@@ -1,6 +1,7 @@
 package com.recipeshopper.jwtauthserver.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -13,7 +14,9 @@ import static com.recipeshopper.jwtauthserver.database.Queries.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import com.recipeshopper.jwtauthserver.model.AppUser;
 
@@ -34,24 +37,35 @@ public class AppUserRepo {
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("email"),
-                    findUserAuthorities(username));
+                    new LinkedList<>());
+                    // findUserAuthorities(username));
         }
     }
 
     public Boolean insertUser(AppUser user) {
-        return template.update(SQL_INSERT_USER,
-                user.getId(),
-                user.getUsername(),
-                user.getPassword(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail()) == 1;
+        try {
+            return template.update(SQL_INSERT_USER,
+                    user.getId(),
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail()) == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
     }
 
-    public AppUser findUserByUsername(String username) {
-        return template.queryForObject(SQL_FIND_USER_USERNAME,
-                new UserRowMapper(),
-                username);
+    public Optional<AppUser> findUserByUsername(String username) {
+        try {
+            return Optional.of(
+                    template.queryForObject(SQL_FIND_USER_USERNAME,
+                            new UserRowMapper(),
+                            username));
+
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     public List<? extends GrantedAuthority> findUserAuthorities(String username) {

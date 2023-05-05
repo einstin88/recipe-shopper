@@ -1,21 +1,24 @@
 # development server
 server:
-    port: 8090
+  port: 8090
 
 # Logging
 logging:
-    level:
-        org:
-            springframework:
-                security: debug
-                jdbc:
-                    core:
-                        JdbcTemplate: debug
-                        StatementCreatorUtils: trace
-        web: debug
+  level:
+    org:
+      springframework:
+        security: debug
+        jdbc:
+          core:
+            JdbcTemplate: debug
+            StatementCreatorUtils: trace
+    web: debug
+    com:
+      recipeshopper:
+        jwtauthserver: debug
 
 # Overrides
 spring:
-    redis:
-        user: 
-        password: 
+  redis:
+    user:
+    password:

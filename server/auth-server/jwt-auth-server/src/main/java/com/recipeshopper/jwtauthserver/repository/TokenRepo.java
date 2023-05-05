@@ -14,22 +14,21 @@ public class TokenRepo {
     @Autowired
     private RedisTemplate<String, Token> template;
 
-    public Boolean insertToken(Token token) {
-        String tokenVal = token.token().serialize();
+    public Boolean insertToken(String username,Token token) {
         template.opsForValue()
                 .set(
-                        tokenVal,
+                        username,
                         token,
                         Duration.ofMinutes(10));
 
-        if (findToken(tokenVal).isPresent())
+        if (findToken(username).isPresent())
             return true;
 
         return false;
     }
 
-    public Optional<Token> findToken(String token) {
+    public Optional<Token> findToken(String username) {
         return Optional.ofNullable(template.opsForValue()
-                .get(token));
+                .get(username));
     }
 }

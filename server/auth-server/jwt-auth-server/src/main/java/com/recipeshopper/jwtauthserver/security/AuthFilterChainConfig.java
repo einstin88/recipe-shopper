@@ -28,8 +28,8 @@ public class AuthFilterChainConfig {
     @Autowired
     private DaoAuthenticationProvider daoAuthenticationProvider;
 
-    @Autowired
-    private JwtAuthFilter jwtAuthFilter;
+    // @Autowired
+    // private JwtAuthFilter jwtAuthFilter;
 
     @Autowired
     private LogoutHandler logoutHandler;
@@ -44,17 +44,28 @@ public class AuthFilterChainConfig {
                 requests
                     .requestMatchers(HttpMethod.GET, 
                         EP_HEALTH,
-                        "/error"
-                            ).permitAll()
+                        EP_SIGN_IN_DEFAULT
+                        ).permitAll()
+                    .requestMatchers(HttpMethod.POST, 
+                        EP_REGISTER
+                        ).permitAll()
                     .requestMatchers(HttpMethod.POST, 
                         EP_SIGN_IN_BASIC
                             ).authenticated()
+                    .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated(); 
             })
             .sessionManagement(session -> {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             })
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .formLogin(login -> {
+                login
+                    .loginPage(EP_SIGN_IN_DEFAULT)
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .successForwardUrl(EP_AUTHENTICATED);  
+            })
             .authenticationManager(new ProviderManager(
                 daoAuthenticationProvider
                 ))

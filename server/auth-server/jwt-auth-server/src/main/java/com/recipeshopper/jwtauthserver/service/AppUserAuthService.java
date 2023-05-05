@@ -1,13 +1,15 @@
 package com.recipeshopper.jwtauthserver.service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.nimbusds.jose.JWSObject;
 import com.recipeshopper.jwtauthserver.Utils.JwtUtils;
 import com.recipeshopper.jwtauthserver.exception.AppUserCreationException;
 import com.recipeshopper.jwtauthserver.exception.TokenTransactionException;
@@ -24,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  * {@link DaoAuthenticationProvider} for user authentication in
  * {@link AuthSupportConfig}
  */
+@Transactional
 @Service
 @Slf4j
 public class AppUserAuthService implements UserDetailsService {
@@ -36,19 +39,17 @@ public class AppUserAuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(">>> Looking for user: {}", username);
-        try {
-            return userRepo.findUserByUsername(username);
-
-        } catch (DataAccessException e) {
-            log.info(">>> {} is not valid", username);
-            throw new UsernameNotFoundException(username);
-        }
+        return userRepo.findUserByUsername(username)
+                .orElseThrow(() -> {
+                    log.info(">>> {} is not valid", username);
+                    throw new UsernameNotFoundException(username);
+                });
     }
 
-    public JWSObject registerNewUser(AppUser newUser) {
+    public String registerNewUser(AppUser newUser) {
         String username = newUser.getUsername();
         // Validation 1: username is available
-        if (loadUserByUsername(username) != null) {
+        if (userRepo.findUserByUsername(username).isPresent()) {
             generateServerError(
                     "User: %s already exists!", AppUserCreationException.class, username);
         }
@@ -59,28 +60,49 @@ public class AppUserAuthService implements UserDetailsService {
                     "Failed to create user %s", AppUserCreationException.class, username);
         }
 
-        Token token = JwtUtils.generateJwt(newUser);
-        if (!tokenRepo.insertToken(token))
+        // Get token and save it to Redis
+        return generateAndSaveToken(username);
+    }
+
+    public String processAuthenticatedUser(String username) {
+        Optional<Token> exisitingToken = tokenRepo.findToken(username);
+        if (exisitingToken.isPresent())
+            return exisitingToken.get().token();
+
+        return generateAndSaveToken(username);
+    }
+
+    private String generateAndSaveToken(String username){
+        Token token = JwtUtils.generateJwt(username);
+        log.info(">>> Token generated...");
+        if (!tokenRepo.insertToken(username, token))
             generateServerError(
                     "Token not saved for user: %s", TokenTransactionException.class, username);
 
         return token.token();
     }
 
-    public void authenticatUser() {
-
-    }
-
-    private <T extends RuntimeException> void generateServerError(
+    private static <T extends RuntimeException> void generateServerError(
             String errMsg, Class<T> exceptionClass, Object... args) {
 
         errMsg = errMsg.formatted(args);
         log.info("--- {}", errMsg);
+
         try {
             throw exceptionClass
                     .getConstructor(String.class)
                     .newInstance(errMsg);
-        } catch (Exception e) {
+        } catch (InstantiationException e) {
+            log.error("Internal Error! {}", e.getMessage());
+        } catch (IllegalAccessException e) {
+            log.error("Internal Error! {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.error("Internal Error! {}", e.getMessage());
+        } catch (InvocationTargetException e) {
+            log.error("Internal Error! {}", e.getMessage());
+        } catch (NoSuchMethodException e) {
+            log.error("Internal Error! {}", e.getMessage());
+        } catch (SecurityException e) {
             log.error("Internal Error! {}", e.getMessage());
         }
     }
