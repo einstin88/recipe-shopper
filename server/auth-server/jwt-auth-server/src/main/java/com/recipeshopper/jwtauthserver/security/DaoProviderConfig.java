@@ -6,14 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 
-import com.recipeshopper.jwtauthserver.service.AppUserAuthService;
+import com.recipeshopper.jwtauthserver.service.AppUserAuthenticationService;
 
 @Configuration
-public class AuthSupportConfig {
+public class DaoProviderConfig {
     @Autowired
-    AppUserAuthService userSvc;
+    private AppUserAuthenticationService userSvc;
 
     /**
      * For Validating authentication with username & password
@@ -34,16 +33,4 @@ public class AuthSupportConfig {
     public PasswordEncoder pwEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    /**
-     * FUTURE: For validating authentication with JWT
-     * 
-     * @see <a href=
-     *      "https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html">Documentation</a>
-     */
-    // @Bean
-    public JwtAuthenticationProvider jwtAuthProvider() {
-        return null;
-    }
-
 }

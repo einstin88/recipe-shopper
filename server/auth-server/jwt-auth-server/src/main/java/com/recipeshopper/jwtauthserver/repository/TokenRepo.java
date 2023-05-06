@@ -14,7 +14,7 @@ public class TokenRepo {
     @Autowired
     private RedisTemplate<String, Token> template;
 
-    public Boolean insertToken(String username,Token token) {
+    public Boolean insertToken(String username, Token token) {
         template.opsForValue()
                 .set(
                         username,

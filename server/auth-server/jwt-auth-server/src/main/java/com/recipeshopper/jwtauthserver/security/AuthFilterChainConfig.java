@@ -11,8 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static com.recipeshopper.jwtauthserver.Utils.Urls.*;
@@ -26,10 +27,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuthFilterChainConfig {
 
     @Autowired
-    private DaoAuthenticationProvider daoAuthenticationProvider;
+    private DaoAuthenticationProvider daoAuthProvider;
 
-    // @Autowired
-    // private JwtAuthFilter jwtAuthFilter;
+    @Autowired
+    private JwtAuthenticationProvider jwtAuthProvider;
+
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     @Autowired
     private LogoutHandler logoutHandler;
@@ -44,15 +48,16 @@ public class AuthFilterChainConfig {
                 requests
                     .requestMatchers(HttpMethod.GET, 
                         EP_HEALTH,
-                        EP_SIGN_IN_DEFAULT
+                        EP_SIGN_IN_DEFAULT,
+                        "/auth/key-uri/**"
                         ).permitAll()
                     .requestMatchers(HttpMethod.POST, 
                         EP_REGISTER
                         ).permitAll()
-                    .requestMatchers(HttpMethod.POST, 
-                        EP_SIGN_IN_BASIC
-                            ).authenticated()
                     .requestMatchers("/error").permitAll()
+                    // .requestMatchers(HttpMethod.POST, 
+                    //     EP_SIGN_IN_BASIC
+                    //         ).authenticated()
                     .anyRequest().authenticated(); 
             })
             .sessionManagement(session -> {
@@ -66,9 +71,18 @@ public class AuthFilterChainConfig {
                     .passwordParameter("password")
                     .successForwardUrl(EP_AUTHENTICATED);  
             })
+            .oauth2ResourceServer(oauth2 -> {
+                oauth2
+                    .jwt(jwt -> {
+                        jwt
+                        .authenticationManager(
+                            new ProviderManager(jwtAuthProvider))
+                        .decoder(jwtDecoder);
+                    });  
+            })
             .authenticationManager(new ProviderManager(
-                daoAuthenticationProvider
-                ))
+                daoAuthProvider
+                    ))
             .logout(logoutRequest -> {
                 logoutRequest
                     .logoutUrl(EP_LOG_OUT)

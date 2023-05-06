@@ -1,8 +1,9 @@
 package com.recipeshopper.jwtauthserver.model;
 
+import java.util.Map;
+
 public record Token(
-    byte[] pubkey,
-    byte[] privkey,
+    Map<String, Object> key,
     String token
 ) {
     

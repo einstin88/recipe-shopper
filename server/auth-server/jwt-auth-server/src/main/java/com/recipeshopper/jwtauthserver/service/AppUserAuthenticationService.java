@@ -21,15 +21,13 @@ import com.recipeshopper.jwtauthserver.repository.TokenRepo;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * public DaoAuthenticationProvider defaultAuthProvider() {
  * Handle queries to {@link AppUserRepo} as well as being used by
  * {@link DaoAuthenticationProvider} for user authentication in
- * {@link AuthSupportConfig}
+ * {@link DaoProviderConfig}
  */
-@Transactional
 @Service
 @Slf4j
-public class AppUserAuthService implements UserDetailsService {
+public class AppUserAuthenticationService implements UserDetailsService {
     @Autowired
     private TokenRepo tokenRepo;
 
@@ -46,18 +44,21 @@ public class AppUserAuthService implements UserDetailsService {
                 });
     }
 
+    @Transactional
     public String registerNewUser(AppUser newUser) {
         String username = newUser.getUsername();
         // Validation 1: username is available
         if (userRepo.findUserByUsername(username).isPresent()) {
             generateServerError(
-                    "User: %s already exists!", AppUserCreationException.class, username);
+                    "User: %s already exists!",
+                    AppUserCreationException.class, username);
         }
 
         // Add user to DB
         if (!userRepo.insertUser(newUser)) {
             generateServerError(
-                    "Failed to create user %s", AppUserCreationException.class, username);
+                    "Failed to create user %s",
+                    AppUserCreationException.class, username);
         }
 
         // Get token and save it to Redis
@@ -72,12 +73,13 @@ public class AppUserAuthService implements UserDetailsService {
         return generateAndSaveToken(username);
     }
 
-    private String generateAndSaveToken(String username){
+    private String generateAndSaveToken(String username) {
         Token token = JwtUtils.generateJwt(username);
         log.info(">>> Token generated...");
         if (!tokenRepo.insertToken(username, token))
             generateServerError(
-                    "Token not saved for user: %s", TokenTransactionException.class, username);
+                    "Token not saved for user: %s",
+                    TokenTransactionException.class, username);
 
         return token.token();
     }

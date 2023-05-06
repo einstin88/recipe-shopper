@@ -2,6 +2,7 @@ package com.recipeshopper.jwtauthserver.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,18 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.recipeshopper.jwtauthserver.Utils.Utils;
 import com.recipeshopper.jwtauthserver.model.AppUser;
-import com.recipeshopper.jwtauthserver.service.AppUserAuthService;
+import com.recipeshopper.jwtauthserver.service.AppUserAuthenticationService;
 
 import static com.recipeshopper.jwtauthserver.Utils.Urls.*;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping(path = URL_PREFIX_AUTH)
+@RequestMapping(path = URL_PREFIX_AUTH, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-public class AuthController {
+public class AuthenticationController {
     @Autowired
-    private AppUserAuthService svc;
+    private AppUserAuthenticationService svc;
 
     @GetMapping(URL_HEALTH)
     public ResponseEntity<String> statusCheck() {
@@ -34,7 +35,13 @@ public class AuthController {
                 .ok("Server is up");
     }
 
-    @PostMapping(URL_REGISTER)
+    /**
+     * EP for new user registration
+     * 
+     * @param newUser
+     * @return
+     */
+    @PostMapping(path = URL_REGISTER, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postNewUser(
             @RequestBody AppUser newUser) {
 
@@ -47,6 +54,12 @@ public class AuthController {
                         svc.registerNewUser(populatedUser)));
     }
 
+    /**
+     * The entry point upon successful authentication.
+     * 
+     * @param user
+     * @return
+     */
     @PostMapping(URL_AUTHENTICATED)
     public ResponseEntity<String> authenticatedCallback(
             @AuthenticationPrincipal AppUser user) {
@@ -67,6 +80,7 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         }
 
+        // No log-in page. This error status should be handled by front-end
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .build();

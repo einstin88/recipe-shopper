@@ -1,7 +1,5 @@
 package com.recipeshopper.jwtauthserver.Utils;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -43,25 +41,20 @@ public class JwtUtils {
         // Part 3
         try {
             RSAKey keyPair = new RSAKeyGenerator(2048).generate();
-            RSAPrivateKey privKey = keyPair.toRSAPrivateKey();
-            RSAPublicKey pubKey = keyPair.toRSAPublicKey();
 
-            JWSSigner signer = new RSASSASigner(privKey);
+            JWSSigner signer = new RSASSASigner(keyPair);
 
             JWSObject token = new JWSObject(
                     header,
                     claims);
 
+            // Sign token with the private key
             token.sign(signer);
             log.debug(">>> Token after signing: {}", token.serialize());
 
-            byte[] publ = pubKey.getEncoded();
-            // log.debug(">>> Pub key: {}", pubKey.toString());
-            byte[] priv = privKey.getEncoded();
-            // log.debug(">>> Pri key: {}", privKey.toString());
             String tokenString = token.serialize();
 
-            return new Token(publ, priv, tokenString);
+            return new Token(keyPair.toPublicJWK().toJSONObject(), tokenString);
 
         } catch (JOSEException e) {
             log.error("--- Token generation error for user: ", username);
