@@ -1,4 +1,4 @@
-package com.recipeshopper.jwtauthserver.security;
+package com.main.backend.recipeshopper.config.security;
 
 import java.text.ParseException;
 
@@ -13,11 +13,11 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 
+import com.main.backend.recipeshopper.service.JwtAuthenticationService;
+import com.main.backend.recipeshopper.utils.Utils;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTParser;
-import com.recipeshopper.jwtauthserver.exception.TokenTransactionException;
-import com.recipeshopper.jwtauthserver.repository.TokenRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,19 +26,28 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtProviderConfig {
 
     @Autowired
-    private TokenRepo tokenRepo;
+    private JwtAuthenticationService svc;
 
     /**
-     * For validating authentication with JWT
+     * For validating JWT by Spring Security
      * 
      * @see <a href=
-     *      "https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html">Documentation</a>
+     *      "https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html"
+     *      >Documentation</a>
      */
     @Bean
     public JwtAuthenticationProvider jwtAuthProvider() {
         return new JwtAuthenticationProvider(jwtDecoder());
     }
 
+    /**
+     * Worker of AuthProvider: to decode, validate and verify the JWT.
+     * This custom implementation is to retrieve Public key from the Auth-server
+     * 
+     * @see <a href=
+     *      "https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html#oauth2resourceserver-jwt-architecture"
+     *      >Reference</a>
+     */
     @Bean
     public JwtDecoder jwtDecoder() {
         return new JwtDecoder() {
@@ -55,28 +64,26 @@ public class JwtProviderConfig {
 
                     // Retrieve user's public key
                     RSAKey userKey = RSAKey.parse(
-                            tokenRepo.findToken(username)
-                                    .orElseThrow(() -> {
-                                        throw new AccessDeniedException(
-                                                "Token expired for user: " + username);
-                                    })
-                                    .key());
-                    
+                            svc.getUserPublicKey(username));
+
                     // Decode token with the public key
                     JwtDecoder decoder = NimbusJwtDecoder
                             .withPublicKey(userKey.toRSAPublicKey())
                             .signatureAlgorithm(SignatureAlgorithm.RS256)
                             .build();
 
-                    // Return token to the AuthProvider for authentication
+                    // Return authenticated token to the AuthProvider.authenticate()
                     return decoder.decode(token);
 
                 } catch (ParseException e) {
-                    throw new TokenTransactionException(
-                            "Token key error for user");
+                    throw Utils.generateServerError(
+                            "Token error: %s",
+                            AccessDeniedException.class,
+                            e.getMessage());
                 } catch (JOSEException e) {
-                    throw new TokenTransactionException(
-                            "Token key parameters error");
+                    throw Utils.generateServerError(
+                            "Invalid key",
+                            AccessDeniedException.class);
                 }
             }
         };

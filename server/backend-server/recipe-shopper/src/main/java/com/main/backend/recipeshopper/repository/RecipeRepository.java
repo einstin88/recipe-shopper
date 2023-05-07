@@ -43,7 +43,7 @@ public class RecipeRepository {
     private JdbcTemplate template;
 
     /**
-     * Retrieves a list of recipes from the 'recipes' and 'recipe_ingredients' table 
+     * Retrieves a list of recipes from the 'recipes' and 'recipe_ingredients' table
      * 
      * @param offset
      * @param limit
@@ -113,7 +113,9 @@ public class RecipeRepository {
      * @param products
      * @return
      */
-    public Boolean insertRecipeIngredients(String recipeId, List<Ingredient> products) {
+    public Boolean insertRecipeIngredients(
+            String recipeId, List<Ingredient> products) {
+
         int[] results = template.batchUpdate(
                 SQL_INSERT_RECIPE_INGREDIENT,
                 new BatchPreparedStatementSetter() {
@@ -165,7 +167,7 @@ public class RecipeRepository {
 
     /**
      * 
-     * @param productId - Unique 11 alphanumeric characters 
+     * @param productId - Unique 11 alphanumeric characters
      * @return (Boolean) true if exactly ONE row is deleted
      */
     public Boolean deleteIngredient(String productId) {

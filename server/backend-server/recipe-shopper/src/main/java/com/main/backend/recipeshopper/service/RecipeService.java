@@ -41,9 +41,10 @@ public class RecipeService {
     public Recipe<Ingredient> getRecipeById(String recipeId) {
         return repo.findRecipeById(recipeId)
                 .orElseThrow(() -> {
-                    String errMsg = "Recipe id %s does not exist".formatted(recipeId);
-                    log.info("--- " + errMsg);
-                    return new IncorrectRequestException(errMsg);
+                    return Utils.generateServerError(
+                            "Recipe id %s does not exist",
+                            IncorrectRequestException.class,
+                            recipeId);
                 });
     }
 
@@ -57,24 +58,27 @@ public class RecipeService {
         // Check if recipe by the same user exists already, else throw error
         repo.findRecipeByNameCreator(recipe.recipeName(), recipe.recipeCreator())
                 .ifPresent((res) -> {
-                    String errMsg = "Recipe '%s' by '%s' already exist"
-                            .formatted(res.recipeName(), res.recipeCreator());
-                    log.info("--- " + errMsg);
-                    throw new IncorrectRequestException(errMsg);
+                    throw Utils.generateServerError(
+                            "Recipe '%s' by '%s' already exist",
+                            IncorrectRequestException.class,
+                            res.recipeName(), res.recipeCreator());
                 });
 
         // Proceed to insert new recipe to both recipe & recipe_ingredients table
         // Handle any errors
         recipe = Utils.generateRecipeId(recipe);
 
-        if (!repo.insertRecipe(recipe)) {
-            log.error("--- Recipe not created...");
-            throw new RecipeTransactionException("Failed to create recipe");
-        }
-        if (!repo.insertRecipeIngredients(recipe.recipeId(), recipe.ingredients())) {
-            log.error("--- Recipe ingredients not added");
-            throw new RecipeTransactionException("Failed to add recipe ingredients");
-        }
+        if (!repo.insertRecipe(recipe))
+            throw Utils.generateServerError(
+                    "Failed to create recipe",
+                    RecipeTransactionException.class);
+
+        if (!repo.insertRecipeIngredients(
+                recipe.recipeId(), recipe.ingredients()))
+            throw Utils.generateServerError(
+                    "Failed to add recipe ingredients",
+                    RecipeTransactionException.class);
+
         // If function runs up to this point, recipe is sucessfully update
     }
 
@@ -90,10 +94,10 @@ public class RecipeService {
         // Check if recipe exists, else throw error
         repo.findRecipeById(repId)
                 .orElseThrow(() -> {
-                    String errMsg = "Recipe id: %s by %s does not exist!"
-                            .formatted(repId, recipe.recipeCreator());
-                    log.info("--- " + errMsg);
-                    return new IncorrectRequestException(errMsg);
+                    return Utils.generateServerError(
+                            "Recipe id: %s by %s does not exist!",
+                            IncorrectRequestException.class,
+                            repId, recipe.recipeCreator());
                 });
 
         // Proceed to update recipe details and handle any errors
@@ -111,21 +115,21 @@ public class RecipeService {
                     String prodId = ingredient.getProductId();
 
                     if (!newIngredients.remove(ingredient)) {
-                        if (!repo.deleteIngredient(prodId)) {
-                            String errMsg = "Could not delete ingredient-id=%s from recipe=%s"
-                                    .formatted(prodId, repId);
-                            log.error("--- " + errMsg);
-                            throw new RecipeTransactionException(errMsg);
-                        }
+                        if (!repo.deleteIngredient(prodId))
+                            throw Utils.generateServerError(
+                                    "Could not delete ingredient-id=%s from recipe=%s",
+                                    RecipeTransactionException.class,
+                                    prodId, repId);
                     }
                 });
 
         // Any remaining new ingredients in the list will be added to DB
         if (newIngredients.size() > 0 &&
-                !repo.insertRecipeIngredients(repId, newIngredients)) {
-            log.error("--- New ingredients are not updated...");
-            throw new RecipeTransactionException("Failed to update new ingredients");
-        }
+                !repo.insertRecipeIngredients(repId, newIngredients))
+            throw Utils.generateServerError(
+                    "Failed to update new ingredients",
+                    RecipeTransactionException.class);
+                    
         // If function runs up to this point, recipe has been successfully updated
     }
 }

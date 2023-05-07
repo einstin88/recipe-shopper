@@ -1,6 +1,7 @@
 package com.main.backend.recipeshopper.utils;
 
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -34,9 +35,9 @@ public class Utils {
      * @return
      */
     // private static String createErrorResponseMsg(String errMsg) {
-    //     return Json.createObjectBuilder()
-    //             .add("error", errMsg)
-    //             .build().toString();
+    // return Json.createObjectBuilder()
+    // .add("error", errMsg)
+    // .build().toString();
     // }
 
     /**
@@ -78,18 +79,21 @@ public class Utils {
                 null);
     }
 
-    public static <T extends RuntimeException> void generateServerError(
+    public static <T extends RuntimeException> T generateServerError(
             String errMsg, Class<T> exceptionClass, Object... args) {
 
         errMsg = errMsg.formatted(args);
-        log.info("--- {}", errMsg);
+        log.error("--- {}", errMsg);
+
         try {
-            throw exceptionClass
+            return exceptionClass
                     .getConstructor(String.class)
                     .newInstance(errMsg);
 
-        } catch (Exception e) {
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
             log.error("Internal Error! {}", e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

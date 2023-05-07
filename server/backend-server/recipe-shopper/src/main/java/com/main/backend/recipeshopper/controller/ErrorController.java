@@ -1,6 +1,7 @@
 package com.main.backend.recipeshopper.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -11,7 +12,6 @@ import com.main.backend.recipeshopper.exceptions.RecipeTransactionException;
 
 @RestControllerAdvice(basePackageClasses = ShopperController.class)
 public class ErrorController {
-
         /**
          * Generate error responses for exception types:
          * {@link DjangoBadResponseException},
@@ -22,15 +22,17 @@ public class ErrorController {
          *            RuntimeException
          * @return Response status 500 with error message
          */
+        // @formatter:off
         @ExceptionHandler({
-                        DjangoBadResponseException.class,
-                        ProductUpsertException.class,
-                        RecipeTransactionException.class })
+                DjangoBadResponseException.class,
+                ProductUpsertException.class,
+                RecipeTransactionException.class })
         public ResponseEntity<String> handleInternalErrors(RuntimeException err) {
                 return ResponseEntity
-                                .internalServerError()
-                                .body(err.getMessage());
+                        .internalServerError()
+                        .body(err.getMessage());
         }
+        // @formatter: on
 
         /**
          * Generate error responses for exception type(s):
@@ -40,12 +42,15 @@ public class ErrorController {
          *            RuntimeException
          * @return Response status 400 with error message
          */
+        // @formatter:off
         @ExceptionHandler({
-                        IncorrectRequestException.class,
+                IncorrectRequestException.class,
+                AccessDeniedException.class
         })
         public ResponseEntity<String> handleIllegalRequests(RuntimeException err) {
                 return ResponseEntity
-                                .badRequest()
-                                .body(err.getMessage());
+                        .badRequest()
+                        .body(err.getMessage());
         }
+        // @formatter: on
 }

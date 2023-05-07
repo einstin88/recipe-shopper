@@ -19,7 +19,7 @@ public class TokenRepo {
                 .set(
                         username,
                         token,
-                        Duration.ofMinutes(10));
+                        Duration.ofMinutes(60));
 
         if (findToken(username).isPresent())
             return true;
@@ -28,7 +28,8 @@ public class TokenRepo {
     }
 
     public Optional<Token> findToken(String username) {
-        return Optional.ofNullable(template.opsForValue()
-                .get(username));
+        return Optional.ofNullable(
+                template.opsForValue()
+                        .get(username));
     }
 }

@@ -137,9 +137,10 @@ public class ProductService {
      */
     private void validateCategory(String category) {
         if (!PRODUCT_CATEGORIES.contains(category)) {
-            String errMsg = "'%s' is not valid category".formatted(category);
-            log.error("--- " + errMsg);
-            throw new IncorrectRequestException(errMsg);
+            throw Utils.generateServerError(
+                    "'%s' is not valid category",
+                    IncorrectRequestException.class,
+                    category);
         }
     }
 
@@ -158,38 +159,44 @@ public class ProductService {
      */
     private List<Product> handleDjangoCallback(
             String category, RequestEntity<?> request) {
+
         // Make API call and handle any errors
         ResponseEntity<String> response;
         RestTemplate client = new RestTemplate();
         try {
             response = client.exchange(request, String.class);
 
-            // Check response status code and content
+            // Check response status code and content exists
             if (response.getStatusCode() != HttpStatus.OK)
-                throw new DjangoBadResponseException(
-                        "Django backend reponsed with status: " + response.getStatusCode().toString());
+                throw Utils.generateServerError(
+                        "Django backend responded with status: %s",
+                        DjangoBadResponseException.class,
+                        response.getStatusCode().toString());
+
             if (!response.hasBody())
-                throw new DjangoBadResponseException(
-                        "Missing response body fron Django backend...");
+                throw Utils.generateServerError(
+                        "Missing response body fron Django backend...",
+                        DjangoBadResponseException.class);
 
             // Else, log the response and let the logic flow through
             // log.debug(">>> Response: \n" + response.getBody());
 
         } catch (RestClientException e) {
             // Handle unexpected errors from API call
-            log.error("--- Error response from Django API -> " + e.getMessage());
-            throw new DjangoBadResponseException(
-                    "Request URL is invalid or Django backend is down...");
+            throw Utils.generateServerError(
+                    "Request URL is invalid or Django backend is down: %s",
+                    DjangoBadResponseException.class,
+                    e.getMessage());
         }
 
         // Parse response into products
         List<Product> products = Utils.parseForProducts(response.getBody())
                 .peek(product -> {
-                    if (!repo.upsertProduct(product, category)) {
-                        throw new ProductUpsertException(
-                                "Failed to upsert category-%s product: %s".formatted(
-                                        category, product));
-                    }
+                    if (!repo.upsertProduct(product, category))
+                        throw Utils.generateServerError(
+                                "Failed to upsert category-%s product: %s",
+                                ProductUpsertException.class,
+                                category, product);
                 })
                 .toList();
 

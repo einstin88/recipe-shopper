@@ -10,20 +10,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static com.recipeshopper.jwtauthserver.Utils.Urls.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class AuthFilterChainConfig {
 
     @Autowired
@@ -35,25 +33,25 @@ public class AuthFilterChainConfig {
     @Autowired
     private JwtDecoder jwtDecoder;
 
-    @Autowired
-    private LogoutHandler logoutHandler;
+    // @Autowired
+    // private LogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain authFilterChain(HttpSecurity security) throws Exception {
         // @formatter:off
         security
             .cors(withDefaults())
-            .csrf(CsrfConfigurer::disable)
+            .csrf(CsrfConfigurer::disable) // TODO: use csrf for POST methods
             .authorizeHttpRequests(requests -> {
                 requests
                     .requestMatchers(HttpMethod.GET, 
                         EP_HEALTH,
                         EP_SIGN_IN_DEFAULT,
                         "/auth/key-uri/**"
-                        ).permitAll()
+                            ).permitAll()
                     .requestMatchers(HttpMethod.POST, 
                         EP_REGISTER
-                        ).permitAll()
+                            ).permitAll()
                     .requestMatchers("/error").permitAll()
                     // .requestMatchers(HttpMethod.POST, 
                     //     EP_SIGN_IN_BASIC
@@ -63,7 +61,6 @@ public class AuthFilterChainConfig {
             .sessionManagement(session -> {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             })
-            // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .formLogin(login -> {
                 login
                     .loginPage(EP_SIGN_IN_DEFAULT)
@@ -75,22 +72,19 @@ public class AuthFilterChainConfig {
                 oauth2
                     .jwt(jwt -> {
                         jwt
-                        .authenticationManager(
-                            new ProviderManager(jwtAuthProvider))
+                        .authenticationManager(new ProviderManager(jwtAuthProvider))
                         .decoder(jwtDecoder);
                     });  
             })
-            .authenticationManager(new ProviderManager(
-                daoAuthProvider
-                    ))
-            .logout(logoutRequest -> {
-                logoutRequest
-                    .logoutUrl(EP_LOG_OUT)
-                    .addLogoutHandler(logoutHandler)
-                    .logoutSuccessHandler((request, response, auth) -> {
-                        SecurityContextHolder.clearContext();
-                    });
-            });
+            .authenticationProvider(daoAuthProvider);
+            // .logout(logoutRequest -> {
+            //     logoutRequest
+            //         .logoutUrl(EP_LOG_OUT)
+            //         .addLogoutHandler(logoutHandler)
+            //         .logoutSuccessHandler((request, response, auth) -> {
+            //             SecurityContextHolder.clearContext();
+            //         });
+            // });
             // .httpBasic(withDefaults())
         // @formatter:on
 

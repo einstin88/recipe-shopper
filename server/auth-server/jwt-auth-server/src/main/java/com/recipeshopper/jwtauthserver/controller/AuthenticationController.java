@@ -39,7 +39,7 @@ public class AuthenticationController {
      * EP for new user registration
      * 
      * @param newUser
-     * @return
+     * @return JWS of the new user
      */
     @PostMapping(path = URL_REGISTER, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postNewUser(
@@ -58,7 +58,7 @@ public class AuthenticationController {
      * The entry point upon successful authentication.
      * 
      * @param user
-     * @return
+     * @return compact JWS
      */
     @PostMapping(URL_AUTHENTICATED)
     public ResponseEntity<String> authenticatedCallback(

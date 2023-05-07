@@ -15,7 +15,7 @@ public class DaoProviderConfig {
     private AppUserAuthenticationService userSvc;
 
     /**
-     * For Validating authentication with username & password
+     * For authentication with username & password
      * 
      * @see <a href=
      *      "https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html">Documentation</a>

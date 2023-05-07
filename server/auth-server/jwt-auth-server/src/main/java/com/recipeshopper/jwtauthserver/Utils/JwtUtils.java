@@ -33,7 +33,7 @@ public class JwtUtils {
                 .issuer(Consts.JWT_ISSUER)
                 .subject(username)
                 .issueTime(Date.from(issueInstant))
-                .expirationTime(Date.from(issueInstant.plus(10, ChronoUnit.MINUTES)))
+                .expirationTime(Date.from(issueInstant.plus(60, ChronoUnit.MINUTES)))
                 .claim("scope", SCOPES.READ)
                 .build().toPayload();
         log.debug(">>> Token claims: {}", claims.toString());

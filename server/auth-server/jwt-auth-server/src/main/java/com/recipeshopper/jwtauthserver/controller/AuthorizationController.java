@@ -22,6 +22,10 @@ public class AuthorizationController {
     @Autowired
     private TokenRepo repo;
 
+    /**
+     * Endpoint for retrieving user's public key
+     * @param username
+     */
     @GetMapping("/key-uri/{username}")
     public ResponseEntity<Map<String, Object>> getUserPublicKey(
             @PathVariable String username) {
