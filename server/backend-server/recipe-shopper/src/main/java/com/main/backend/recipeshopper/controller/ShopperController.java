@@ -72,7 +72,7 @@ public class ShopperController {
         public ResponseEntity<Recipe<Ingredient>> getRecipeById(
                         @PathVariable String recipeId) {
 
-                log.info(">>> Request for recipe with id: " + recipeId);
+                log.info(">>> Request for recipe with id: {}", recipeId);
 
                 return ResponseEntity
                                 .ok(recipeSvc.getRecipeById(recipeId));
@@ -92,7 +92,7 @@ public class ShopperController {
         public ResponseEntity<Void> postNewRecipe(
                         @RequestBody Recipe<Ingredient> recipe) {
 
-                log.info(">>> Posting new recipe: " + recipe);
+                log.info(">>> Posting new recipe: {}", recipe);
                 recipeSvc.insertNewRecipe(recipe);
 
                 return ResponseEntity
@@ -112,7 +112,7 @@ public class ShopperController {
         public ResponseEntity<Void> updateRecipe(
                         @RequestBody Recipe<Ingredient> recipe) {
 
-                log.info(">>> Updating new recipe: " + recipe);
+                log.info(">>> Updating new recipe: {}", recipe);
                 recipeSvc.updateRecipe(recipe);
 
                 return ResponseEntity
@@ -130,7 +130,7 @@ public class ShopperController {
         public ResponseEntity<Void> checkoutCart(
                         Cart cart) {
 
-                log.info(">>> Checking out cart: " + cart);
+                log.info(">>> Checking out cart: {}", cart);
                 return null;
         }
 

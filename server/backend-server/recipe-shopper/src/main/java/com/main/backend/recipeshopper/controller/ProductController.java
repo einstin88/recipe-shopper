@@ -24,73 +24,73 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(path = Urls.URL_PREFIX_API, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class ProductController {
-    @Autowired
-    private ProductService productSvc;
+        @Autowired
+        private ProductService productSvc;
 
-    /**
-     * Test Endpoint 1: a test point for making API call to Django web scrapper
-     * - errors from api call or product insertion to DB will be handled by
-     * {@link ErrorController}
-     * 
-     * @param category (String, mandatory) a parameter mapped to a URL for scraping
-     * @return List of Product objects
-     */
-    @GetMapping(path = Urls.URL_PARSE_URL)
-    public ResponseEntity<List<Product>> parseUrl(
-            @RequestParam String category) {
+        /**
+         * Test Endpoint 1: a test point for making API call to Django web scrapper
+         * - errors from api call or product insertion to DB will be handled by
+         * {@link ErrorController}
+         * 
+         * @param category (String, mandatory) a parameter mapped to a URL for scraping
+         * @return List of Product objects
+         */
+        @GetMapping(path = Urls.URL_PARSE_URL)
+        public ResponseEntity<List<Product>> parseUrl(
+                        @RequestParam String category) {
 
-        log.info(">>> Test parsing products for category -> %s".formatted(category));
+                log.info(">>> Test parsing products for category -> {}", category);
 
-        return ResponseEntity
-                .ok(productSvc.scrapeFromUrl(category.strip().toLowerCase()));
-    }
+                return ResponseEntity
+                                .ok(productSvc.scrapeFromUrl(category.strip().toLowerCase()));
+        }
 
-    /**
-     * Endpoint 1 (POST): receive html to pass to Django web scrapper for parsing
-     * - errors will be handled by {@link ErrorController} and rollback any DB
-     * transactions
-     * 
-     * @see ProductService
-     * 
-     * @param category (String, mandatory) parameter to associate with the parsed
-     *                 Products when saving to DB
-     * @param file     (File, mandatory) HTML file of a supermarket's products
-     *                 listing
-     * @return List of Product objects
-     */
-    @PostMapping(path = Urls.URL_PARSE_HTML, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<Product>> parseHtml(
-            @RequestParam String category,
-            @RequestPart MultipartFile file) {
+        /**
+         * Endpoint 1 (POST): receive html to pass to Django web scrapper for parsing
+         * - errors will be handled by {@link ErrorController} and rollback any DB
+         * transactions
+         * 
+         * @see ProductService
+         * 
+         * @param category (String, mandatory) parameter to associate with the parsed
+         *                 Products when saving to DB
+         * @param file     (File, mandatory) HTML file of a supermarket's products
+         *                 listing
+         * @return List of Product objects
+         */
+        @PostMapping(path = Urls.URL_PARSE_HTML, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        public ResponseEntity<List<Product>> parseHtml(
+                        @RequestParam String category,
+                        @RequestPart MultipartFile file) {
 
-        log.info(">>> Request to parse '%s' in category '%s'".formatted(
-                file.getOriginalFilename(), category));
+                log.info(">>> Request to parse '{}' in category '{}'",
+                                file.getOriginalFilename(), category);
 
-        return ResponseEntity
-                .ok(productSvc.scrapeFromHtml(category, file.getResource()));
-    }
+                return ResponseEntity
+                                .ok(productSvc.scrapeFromHtml(category, file.getResource()));
+        }
 
-    /**
-     * Endpoint 2 (GET): Retrieves a list of products from the given category
-     * 
-     * @param category (String, mandatory) The category of products to retrieve from
-     *                 DB
-     * @param limit    (Integer, default = 20) Max number of results
-     * @param offset   (Integer, default = 0) Starting index of the results to
-     *                 retrieve
-     * @return List of products
-     */
-    @GetMapping(path = Urls.URL_PRODUCTS + "/{category}")
-    public ResponseEntity<List<Product>> getProductList(
-            @PathVariable String category,
-            @RequestParam(defaultValue = "20") Integer limit,
-            @RequestParam(defaultValue = "0") Integer offset) {
+        /**
+         * Endpoint 2 (GET): Retrieves a list of products from the given category
+         * 
+         * @param category (String, mandatory) The category of products to retrieve from
+         *                 DB
+         * @param limit    (Integer, default = 20) Max number of results
+         * @param offset   (Integer, default = 0) Starting index of the results to
+         *                 retrieve
+         * @return List of products
+         */
+        @GetMapping(path = Urls.URL_PRODUCTS + "/{category}")
+        public ResponseEntity<List<Product>> getProductList(
+                        @PathVariable String category,
+                        @RequestParam(defaultValue = "20") Integer limit,
+                        @RequestParam(defaultValue = "0") Integer offset) {
 
-        log.info(">>> Request for products in category '%s' with limit-%d, offset-%d"
-                .formatted(category, limit, offset));
+                log.info(">>> Request for products in category '{}' with limit-{}, offset-{}",
+                                category, limit, offset);
 
-        return ResponseEntity
-                .ok(productSvc.getProductListByCategory(category, limit, offset));
-    }
+                return ResponseEntity
+                                .ok(productSvc.getProductListByCategory(category, limit, offset));
+        }
 
 }

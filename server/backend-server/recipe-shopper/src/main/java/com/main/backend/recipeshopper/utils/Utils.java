@@ -28,7 +28,7 @@ public class Utils {
                 .build().toString();
     }
 
-    // TODO: Function is not used, tb be deleted
+    // TODO: Function is not used, to be deleted
     /**
      * @deprecated
      * @param errMsg

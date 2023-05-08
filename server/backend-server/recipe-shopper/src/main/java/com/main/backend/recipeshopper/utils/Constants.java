@@ -8,7 +8,4 @@ public class Constants {
             "meats",
             "dairies",
             "condiments");
-
-    public static final String DJ_PARSE_URL = "parse-url";
-    public static final String DJ_PARSE_HTML = "parse-html";
 }

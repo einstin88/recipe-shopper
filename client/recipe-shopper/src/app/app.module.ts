@@ -19,6 +19,9 @@ import { ViewRecipeComponent } from './routes/view-recipe/view-recipe.component'
 import { ViewCartComponent } from './routes/view-cart/view-cart.component';
 import { SignInComponent } from './routes/sign-in/sign-in.component';
 import { RegistrationComponent } from './routes/registration/registration.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './flux/reducers';
+import { SignOutComponent } from './routes/sign-out/sign-out.component';
 
 @NgModule({
   declarations: [
@@ -35,12 +38,16 @@ import { RegistrationComponent } from './routes/registration/registration.compon
     ViewCartComponent,
     SignInComponent,
     RegistrationComponent,
+    SignOutComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers
+    }),
   ],
   providers: [RecipeDataService, ProductDataService],
   bootstrap: [AppComponent],

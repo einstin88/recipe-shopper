@@ -23,6 +23,7 @@ import com.main.backend.recipeshopper.exceptions.IncorrectRequestException;
 import com.main.backend.recipeshopper.exceptions.ProductUpsertException;
 import com.main.backend.recipeshopper.model.Product;
 import com.main.backend.recipeshopper.repository.ProductRepository;
+import com.main.backend.recipeshopper.utils.Urls;
 import com.main.backend.recipeshopper.utils.Utils;
 
 import static com.main.backend.recipeshopper.utils.Constants.*;
@@ -57,10 +58,10 @@ public class ProductService {
         // Build URL for API call to Django
         URI url = UriComponentsBuilder
                 .fromHttpUrl(DJANGO_URL)
-                .pathSegment(DJ_PARSE_URL)
+                .path(Urls.URL_PARSE_URL)
                 .queryParam("category", category)
                 .build().toUri();
-        log.info(">>> API URL to call: %s".formatted(url.toString()));
+        log.info(">>> API URL to call: {}", url.toString());
 
         // Build request entity
         RequestEntity<Void> request = RequestEntity
@@ -91,7 +92,7 @@ public class ProductService {
         // Build URL for API call to Django
         URI url = UriComponentsBuilder
                 .fromHttpUrl(DJANGO_URL)
-                .pathSegment(DJ_PARSE_HTML)
+                .pathSegment(Urls.URL_PARSE_HTML)
                 .build().toUri();
 
         // Build body as form-data
@@ -200,7 +201,7 @@ public class ProductService {
                 })
                 .toList();
 
-        log.info(">>> Products saved to DB: " + String.valueOf(products.size()));
+        log.info(">>> Products saved to DB: {}", products.size());
 
         return products;
     }

@@ -4,25 +4,28 @@ import { EP_REGISTER_USER, EP_SIGN_IN_USER } from '../utils/urls';
 import { User } from '../model/user.model';
 import { AuthPayLoad } from '../model/authentication-payload.model';
 import { JWT } from '../model/jwt.model';
-import { firstValueFrom, tap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AuthActions } from '../flux/actions/auth.action';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthDataService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private store: Store) {}
 
-  jwt!: string;
+  // jwt!: string;
 
   registerUser(newUser: User) {
-    firstValueFrom(
-      this.http.post<JWT>(EP_REGISTER_USER, newUser).pipe(
-        tap((token) => {
-          this.jwt = token.token;
-          console.debug('>>> Token: ', this.jwt);
-        })
-      )
-    ).catch((error) => console.error('--- Login error: ', error));
+    return firstValueFrom(this.http.post<JWT>(EP_REGISTER_USER, newUser))
+      .then((jwt) => {
+        console.info('>>> Token: ', jwt);
+        this.store.dispatch(AuthActions.registrationSuccess({ jwt }));
+      })
+      .catch((error: Error) => {
+        console.error('--- Login error: ', error.message);
+        this.store.dispatch(AuthActions.registrationFailure());
+      });
   }
 
   loginUser(credentials: AuthPayLoad) {
@@ -33,15 +36,16 @@ export class AuthDataService {
       'application/x-www-form-urlencoded'
     );
 
-    firstValueFrom(
-      this.http
-        .post<JWT>(EP_SIGN_IN_USER, payload.toString(), { headers })
-        .pipe(
-          tap((token) => {
-            this.jwt = token.token;
-            console.debug('>>> Token: ', this.jwt);
-          })
-        )
-    ).catch((error) => console.error('--- Login error: ', error));
+    return firstValueFrom(
+      this.http.post<JWT>(EP_SIGN_IN_USER, payload.toString(), { headers })
+    )
+      .then((jwt) => {
+        console.info('>>> Token: ', jwt);
+        this.store.dispatch(AuthActions.loginSuccess({ jwt }));
+      })
+      .catch((error: Error) => {
+        console.error('--- Login error: ', error.message);
+        this.store.dispatch(AuthActions.loginFailure());
+      });
   }
 }
