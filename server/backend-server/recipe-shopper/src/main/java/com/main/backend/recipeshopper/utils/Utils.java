@@ -34,11 +34,11 @@ public class Utils {
      * @param errMsg
      * @return
      */
-    // private static String createErrorResponseMsg(String errMsg) {
-    // return Json.createObjectBuilder()
-    // .add("error", errMsg)
-    // .build().toString();
-    // }
+    public static String createErrorResponseMsg(String errMsg) {
+        return Json.createObjectBuilder()
+                .add("error", errMsg)
+                .build().toString();
+    }
 
     /**
      * 

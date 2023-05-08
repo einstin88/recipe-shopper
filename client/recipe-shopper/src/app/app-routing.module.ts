@@ -6,8 +6,16 @@ import { ParseHtmlComponent } from './routes/parse-html/parse-html.component';
 import { BrowseRecipeComponent } from './routes/browse-recipe/browse-recipe.component';
 import { ViewRecipeComponent } from './routes/view-recipe/view-recipe.component';
 import { ViewCartComponent } from './routes/view-cart/view-cart.component';
+import { SignInComponent } from './routes/sign-in/sign-in.component';
+import { RegistrationComponent } from './routes/registration/registration.component';
 
 const routes: Routes = [
+  { path: 'login', component: SignInComponent, title: 'Log In Page' },
+  {
+    path: 'registration',
+    component: RegistrationComponent,
+    title: 'Register Account',
+  },
   { path: 'cart/view', component: ViewCartComponent, title: 'View Cart' },
   { path: 'parse-html', component: ParseHtmlComponent, title: 'Parse HTML' },
   {

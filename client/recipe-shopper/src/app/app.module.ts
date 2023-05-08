@@ -17,6 +17,8 @@ import { ParseHtmlComponent } from './routes/parse-html/parse-html.component';
 import { UpdateRecipeComponent } from './routes/update-recipe/update-recipe.component';
 import { ViewRecipeComponent } from './routes/view-recipe/view-recipe.component';
 import { ViewCartComponent } from './routes/view-cart/view-cart.component';
+import { SignInComponent } from './routes/sign-in/sign-in.component';
+import { RegistrationComponent } from './routes/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { ViewCartComponent } from './routes/view-cart/view-cart.component';
     UpdateRecipeComponent,
     ViewRecipeComponent,
     ViewCartComponent,
+    SignInComponent,
+    RegistrationComponent,
   ],
   imports: [
     BrowserModule,

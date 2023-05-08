@@ -15,6 +15,9 @@ import static com.recipeshopper.jwtauthserver.Utils.Urls.*;
 
 import java.util.Map;
 
+/**
+ * This controller is to be accessed from the back-end server only
+ */
 @RestController
 @RequestMapping(path = URL_PREFIX_AUTH)
 @Slf4j

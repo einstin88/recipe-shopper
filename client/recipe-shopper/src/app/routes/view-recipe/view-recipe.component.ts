@@ -50,6 +50,6 @@ export class ViewRecipeComponent implements OnInit {
    * @description Function to handle the clicking of the 'Update' button. Navigates to the Update Recipe path.
    */
   updateRecipe() {
-    this.router.navigate([this.svc.API_UPDATE_RECIPE, this.recipeId]);
+    this.router.navigate(['/recipe/update', this.recipeId]);
   }
 }

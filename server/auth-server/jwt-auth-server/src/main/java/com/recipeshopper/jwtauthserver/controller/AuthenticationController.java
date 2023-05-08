@@ -20,6 +20,9 @@ import static com.recipeshopper.jwtauthserver.Utils.Urls.*;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * This controller is to be accessed from front-end
+ */
 @RestController
 @RequestMapping(path = URL_PREFIX_AUTH, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -38,7 +41,7 @@ public class AuthenticationController {
     /**
      * EP for new user registration
      * 
-     * @param newUser
+     * @param newUser JSON format
      * @return JWS of the new user
      */
     @PostMapping(path = URL_REGISTER, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -68,7 +71,8 @@ public class AuthenticationController {
         log.info(">>> Succesfully authenticated {}", username);
 
         return ResponseEntity.ok(
-                svc.processAuthenticatedUser(username));
+                Utils.createTokenResponse(
+                        svc.processAuthenticatedUser(username)));
     }
 
     @GetMapping(URL_SIGN_IN_DEFAULT)
@@ -77,7 +81,9 @@ public class AuthenticationController {
 
         if (error != null) {
             log.info(">>> Log in failed");
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity
+                    .badRequest()
+                    .body("User not found");
         }
 
         // No log-in page. This error status should be handled by front-end

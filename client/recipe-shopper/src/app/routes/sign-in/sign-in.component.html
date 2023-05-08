@@ -1,0 +1,18 @@
+<form [formGroup]="signinForm" (ngSubmit)="processForm()">
+  <table>
+    <tr>
+      <td>Username:</td>
+      <td><input type="text" formControlName="username" /></td>
+    </tr>
+    <tr>
+      <td>Password:</td>
+      <td><input type="password" formControlName="password" /></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <button type="submit" [disabled]="signinForm.invalid">Log In</button>
+      </td>
+    </tr>
+  </table>
+</form>
