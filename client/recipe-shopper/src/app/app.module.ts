@@ -22,6 +22,9 @@ import { RegistrationComponent } from './routes/registration/registration.compon
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './flux/reducers';
 import { SignOutComponent } from './routes/sign-out/sign-out.component';
+import { EffectsModule } from '@ngrx/effects';
+import { persistStoreEffect } from './flux/effects/persist-store.effect';
+import { HydrationEffect } from './flux/effects/hydration.effect';
 
 @NgModule({
   declarations: [
@@ -46,8 +49,9 @@ import { SignOutComponent } from './routes/sign-out/sign-out.component';
     HttpClientModule,
     ReactiveFormsModule,
     StoreModule.forRoot(reducers, {
-      metaReducers
+      metaReducers,
     }),
+    EffectsModule.forRoot([HydrationEffect, { persistStoreEffect }]),
   ],
   providers: [RecipeDataService, ProductDataService],
   bootstrap: [AppComponent],

@@ -14,8 +14,6 @@ import { AuthActions } from '../flux/actions/auth.action';
 export class AuthDataService {
   constructor(private http: HttpClient, private store: Store) {}
 
-  // jwt!: string;
-
   registerUser(newUser: User) {
     return firstValueFrom(this.http.post<JWT>(EP_REGISTER_USER, newUser))
       .then((jwt) => {

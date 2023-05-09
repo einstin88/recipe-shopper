@@ -9,5 +9,7 @@ export const AuthActions = createActionGroup({
 
     'Registration Success': props<{ jwt: JWT }>(),
     'Registration Failure': emptyProps(),
+
+    Logout: emptyProps(),
   },
 });

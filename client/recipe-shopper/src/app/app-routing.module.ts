@@ -8,9 +8,11 @@ import { ViewRecipeComponent } from './routes/view-recipe/view-recipe.component'
 import { ViewCartComponent } from './routes/view-cart/view-cart.component';
 import { SignInComponent } from './routes/sign-in/sign-in.component';
 import { RegistrationComponent } from './routes/registration/registration.component';
+import { SignOutComponent } from './routes/sign-out/sign-out.component';
 
 const routes: Routes = [
   { path: 'login', component: SignInComponent, title: 'Log In Page' },
+  { path: 'logout', component: SignOutComponent, title: 'Log Out' },
   {
     path: 'registration',
     component: RegistrationComponent,
