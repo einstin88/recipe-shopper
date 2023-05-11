@@ -1,4 +1,9 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Recipe } from '../model/recipe.model';
@@ -29,11 +34,15 @@ export class RecipeDataService {
    * @returns Promise with a {@link Recipe}[]
    */
   getRecipes(limit: number, offset: number) {
-    const url = EP_GET_RECIPES;
     const headers = new HttpHeaders().set('Accept', this.#Content_JSON);
     const params = new HttpParams().appendAll({ limit, offset });
 
-    return firstValueFrom(this.http.get<Recipe[]>(url, { headers, params }));
+    return firstValueFrom(
+      this.http.get<Recipe[]>(EP_GET_RECIPES, { headers, params })
+    ).catch((error: HttpErrorResponse) => {
+      console.error(`Error response: ${error.message}`);
+      throw new Error(`${error.status}: ${error.statusText}`);
+    });
   }
 
   /**
@@ -43,9 +52,14 @@ export class RecipeDataService {
    * @returns Promise with a {@link Recipe}
    */
   getRecipeById(recipeId: string) {
-    const url = EP_GET_RECIPE + recipeId;
+    const url = `${EP_GET_RECIPE}/${recipeId}`;
 
-    return firstValueFrom(this.http.get<Recipe>(url));
+    return firstValueFrom(this.http.get<Recipe>(url)).catch(
+      (error: HttpErrorResponse) => {
+        console.error(`Error response: ${error.message}`);
+        throw new Error(`${error.status}: ${error.statusText}`);
+      }
+    );
   }
 
   /**
@@ -55,9 +69,12 @@ export class RecipeDataService {
    * @returns Empty promise
    */
   postNewRecipe(newRecipe: Recipe) {
-    const url = EP_POST_RECIPE;
-
-    return firstValueFrom(this.http.post<void>(url, newRecipe));
+    return firstValueFrom(
+      this.http.post<void>(EP_POST_RECIPE, newRecipe)
+    ).catch((error: HttpErrorResponse) => {
+      console.error(`Error response: ${error.message}`);
+      throw new Error(`${error.status}: ${error.statusText}`);
+    });
   }
 
   /**
@@ -67,8 +84,11 @@ export class RecipeDataService {
    * @returns Empty promise
    */
   updateRecipe(recipe: Recipe) {
-    const url = EP_UPDATE_RECIPE;
-
-    return firstValueFrom(this.http.put<void>(url, recipe));
+    return firstValueFrom(this.http.put<void>(EP_UPDATE_RECIPE, recipe)).catch(
+      (error: HttpErrorResponse) => {
+        console.error(`Error response: ${error.message}`);
+        throw new Error(`${error.status}: ${error.statusText}`);
+      }
+    );
   }
 }

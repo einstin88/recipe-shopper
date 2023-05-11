@@ -47,8 +47,8 @@ export class SignInComponent implements OnInit {
         this.router.navigate([this.redirectPath]);
       })
       .catch((error: Error) => {
-        console.debug('Sign in Error: ', error.message);
         this.errorMsg = error.message;
+        console.debug('Sign in Error! ', this.errorMsg);
       });
   }
 }

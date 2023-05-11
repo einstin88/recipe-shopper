@@ -1,4 +1,9 @@
 <h3>Register a new account</h3>
+<div *ngIf="errorMsg">
+  <p class="error">
+    {{ errorMsg }}
+  </p>
+</div>
 <form [formGroup]="registrationForm" (ngSubmit)="processform()">
   <table>
     <tr>

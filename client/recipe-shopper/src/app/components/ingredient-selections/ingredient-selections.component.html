@@ -1,0 +1,24 @@
+<p>Ingredients:</p>
+<form [formGroup]="ingredientsForm">
+  <table formArrayName="ingredientSelections">
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Pack Size</th>
+      <th>Quantity</th>
+      <th>Image</th>
+    </tr>
+    <tr
+      *ngFor="let ingredient of ingredientSelections.controls; index as idx"
+      [formGroupName]="idx"
+    >
+      <td><input type="checkbox" formControlName="selected" /></td>
+      <td>{{ ingredientSelections.at(idx).get("name")!.value }}</td>
+      <td>{{ ingredientSelections.at(idx).get("pack_size")!.value }}</td>
+      <td>{{ ingredientSelections.at(idx).get("quantity")!.value }}</td>
+      <td>
+        <img [src]="ingredientSelections.at(idx).get('img')!.value" alt="" />
+      </td>
+    </tr>
+  </table>
+</form>

@@ -5,7 +5,7 @@ export const EP_GET_PRODUCTS = URL_PREFIX_API + '/products/';
 export const EP_PARSE_HTML = URL_PREFIX_API + '/parse-html';
 
 export const EP_GET_RECIPES = URL_PREFIX_API + '/recipes';
-export const EP_GET_RECIPE = URL_PREFIX_API + '/recipe/view/';
+export const EP_GET_RECIPE = URL_PREFIX_API + '/recipe/view';
 export const EP_POST_RECIPE = URL_PREFIX_API + '/recipe/new';
 export const EP_UPDATE_RECIPE = URL_PREFIX_API + '/recipe/update';
 

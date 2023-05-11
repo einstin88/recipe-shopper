@@ -1,6 +1,24 @@
 <div *ngIf="!errMsg; else err">
-  <h2>{{ recipeId }}</h2>
-  <button type="button" (click)="updateRecipe()">Update Recipe</button>
-  <p>{{ recipe | json }}</p>
+  <h2>Recipe: {{ recipe.recipeName }}</h2>
+  <button type="button" [routerLink]="['/recipe/update', recipeId]">
+    Update Recipe
+  </button>
+  <table>
+    <tr>
+      <td>Created by:</td>
+      <td>{{ recipe.recipeCreator }}</td>
+    </tr>
+    <tr>
+      <td>Created on:</td>
+      <td>{{ recipe.timeStamp | date : "longDate" }}</td>
+    </tr>
+    <tr>
+      <td>Procedures:</td>
+      <td>{{ recipe.procedures }}</td>
+    </tr>
+  </table>
+  <app-ingredient-selections
+    [ingredients]="recipe.ingredients"
+  ></app-ingredient-selections>
 </div>
 <ng-template #err>{{ errMsg }}</ng-template>

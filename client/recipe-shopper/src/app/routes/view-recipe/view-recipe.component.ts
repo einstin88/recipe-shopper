@@ -40,8 +40,8 @@ export class ViewRecipeComponent implements OnInit {
         this.recipe = recipe;
         this.title.setTitle(`View Recipe: ${this.recipe.recipeName}`);
       })
-      .catch((err) => {
-        this.errMsg = err.error;
+      .catch((err: Error) => {
+        this.errMsg = err.message;
         this.title.setTitle(`Recipe ${this.recipeId} Not Found`);
       });
   }
@@ -49,7 +49,7 @@ export class ViewRecipeComponent implements OnInit {
   /**
    * @description Function to handle the clicking of the 'Update' button. Navigates to the Update Recipe path.
    */
-  updateRecipe() {
-    this.router.navigate(['/recipe/update', this.recipeId]);
-  }
+  // updateRecipe() {
+  //   this.router.navigate(['/recipe/update', this.recipeId]);
+  // }
 }

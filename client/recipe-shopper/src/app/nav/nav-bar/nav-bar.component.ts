@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { selectCurrentUser, selectJwt } from 'src/app/flux/auth/auth.selector';
+import { selectCurrentUser } from 'src/app/flux/auth/auth.selector';
 
 @Component({
   selector: 'app-nav-bar',
