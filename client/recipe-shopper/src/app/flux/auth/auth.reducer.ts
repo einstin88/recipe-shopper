@@ -1,8 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { JWT } from 'src/app/model/jwt.model';
-import { AuthActions } from '../actions/auth.action';
-import jwtDecode from 'jwt-decode';
-import { JwtPayload } from 'src/app/model/jwt-payload.model';
+import { AuthActions } from './auth.action';
+import { decodeJwt } from 'jose';
 
 export interface AuthState {
   jwt: JWT;
@@ -22,10 +21,11 @@ export const AuthReducers = createReducer(
     AuthActions.loginSuccess,
     AuthActions.registrationSuccess,
     (state, { jwt }) => {
-      const decodedToken: JwtPayload = jwtDecode(jwt.token);
-      console.debug('>>> Decoded sub: ', decodedToken.sub);
+      const decodedToken = decodeJwt(jwt.token);
+      const currentUser = decodedToken.sub!;
+      console.debug('>>> Decoded subject: ', currentUser);
 
-      return { ...state, jwt, currentUser: decodedToken.sub };
+      return { ...state, jwt, currentUser };
     }
   ),
   on(

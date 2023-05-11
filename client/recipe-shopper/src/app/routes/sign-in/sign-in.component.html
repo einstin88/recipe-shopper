@@ -1,3 +1,6 @@
+<div *ngIf="errorMsg" class="error">
+  {{ errorMsg }}
+</div>
 <form [formGroup]="signinForm" (ngSubmit)="processForm()">
   <table>
     <tr>

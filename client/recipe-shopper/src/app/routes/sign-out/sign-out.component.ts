@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AuthActions } from 'src/app/flux/actions/auth.action';
+import { AuthActions } from 'src/app/flux/auth/auth.action';
 import { State } from 'src/app/flux/reducers';
-import { selectCurrentUser } from 'src/app/flux/selectors/auth.selector';
+import { selectCurrentUser } from 'src/app/flux/auth/auth.selector';
 
 @Component({
   templateUrl: './sign-out.component.html',

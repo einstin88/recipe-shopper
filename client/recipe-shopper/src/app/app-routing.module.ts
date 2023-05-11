@@ -9,24 +9,56 @@ import { ViewCartComponent } from './routes/view-cart/view-cart.component';
 import { SignInComponent } from './routes/sign-in/sign-in.component';
 import { RegistrationComponent } from './routes/registration/registration.component';
 import { SignOutComponent } from './routes/sign-out/sign-out.component';
+import { AuthGuard } from './routes/auth.guard';
+import { AnonymousGuard } from './routes/anonymous.guard';
 
 const routes: Routes = [
-  { path: 'login', component: SignInComponent, title: 'Log In Page' },
-  { path: 'logout', component: SignOutComponent, title: 'Log Out' },
+  {
+    path: 'login',
+    component: SignInComponent,
+    title: 'Log In Page',
+    canMatch: [AnonymousGuard]
+  },
+  {
+    path: 'logout',
+    component: SignOutComponent,
+    title: 'Log Out',
+    canActivate: [AuthGuard],
+  },
   {
     path: 'registration',
     component: RegistrationComponent,
     title: 'Register Account',
+    canMatch: [AnonymousGuard]
   },
-  { path: 'cart/view', component: ViewCartComponent, title: 'View Cart' },
-  { path: 'parse-html', component: ParseHtmlComponent, title: 'Parse HTML' },
+  {
+    path: 'cart/view',
+    component: ViewCartComponent,
+    title: 'View Cart',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'parse-html',
+    component: ParseHtmlComponent,
+    title: 'Parse HTML',
+    canActivate: [AuthGuard],
+  },
   {
     path: 'recipe/new',
     component: NewRecipeComponent,
     title: 'Create New Recipe',
+    canActivate: [AuthGuard],
   },
-  { path: 'recipe/update/:recipeId', component: UpdateRecipeComponent },
-  { path: 'recipe/view/:recipeId', component: ViewRecipeComponent },
+  {
+    path: 'recipe/update/:recipeId',
+    component: UpdateRecipeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'recipe/view/:recipeId',
+    component: ViewRecipeComponent,
+    canActivate: [AuthGuard],
+  },
   { path: '', component: BrowseRecipeComponent, title: 'Browse Recipes' },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];

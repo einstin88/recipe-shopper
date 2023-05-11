@@ -16,12 +16,15 @@ export class SignInComponent implements OnInit {
     private svc: AuthDataService
   ) {}
 
+  errorMsg: string = '';
   redirectPath: string = '/';
   signinForm!: FormGroup;
 
   ngOnInit(): void {
     if (this.route.snapshot.queryParamMap.has('redirect'))
-      this.redirectPath += this.route.snapshot.queryParamMap.get('redirect')!;
+      this.redirectPath = this.route.snapshot.queryParamMap.get('redirect')!;
+
+    console.debug('>>> Redirect path: ', this.redirectPath);
 
     this.initForm();
   }
@@ -37,10 +40,15 @@ export class SignInComponent implements OnInit {
     const credentials = this.signinForm.value as AuthPayLoad;
     console.debug('>>> Credentials: ', credentials);
 
-    this.svc.loginUser(credentials).then(() => {
-      this.signinForm.reset();
-    });
-
-    this.router.navigate([this.redirectPath]);
+    this.svc
+      .loginUser(credentials)
+      .then(() => {
+        this.signinForm.reset();
+        this.router.navigate([this.redirectPath]);
+      })
+      .catch((error: Error) => {
+        console.debug('Sign in Error: ', error.message);
+        this.errorMsg = error.message;
+      });
   }
 }

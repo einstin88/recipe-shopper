@@ -23,8 +23,8 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './flux/reducers';
 import { SignOutComponent } from './routes/sign-out/sign-out.component';
 import { EffectsModule } from '@ngrx/effects';
-import { persistStoreEffect } from './flux/effects/persist-store.effect';
-import { HydrationEffect } from './flux/effects/hydration.effect';
+import { persistStoreEffect } from './flux/store-persist-hydrate/persist-store.effect';
+import { HydrationEffect } from './flux/store-persist-hydrate/hydration.effect';
 
 @NgModule({
   declarations: [

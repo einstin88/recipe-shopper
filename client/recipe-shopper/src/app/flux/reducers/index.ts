@@ -1,7 +1,7 @@
 import { isDevMode } from '@angular/core';
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
-import { AuthReducers, AuthState, authInitialState } from './auth.reducer';
-import { HydrationMetaReducer } from './hydrate.meta.reducer';
+import { AuthReducers, AuthState, authInitialState } from '../auth/auth.reducer';
+import { HydrationMetaReducer } from '../store-persist-hydrate/hydrate.meta.reducer';
 import { loggingMetaReducer } from './logging.meta.reducer';
 
 export interface State {

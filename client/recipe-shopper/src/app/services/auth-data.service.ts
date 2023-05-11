@@ -6,7 +6,7 @@ import { AuthPayLoad } from '../model/authentication-payload.model';
 import { JWT } from '../model/jwt.model';
 import { firstValueFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AuthActions } from '../flux/actions/auth.action';
+import { AuthActions } from '../flux/auth/auth.action';
 
 @Injectable({
   providedIn: 'root',
@@ -38,12 +38,13 @@ export class AuthDataService {
       this.http.post<JWT>(EP_SIGN_IN_USER, payload.toString(), { headers })
     )
       .then((jwt) => {
-        console.info('>>> Token: ', jwt);
+        console.debug('>>> Token: ', jwt);
         this.store.dispatch(AuthActions.loginSuccess({ jwt }));
       })
       .catch((error: Error) => {
         console.error('--- Login error: ', error.message);
         this.store.dispatch(AuthActions.loginFailure());
+        throw new Error(`Bad response from server- ${error.message}`);
       });
   }
 }

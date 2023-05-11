@@ -1,6 +1,6 @@
 import { Action, ActionReducer } from '@ngrx/store';
-import { State } from '.';
-import { HydrationActions } from '../actions/hydration.action';
+import { State } from '../reducers';
+import { HydrationActions } from './hydration.action';
 
 const isHydrateSuccess = (
   action: Action

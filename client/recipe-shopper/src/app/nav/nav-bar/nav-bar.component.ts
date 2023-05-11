@@ -1,17 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  selectCurrentUser,
-  selectJwt,
-} from 'src/app/flux/selectors/auth.selector';
+import { Subscription } from 'rxjs';
+import { selectCurrentUser, selectJwt } from 'src/app/flux/auth/auth.selector';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css'],
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit, OnDestroy {
   constructor(private store: Store) {}
 
-  currentUser$ = this.store.select(selectCurrentUser);
+  currentUser!: string;
+  isLoggedIn: boolean = false;
+
+  sub$!: Subscription;
+
+  ngOnInit(): void {
+    this.sub$ = this.store.select(selectCurrentUser).subscribe((user) => {
+      if (user) this.isLoggedIn = true;
+      else this.isLoggedIn = false;
+
+      this.currentUser = user;
+    });
+  }
+  ngOnDestroy(): void {
+    this.sub$.unsubscribe();
+  }
 }

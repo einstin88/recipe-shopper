@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, OnInitEffects, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { HydrationActions } from '../actions/hydration.action';
+import { HydrationActions } from './hydration.action';
 import { State } from '../reducers';
 import { map, pipe } from 'rxjs';
 

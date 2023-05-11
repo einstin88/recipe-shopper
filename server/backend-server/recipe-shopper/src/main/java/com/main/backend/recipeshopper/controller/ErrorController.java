@@ -37,6 +37,7 @@ public class ErrorController {
         /**
          * Generate error responses for exception type(s):
          * {@link IncorrectRequestException}
+         * {@link AccessDeniedException}
          * 
          * @param err - the thrown exception instance belonging to a subclass of
          *            RuntimeException
