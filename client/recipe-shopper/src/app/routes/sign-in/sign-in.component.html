@@ -1,5 +1,9 @@
-<div *ngIf="errorMsg" class="error">
-  {{ errorMsg }}
+<h3>Sign In</h3>
+<div *ngIf="errorMsg">
+  <p class="error">
+    {{ errorMsg }}
+  </p>
+  <p><a routerLink="/registration">Register</a> for a new account instead?</p>
 </div>
 <form [formGroup]="signinForm" (ngSubmit)="processForm()">
   <table>

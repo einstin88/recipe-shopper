@@ -1,0 +1,35 @@
+<p>Ingredients:</p>
+<div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+<form [formGroup]="ingredientsForm" (ngSubmit)="processForm()">
+  <table formArrayName="selectedIngredients">
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Pack Size</th>
+      <th>Unit Price</th>
+      <th>Quantity</th>
+      <th>Image</th>
+    </tr>
+    <tr
+      *ngFor="let ingredient of ingredientSelections.controls; index as idx"
+      [formGroupName]="idx"
+    >
+      <td><input type="checkbox" formControlName="selected" /></td>
+      <td>{{ ingredientSelections.at(idx).get("name")!.value }}</td>
+      <td>{{ ingredientSelections.at(idx).get("pack_size")!.value }}</td>
+      <td>{{ ingredientSelections.at(idx).get("price")!.value }}</td>
+      <td><input type="number" formControlName="quantity" /></td>
+      <td>
+        <img [src]="ingredientSelections.at(idx).get('img')!.value" alt="" />
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <button type="submit" [disabled]="ingredientsForm.invalid">
+          Add ingredient(s) to cart
+        </button>
+      </td>
+    </tr>
+  </table>
+</form>

@@ -14,7 +14,7 @@
         <a class="nav-link" routerLink="/parse-html">Parse HTML</a>
       </li>
       <li class="nav-item" *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="/cart/view">Cart</a>
+        <a class="nav-link" routerLink="/cart/view">Cart({{ cartCount }})</a>
       </li>
       <li class="nav-item" *ngIf="!isLoggedIn">
         <a class="nav-link" routerLink="/registration">Register</a>

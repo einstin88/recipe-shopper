@@ -11,7 +11,9 @@ public class Urls {
     public static final String URL_RECIPES = "/recipes";
     public static final String URL_RECIPE_NEW = URL_PREFIX_RECIPE + "/new";
     public static final String URL_RECIPE_UPDATE = URL_PREFIX_RECIPE + "/update";
-    public static final String URL_RECIPE_VIEW = URL_PREFIX_RECIPE + "/recipes";
+    public static final String URL_RECIPE_VIEW = URL_PREFIX_RECIPE + "/view";
+
+    public static final String URL_CART_CHECKOUT = "/cart/checkout";
 
     public static final String URL_HEALTH = "/health";
 

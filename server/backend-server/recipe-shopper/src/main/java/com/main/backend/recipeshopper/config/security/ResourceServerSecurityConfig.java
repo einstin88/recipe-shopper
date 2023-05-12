@@ -14,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
 import static com.main.backend.recipeshopper.utils.Urls.*;
@@ -74,12 +73,8 @@ public class ResourceServerSecurityConfig {
                         .decoder(jwtDecoder);
                 });
             })
-            .exceptionHandling(exception -> {
-                exception.authenticationEntryPoint(
-                    new LoginUrlAuthenticationEntryPoint("/login")
-                );
-            });
-        // @formatter: on
+            ;
+            // @formatter: on
 
         return security.build();
     }

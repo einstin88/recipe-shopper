@@ -1,4 +1,9 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EP_REGISTER_USER, EP_SIGN_IN_USER } from '../utils/urls';
 import { User } from '../model/user.model';
@@ -20,9 +25,11 @@ export class AuthDataService {
         console.info('>>> Token: ', jwt);
         this.store.dispatch(AuthActions.registrationSuccess({ jwt }));
       })
-      .catch((error: Error) => {
-        console.error('--- Login error: ', error.message);
+      .catch((error: HttpErrorResponse) => {
+        console.error('--- Registration error: ', error.message);
+
         this.store.dispatch(AuthActions.registrationFailure());
+        throw new Error(`${error.status}: Registration failed!`);
       });
   }
 
@@ -41,10 +48,11 @@ export class AuthDataService {
         console.debug('>>> Token: ', jwt);
         this.store.dispatch(AuthActions.loginSuccess({ jwt }));
       })
-      .catch((error: Error) => {
+      .catch((error: HttpErrorResponse) => {
         console.error('--- Login error: ', error.message);
+
         this.store.dispatch(AuthActions.loginFailure());
-        throw new Error(`Bad response from server- ${error.message}`);
+        throw new Error(`${error.status}: Bad response from server`);
       });
   }
 }
