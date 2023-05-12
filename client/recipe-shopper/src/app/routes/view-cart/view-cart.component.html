@@ -1,1 +1,70 @@
-<p>view-cart works!</p>
+<table *ngIf="cartItems.length; else emptyMsg">
+  <tr>
+    <th rowspan="2">Recipe Name</th>
+    <th rowspan="2">Recipe Creator</th>
+    <th colspan="5">Ingredients</th>
+    <th rowspan="2"></th>
+  </tr>
+  <tr>
+    <th>Name</th>
+    <th>Pack Size</th>
+    <th>Unit Price</th>
+    <th>Quantity</th>
+    <th>Total</th>
+  </tr>
+  <tr *ngFor="let item of cartItems; index as idx">
+    <td>
+      {{ item.recipeName }}
+    </td>
+    <td>{{ item.recipeCreator }}</td>
+    <td>
+      <ul>
+        <li *ngFor="let ingredient of item.ingredients">
+          {{ ingredient.name }}
+        </li>
+      </ul>
+    </td>
+    <td>
+      <div *ngFor="let ingredient of item.ingredients">
+        {{ ingredient.pack_size }}
+      </div>
+    </td>
+    <td>
+      <div *ngFor="let ingredient of item.ingredients">
+        {{ ingredient.price }}
+      </div>
+    </td>
+    <td>
+      <div *ngFor="let ingredient of item.ingredients">
+        {{ ingredient.quantity }}
+      </div>
+    </td>
+    <td>
+      <div *ngFor="let ingredient of item.ingredients">
+        {{ ingredient.total }}
+      </div>
+    </td>
+    <td><button type="button" (click)="removeItem(idx)">X</button></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>TOTAL: </td>
+    <td>{{ cartTotal}}</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><button type="button" (click)="checkOut()">Checkout</button></td>
+    <td><button type="button" (click)="emptyCart()">Empty Cart</button></td>
+  </tr>
+</table>
+<ng-template #emptyMsg>No items in the cart yet</ng-template>

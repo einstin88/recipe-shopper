@@ -73,11 +73,6 @@ public class ResourceServerSecurityConfig {
                         .decoder(jwtDecoder);
                 });
             })
-            // .exceptionHandling(exception -> {
-            //     exception.authenticationEntryPoint(
-            //         new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login")
-            //     );
-            // })
             ;
             // @formatter: on
 

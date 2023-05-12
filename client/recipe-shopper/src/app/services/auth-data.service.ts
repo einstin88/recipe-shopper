@@ -1,4 +1,9 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EP_REGISTER_USER, EP_SIGN_IN_USER } from '../utils/urls';
 import { User } from '../model/user.model';
@@ -22,6 +27,7 @@ export class AuthDataService {
       })
       .catch((error: HttpErrorResponse) => {
         console.error('--- Registration error: ', error.message);
+
         this.store.dispatch(AuthActions.registrationFailure());
         throw new Error(`${error.status}: Registration failed!`);
       });
@@ -44,6 +50,7 @@ export class AuthDataService {
       })
       .catch((error: HttpErrorResponse) => {
         console.error('--- Login error: ', error.message);
+
         this.store.dispatch(AuthActions.loginFailure());
         throw new Error(`${error.status}: Bad response from server`);
       });

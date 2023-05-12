@@ -1,5 +1,6 @@
 package com.main.backend.recipeshopper.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,7 +11,7 @@ import com.main.backend.recipeshopper.exceptions.IncorrectRequestException;
 import com.main.backend.recipeshopper.exceptions.ProductUpsertException;
 import com.main.backend.recipeshopper.exceptions.RecipeTransactionException;
 
-@RestControllerAdvice(basePackageClasses = ShopperController.class)
+@RestControllerAdvice(basePackageClasses = { ShopperController.class, ProductController.class })
 public class ErrorController {
         /**
          * Generate error responses for exception types:
@@ -45,12 +46,22 @@ public class ErrorController {
          */
         // @formatter:off
         @ExceptionHandler({
-                IncorrectRequestException.class,
-                AccessDeniedException.class
+                IncorrectRequestException.class
         })
         public ResponseEntity<String> handleIllegalRequests(RuntimeException err) {
                 return ResponseEntity
                         .badRequest()
+                        .body(err.getMessage());
+        }
+        // @formatter: on
+
+        // @formatter:off
+        @ExceptionHandler({
+                AccessDeniedException.class
+        })
+        public ResponseEntity<String> handleExpiredRequests(RuntimeException err) {
+                return ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
                         .body(err.getMessage());
         }
         // @formatter: on

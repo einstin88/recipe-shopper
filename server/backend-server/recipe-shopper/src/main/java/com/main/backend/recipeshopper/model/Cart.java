@@ -4,8 +4,7 @@ import java.util.List;
 
 public record Cart(
     String username,
-    String address,
-    List<Recipe<Ingredient>> cartItems,
+    List<CartItem> cartItems,
     Double total
 ) {
     

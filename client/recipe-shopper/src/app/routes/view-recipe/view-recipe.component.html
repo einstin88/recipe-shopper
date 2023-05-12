@@ -1,6 +1,10 @@
 <div *ngIf="!errMsg; else err">
   <h2>Recipe: {{ recipe.recipeName }}</h2>
-  <button type="button" [routerLink]="['/recipe/update', recipeId]">
+  <button
+    *ngIf="currentUser == recipe.recipeCreator"
+    type="button"
+    [routerLink]="['/recipe/update', recipeId]"
+  >
     Update Recipe
   </button>
   <table>
@@ -19,6 +23,7 @@
   </table>
   <app-ingredient-selections
     [ingredients]="recipe.ingredients"
+    (ingredientsToAdd)="addToCart($event)"
   ></app-ingredient-selections>
 </div>
 <ng-template #err>{{ errMsg }}</ng-template>

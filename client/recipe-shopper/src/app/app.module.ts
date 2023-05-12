@@ -27,6 +27,8 @@ import { persistStoreEffect } from './flux/store-persist-hydrate/persist-store.e
 import { HydrationEffect } from './flux/store-persist-hydrate/hydration.effect';
 import { BearerTokenInterceptor } from './interceptors/bearer-token.interceptor';
 import { IngredientSelectionsComponent } from './components/ingredient-selections/ingredient-selections.component';
+import { AuthDataService } from './services/auth-data.service';
+import { CartDataService } from './services/cart-data.service';
 
 @NgModule({
   declarations: [
@@ -57,8 +59,10 @@ import { IngredientSelectionsComponent } from './components/ingredient-selection
     EffectsModule.forRoot([HydrationEffect, { persistStoreEffect }]),
   ],
   providers: [
-    RecipeDataService,
+    AuthDataService,
+    CartDataService,
     ProductDataService,
+    RecipeDataService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: BearerTokenInterceptor,

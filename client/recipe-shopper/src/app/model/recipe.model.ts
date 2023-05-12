@@ -9,5 +9,5 @@ export type Recipe = {
   recipeCreator: string;
   procedures: string;
   ingredients: Ingredient[];
-  timeStamp: Date;
+  timeStamp?: Date;
 };

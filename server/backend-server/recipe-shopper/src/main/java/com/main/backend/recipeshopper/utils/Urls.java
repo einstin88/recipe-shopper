@@ -13,6 +13,8 @@ public class Urls {
     public static final String URL_RECIPE_UPDATE = URL_PREFIX_RECIPE + "/update";
     public static final String URL_RECIPE_VIEW = URL_PREFIX_RECIPE + "/view";
 
+    public static final String URL_CART_CHECKOUT = "/cart/checkout";
+
     public static final String URL_HEALTH = "/health";
 
     public static final String EP_RECIPES = URL_PREFIX_API + URL_RECIPES;
