@@ -2,6 +2,7 @@ package com.main.backend.recipeshopper.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Properties;
 
 import javax.mail.MessagingException;
@@ -14,7 +15,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
@@ -31,23 +32,22 @@ public class GmailService {
     private GoogleCredentials credentials;
 
     public void sendEmail() {
-
-        // Gmail API client
-        Gmail service = new Gmail.Builder(new NetHttpTransport(),
-                GsonFactory.getDefaultInstance(),
-                new HttpCredentialsAdapter(credentials))
-                .setApplicationName("recipe-shopper")
-                .build();
-
-        log.debug(">>> Gmail client created...");
-
         try {
+            // Gmail API client
+            Gmail service = new Gmail.Builder(GoogleNetHttpTransport.newTrustedTransport(),
+                    GsonFactory.getDefaultInstance(),
+                    new HttpCredentialsAdapter(credentials))
+                    .setApplicationName("recipe-shopper")
+                    .build();
+    
+            log.debug(">>> Gmail client created...");
+
             Session session = Session.getDefaultInstance(new Properties());
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress("pelie.888888@recipee-shopping.com"));
             message.addRecipient(RecipientType.TO, new InternetAddress("pelie.888888@gmail.com"));
-            message.setSubject("test mail");
-            message.setText("testing testing");
+            message.setSubject("test mail 4");
+            message.setText("testing testing testing ok");
 
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             message.writeTo(buffer);
@@ -65,6 +65,8 @@ public class GmailService {
         } catch (AddressException e) {
             log.error(e.getMessage());
         } catch (MessagingException e) {
+            log.error(e.getMessage());
+        } catch (GeneralSecurityException e) {
             log.error(e.getMessage());
         }
     }
