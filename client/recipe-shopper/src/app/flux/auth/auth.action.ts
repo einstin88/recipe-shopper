@@ -11,5 +11,9 @@ export const AuthActions = createActionGroup({
     'Registration Failure': emptyProps(),
 
     Logout: emptyProps(),
+    'Logout Success': emptyProps(),
+    'Logout Failure': emptyProps(),
+
+    'Token Expired': emptyProps()
   },
 });

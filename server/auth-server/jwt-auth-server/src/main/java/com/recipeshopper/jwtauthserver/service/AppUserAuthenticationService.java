@@ -62,19 +62,23 @@ public class AppUserAuthenticationService implements UserDetailsService {
         }
 
         // Get token and save it to Redis
-        return generateAndSaveToken(username);
+        return generateAndSaveToken(username, newUser.getEmail());
     }
 
-    public String processAuthenticatedUser(String username) {
+    public String processAuthenticatedUser(String username, String email) {
         Optional<Token> exisitingToken = tokenRepo.findToken(username);
         if (exisitingToken.isPresent())
             return exisitingToken.get().token();
 
-        return generateAndSaveToken(username);
+        return generateAndSaveToken(username, email);
     }
 
-    private String generateAndSaveToken(String username) {
-        Token token = JwtUtils.generateJwt(username);
+    public void removeToken(String username) {
+        tokenRepo.removeToken(username);
+    }
+
+    private String generateAndSaveToken(String username, String email) {
+        Token token = JwtUtils.generateJwt(username, email);
         log.info(">>> Token generated...");
         if (!tokenRepo.insertToken(username, token))
             generateServerError(

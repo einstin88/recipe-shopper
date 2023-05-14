@@ -7,7 +7,7 @@ public class Urls {
     public static final String URL_SIGN_IN_DEFAULT = "/sign-in/default";
     public static final String URL_REGISTER = "/registration";
     public static final String URL_AUTHENTICATED = "/authenticated";
-    public static final String URL_LOG_OUT = "/signout";
+    public static final String URL_LOG_OUT = "/sign-out";
     
     public static final String EP_HEALTH = URL_PREFIX_AUTH + URL_HEALTH;
     public static final String EP_SIGN_IN_BASIC = URL_PREFIX_AUTH + URL_SIGN_IN_BASIC;

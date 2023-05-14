@@ -48,14 +48,15 @@ public class ResourceServerSecurityConfig {
             // Define endpoints to protect
             .authorizeHttpRequests(requests -> {
                 requests
-                        .requestMatchers(HttpMethod.GET, 
-                            EP_HEALTH, EP_RECIPES)
-                                .permitAll()
-                        .requestMatchers(HttpMethod.GET, 
-                            EP_PARSE_HTML, EP_PARSE_URL)
-                                .hasAuthority("SCOPE_admin")
-                        .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated();
+                    .requestMatchers(HttpMethod.GET, 
+                        EP_HEALTH, EP_RECIPES)
+                            .permitAll()
+                    .requestMatchers(HttpMethod.GET, 
+                        EP_PARSE_HTML, EP_PARSE_URL)
+                            .hasAuthority("SCOPE_admin")
+                    // .requestMatchers("/api/cart/test").permitAll()
+                    .requestMatchers("/error").permitAll()
+                    .anyRequest().authenticated();
             })
             // Since client requests are validated via JWT
             .sessionManagement(session -> {

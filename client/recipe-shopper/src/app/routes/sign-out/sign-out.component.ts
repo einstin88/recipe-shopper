@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AuthActions } from 'src/app/flux/auth/auth.action';
 import { State } from 'src/app/flux/reducers';
-import { selectCurrentUser } from 'src/app/flux/auth/auth.selector';
+import { Subscription } from 'rxjs';
 
 @Component({
   templateUrl: './sign-out.component.html',
   styleUrls: ['./sign-out.component.css'],
 })
 export class SignOutComponent implements OnInit {
-  constructor(private store: Store<State>, private router: Router) {}
+  constructor(private store: Store<State>) {}
+
+  sub$!: Subscription;
 
   ngOnInit(): void {
     this.store.dispatch(AuthActions.logout());
-
-    if (this.store.select(selectCurrentUser)) this.router.navigate(['/login']);
   }
 }

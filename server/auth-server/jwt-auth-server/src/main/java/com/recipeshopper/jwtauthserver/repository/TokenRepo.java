@@ -32,4 +32,9 @@ public class TokenRepo {
                 template.opsForValue()
                         .get(username));
     }
+
+    public void removeToken(String username) {
+        template.opsForValue()
+                .getAndDelete(username);
+    }
 }

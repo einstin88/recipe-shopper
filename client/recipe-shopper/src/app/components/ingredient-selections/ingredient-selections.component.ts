@@ -36,6 +36,7 @@ export class IngredientSelectionsComponent implements OnInit {
       const item = this.fb.group({
         productId: [ingredient.productId],
         name: [ingredient.name],
+        url: [ingredient.url],
         pack_size: [ingredient.pack_size],
         price: [ingredient.price],
         img: [ingredient.img],

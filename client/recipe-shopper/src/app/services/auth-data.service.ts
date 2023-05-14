@@ -5,13 +5,14 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EP_REGISTER_USER, EP_SIGN_IN_USER } from '../utils/urls';
+import { EP_REGISTER_USER, EP_SIGN_IN_USER, EP_SIGN_OUT } from '../utils/urls';
 import { User } from '../model/user.model';
 import { AuthPayLoad } from '../model/authentication-payload.model';
 import { JWT } from '../model/jwt.model';
 import { firstValueFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AuthActions } from '../flux/auth/auth.action';
+import { selectCurrentUser } from '../flux/auth/auth.selector';
 
 @Injectable({
   providedIn: 'root',
@@ -54,5 +55,11 @@ export class AuthDataService {
         this.store.dispatch(AuthActions.loginFailure());
         throw new Error(`${error.status}: Bad response from server`);
       });
+  }
+
+  logoutUser(currentUser: string) {
+    const url = `${EP_SIGN_OUT}/${currentUser}`;
+
+    return this.http.get<void>(url);
   }
 }

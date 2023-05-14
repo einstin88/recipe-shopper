@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class JwtUtils {
-    public static Token generateJwt(String username) {
+    public static Token generateJwt(String username, String email) {
         // Part 1
         JWSHeader header = new JWSHeader(JWSAlgorithm.RS256);
         log.debug(">>> Token header: {}", header.toString());
@@ -35,6 +35,7 @@ public class JwtUtils {
                 .issueTime(Date.from(issueInstant))
                 .expirationTime(Date.from(issueInstant.plus(60, ChronoUnit.MINUTES)))
                 .claim("scope", SCOPES.READ)
+                .claim("email", email)
                 .build().toPayload();
         log.debug(">>> Token claims: {}", claims.toString());
 

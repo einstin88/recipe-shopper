@@ -77,7 +77,7 @@ public class JwtProviderConfig {
 
                 } catch (ParseException e) {
                     throw Utils.generateServerError(
-                            "Token error: %s",
+                            "Token/Key error: %s",
                             AccessDeniedException.class,
                             e.getMessage());
                 } catch (JOSEException e) {
