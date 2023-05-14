@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.main.backend.recipeshopper.model.Cart;
 import com.main.backend.recipeshopper.model.Ingredient;
 import com.main.backend.recipeshopper.model.Recipe;
 import com.main.backend.recipeshopper.service.RecipeService;
@@ -119,19 +118,4 @@ public class ShopperController {
                                 .status(HttpStatus.ACCEPTED)
                                 .build();
         }
-
-        /**
-         * Endpoint 7:
-         * 
-         * @param cart
-         * @return
-         */
-        @PostMapping("/checkout")
-        public ResponseEntity<Void> checkoutCart(
-                        Cart cart) {
-
-                log.info(">>> Checking out cart: {}", cart);
-                return null;
-        }
-
 }

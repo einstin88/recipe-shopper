@@ -21,8 +21,7 @@ export const AuthReducers = createReducer(
     AuthActions.loginSuccess,
     AuthActions.registrationSuccess,
     (state, { jwt }) => {
-      const decodedToken = decodeJwt(jwt.token);
-      const currentUser = decodedToken.sub!;
+      const currentUser = decodeJwt(jwt.token).sub!;
       console.debug('>>> Decoded subject: ', currentUser);
 
       return { ...state, jwt, currentUser };
@@ -31,7 +30,7 @@ export const AuthReducers = createReducer(
   on(
     AuthActions.loginFailure,
     AuthActions.registrationFailure,
-    AuthActions.logout,
+    AuthActions.logoutSuccess,
     (state) => ({
       ...state,
       ...authInitialState,

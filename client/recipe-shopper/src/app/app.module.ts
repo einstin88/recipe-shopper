@@ -29,6 +29,7 @@ import { BearerTokenInterceptor } from './interceptors/bearer-token.interceptor'
 import { IngredientSelectionsComponent } from './components/ingredient-selections/ingredient-selections.component';
 import { AuthDataService } from './services/auth-data.service';
 import { CartDataService } from './services/cart-data.service';
+import { AuthEffects } from './flux/auth/auth.effect';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,11 @@ import { CartDataService } from './services/cart-data.service';
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),
-    EffectsModule.forRoot([HydrationEffect, { persistStoreEffect }]),
+    EffectsModule.forRoot([
+      AuthEffects,
+      HydrationEffect,
+      { persistStoreEffect },
+    ]),
   ],
   providers: [
     AuthDataService,

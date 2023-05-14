@@ -27,25 +27,27 @@ public class GoogleConfig {
 
     @Bean
     public GoogleCredentials getCredentials() {
-        // log.info("credentialsFile: {}", credentialsFile);
+        // Load credentials from Google Cloud environment (not using end user's identity
+        // via Google SDK)
+        // https://cloud.google.com/java/docs/reference/google-auth-library/latest/com.google.auth.oauth2.GoogleCredentials#com_google_auth_oauth2_GoogleCredentials_getApplicationDefault__
         try {
             if (!gCloudCredentials.isBlank()) {
-                // log.info("credentials ran");
                 return GoogleCredentials
                         .getApplicationDefault()
-                        .createScoped(GmailScopes.GMAIL_SEND);
+                        .createScoped(GmailScopes.GMAIL_SEND)
+                        .createDelegated("recipee-cart@recipee-shopping.com");
             }
 
-            // log.info("this ran");
+            // Load credentials from file (used for local development)
+            // https://developers.google.com/identity/protocols/oauth2/service-account#authorizingrequests
             InputStream is = new ClassPathResource(credentialsFile).getInputStream();
-
             return GoogleCredentials
                     .fromStream(is)
                     .createScoped(GmailScopes.GMAIL_SEND)
-                    .createDelegated("pelie.888888@recipee-shopping.com");
+                    .createDelegated("recipee-cart@recipee-shopping.com");
 
         } catch (IOException e) {
-            log.info(credentialsFile, e);
+            log.error("--- Error reading credentials: {}", e.getMessage());
             throw Utils.generateServerError(
                     "--- Credentials Error: %s",
                     GoogleCredentialsException.class,

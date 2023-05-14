@@ -14,6 +14,8 @@ import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
@@ -21,6 +23,7 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.main.backend.recipeshopper.model.Cart;
 import com.nimbusds.jose.util.Base64URL;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class GmailService {
+    private static final String TEMPLATE_CART_SUMMARY = "cart-summary.html";
+
     @Autowired
     private GoogleCredentials credentials;
 
-    public void sendEmail() {
+    @Autowired
+    private TemplateEngine templateEngine;
+
+    public void sendEmail(Cart cart, String username, String toEmail) {
         try {
             // Gmail API client
             Gmail service = new Gmail.Builder(GoogleNetHttpTransport.newTrustedTransport(),
@@ -39,15 +47,16 @@ public class GmailService {
                     new HttpCredentialsAdapter(credentials))
                     .setApplicationName("recipe-shopper")
                     .build();
-    
+
             log.debug(">>> Gmail client created...");
 
             Session session = Session.getDefaultInstance(new Properties());
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("pelie.888888@recipee-shopping.com"));
+            message.setFrom(new InternetAddress("recipee-cart@recipee-shopping.com"));
+            // TODO: change to toEmail
             message.addRecipient(RecipientType.TO, new InternetAddress("pelie.888888@gmail.com"));
-            message.setSubject("test mail 4");
-            message.setText("testing testing testing ok");
+            message.setSubject("Cart Summary: %s".formatted(username));
+            message.setContent(generateMail(cart, username), "text/html; charset=UTF-8");
 
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             message.writeTo(buffer);
@@ -56,7 +65,7 @@ public class GmailService {
             email.setRaw(Base64URL.encode(buffer.toByteArray()).toString());
 
             Message response = service.users().messages().send(
-                    "pelie.888888@recipee-shopping.com", email).execute();
+                    "me", email).execute();
 
             log.info(">>> Response: {}", response.toPrettyString());
 
@@ -69,5 +78,13 @@ public class GmailService {
         } catch (GeneralSecurityException e) {
             log.error(e.getMessage());
         }
+    }
+
+    private String generateMail(Cart cart, String username) {
+        Context ctx = new Context();
+        ctx.setVariable("cart", cart);
+        ctx.setVariable("username", username);
+
+        return templateEngine.process(TEMPLATE_CART_SUMMARY, ctx);
     }
 }

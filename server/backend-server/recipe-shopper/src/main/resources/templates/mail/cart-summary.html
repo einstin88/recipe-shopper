@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <h2>Summary for [[${username}]]</h2>
+    <table border="1px solid black">
+      <tr>
+        <th rowspan="2"></th>
+        <th rowspan="2">Recipe Name</th>
+        <th rowspan="2">Recipe Creator</th>
+        <th colspan="5">Ingredients</th>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <th>Pack Size</th>
+        <th>Unit Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
+      <tr data-th-each="item, it: ${cart.cartItems}" data-th-object="${item}">
+        <td data-th-text="${it.count}"></td>
+        <td data-th-text="*{recipeName}"></td>
+        <td data-th-text="*{recipeCreator}"></td>
+        <td>
+          <ul>
+            <li data-th-each="ingredient : *{ingredients}">
+              <a data-th-href="@{https://shengsiong.com.sg{productUrl} (productUrl=${ingredient.url})}" data-th-text="${ingredient.name}"></a>
+            </li>
+          </ul>
+        </td>
+        <td>
+          <div
+            data-th-each="ingredient : *{ingredients}"
+            data-th-text="${ingredient.pack_size}"
+          ></div>
+        </td>
+        <td>
+          <div
+            data-th-each="ingredient : *{ingredients}"
+            data-th-text="${ingredient.price}"
+          ></div>
+        </td>
+        <td>
+          <div
+            data-th-each="ingredient : *{ingredients}"
+            data-th-text="${ingredient.quantity}"
+          ></div>
+        </td>
+        <td>
+          <div
+            data-th-each="ingredient : *{ingredients}"
+            data-th-text="${ingredient.total}"
+          ></div>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>TOTAL</td>
+        <td data-th-text="${cart.total}"></td>
+      </tr>
+    </table>
+  </body>
+</html>

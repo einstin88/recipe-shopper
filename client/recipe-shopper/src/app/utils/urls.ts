@@ -13,3 +13,4 @@ export const EP_CART_CHECKOUT = URL_PREFIX_API + '/cart/checkout';
 
 export const EP_REGISTER_USER = URL_PREFIX_AUTH + '/registration';
 export const EP_SIGN_IN_USER = URL_PREFIX_AUTH + '/sign-in/default';
+export const EP_SIGN_OUT = URL_PREFIX_AUTH + '/sign-out'

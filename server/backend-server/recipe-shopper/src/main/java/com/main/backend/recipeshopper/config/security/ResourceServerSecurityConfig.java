@@ -54,7 +54,7 @@ public class ResourceServerSecurityConfig {
                     .requestMatchers(HttpMethod.GET, 
                         EP_PARSE_HTML, EP_PARSE_URL)
                             .hasAuthority("SCOPE_admin")
-                    .requestMatchers("/api/cart/test").permitAll()
+                    // .requestMatchers("/api/cart/test").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated();
             })
