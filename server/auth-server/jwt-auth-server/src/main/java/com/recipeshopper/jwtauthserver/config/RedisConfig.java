@@ -40,7 +40,7 @@ public class RedisConfig {
         config.setDatabase(redisDatabase);
         config.setHostName(redisHost);
         config.setPort(redisPort);
-        if (!redisUser.isEmpty() && !redisPassword.isEmpty()) {
+        if (!redisUser.isBlank() && !redisPassword.isBlank()) {
             config.setUsername(redisUser);
             config.setPassword(redisPassword);
         }

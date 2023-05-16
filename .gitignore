@@ -3,3 +3,5 @@
 *.sql
 *.rdb
 *.json
+
+!**/docker.ps1

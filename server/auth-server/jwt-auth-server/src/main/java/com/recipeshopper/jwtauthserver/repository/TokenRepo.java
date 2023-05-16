@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.recipeshopper.jwtauthserver.Utils.Consts;
 import com.recipeshopper.jwtauthserver.model.Token;
 
 @Repository
@@ -19,7 +20,7 @@ public class TokenRepo {
                 .set(
                         username,
                         token,
-                        Duration.ofMinutes(60));
+                        Duration.ofMinutes(Consts.JWT_VALIDITY));
 
         if (findToken(username).isPresent())
             return true;

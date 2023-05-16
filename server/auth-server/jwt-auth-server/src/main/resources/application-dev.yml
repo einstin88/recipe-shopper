@@ -22,3 +22,5 @@ spring:
   redis:
     user:
     password:
+  devtools:
+    add-properties: true

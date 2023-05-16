@@ -7,7 +7,7 @@ import { Observable, map } from 'rxjs';
 
 export const AuthGuard: CanActivateFn = (
   _,
-  state
+  routerState
 ): Observable<boolean | UrlTree> => {
   const router = inject(Router);
 
@@ -17,7 +17,7 @@ export const AuthGuard: CanActivateFn = (
       map((token) => {
         if (token) return true;
 
-        const queryParams: Params = { redirect: state.url };
+        const queryParams: Params = { redirect: routerState.url };
         return router.createUrlTree(['/login'], { queryParams });
       })
     );

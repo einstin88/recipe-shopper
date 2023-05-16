@@ -1,11 +1,15 @@
-# Redis & MySQL
 spring:
+  # Docker
+  config:
+    import: optional:configtree:/run/secrets/
+  # Redis
   redis:
     host: ${REDISHOST}
     port: ${REDISPORT}
     database: 0
     user: ${REDISUSER}
     password: ${REDISPASSWORD}
+  # MySQL
   datasource:
     url: ${MYSQL_URL_JDBC}
     username: ${MYSQLUSER}
@@ -14,3 +18,5 @@ spring:
     hikari:
       connectionTimeout: 20000
       maximumPoolSize: 5
+    devtools:
+      add-properties: false
