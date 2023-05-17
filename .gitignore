@@ -1,7 +1,8 @@
-*.ps1
+# *.ps1
 .vscode/
 *.sql
 *.rdb
 *.json
+/secrets
 
 !**/docker.ps1

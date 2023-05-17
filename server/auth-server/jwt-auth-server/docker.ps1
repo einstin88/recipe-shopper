@@ -8,5 +8,5 @@ docker service create --name auth `
 --secret REDISPASSWORD `
 --secret MYSQLUSER `
 --secret MYSQLPASSWORD `
---secret MYSQL_URL_JDBC `
+--secret MYSQL_URL_AUTH `
 recipee-shopping-auth:0.0.1

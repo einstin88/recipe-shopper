@@ -1,5 +1,6 @@
 spring:
   # Docker
+  # https://stackoverflow.com/questions/70007676/how-to-handle-docker-secrets-in-application-properties-files
   config:
     import: optional:configtree:/run/secrets/
   # Redis
@@ -11,7 +12,7 @@ spring:
     password: ${REDISPASSWORD}
   # MySQL
   datasource:
-    url: ${MYSQL_URL_JDBC}
+    url: ${MYSQL_URL_AUTH}
     username: ${MYSQLUSER}
     password: ${MYSQLPASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver

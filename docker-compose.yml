@@ -1,0 +1,85 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./client/recipe-shopper
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - auth
+      - backend
+
+  backend:
+    build:
+      context: ./server/backend-server/recipe-shopper
+      dockerfile: Dockerfile
+    secrets:
+      - MYSQLUSER
+      - MYSQLPASSWORD
+      - MYSQL_URL_BACKEND
+      - SCRAPPER_URL
+      - KEY_URL
+      - GOOGLE_CREDENTIALS
+    expose:
+      - 8000
+    ports:
+      - "8000:8080"
+    depends_on:
+      - auth
+      - scrapper
+
+  auth:
+    build:
+      context: ./server/auth-server/jwt-auth-server
+      dockerfile: Dockerfile
+    secrets:
+      - REDISPORT
+      - REDISHOST
+      - REDISUSER
+      - REDISPASSWORD
+      - MYSQLUSER
+      - MYSQLPASSWORD
+      - MYSQL_URL_AUTH
+    expose:
+      - 8010
+    ports:
+      - "8010:8080"
+
+  scrapper:
+    build:
+      context: ./server/python-server/web_scrapper_server
+      dockerfile: Dockerfile
+    secrets:
+      - scrapper_server_key
+    expose:
+      - 8030
+    ports:
+      - "8030:8000"
+
+secrets:
+  MYSQLUSER:
+    environment: "MYSQLUSER"
+  MYSQLPASSWORD:
+    environment: "MYSQLPASSWORD"
+  MYSQL_URL_BACKEND:
+    environment: "MYSQL_URL_BACKEND"
+  MYSQL_URL_AUTH:
+    environment: "MYSQL_URL_AUTH"
+  REDISHOST:
+    environment: "REDISHOST"
+  REDISPORT:
+    environment: "REDISPORT"
+  REDISUSER:
+    environment: "REDISUSER"
+  REDISPASSWORD:
+    environment: "REDISPASSWORD"
+  SCRAPPER_URL:
+    environment: "SCRAPPER_URL"
+  KEY_URL:
+    environment: "KEY_URL"
+  GOOGLE_CREDENTIALS:
+    environment: "GOOGLE_CREDENTIALS"
+  scrapper_server_key:
+    environment: "SCRAPPER_SERVER_KEY"
