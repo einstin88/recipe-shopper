@@ -27,7 +27,6 @@ def read_docker_secret(key: str):
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SCRAPPER_SERVER_KEY'] if os.getenv('SCRAPPER_SERVER_KEY') else read_docker_secret('scrapper_server_key')
-print(SECRET_KEY)
 
 # TODO SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -91,7 +90,6 @@ DATABASES = {
         #     'password': os.environ['MYSQLPASSWORD'],
         #     'host': os.environ['MYSQLHOST'],
         #     'port': int(os.environ['MYSQLPORT']),
-        #     # TODO Create separate DB on the cloud
         #     'database': os.environ['MYSQL_DB']
         # }
         # 'ENGINE': 'mysql.connector.django',

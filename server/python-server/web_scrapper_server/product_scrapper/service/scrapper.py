@@ -6,8 +6,6 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
-# from selenium.webdriver.chromium.options import ChromiumOptions
-# from selenium.webdriver.chromium.service import ChromiumService
 from selenium.webdriver.chrome.options import Options
 # from selenium.webdriver.chrome.service import Service
 import jsonpickle
@@ -44,7 +42,6 @@ class Scrapper:
 
         # Set binary path of the chrome webdriver
         # service = Service(binary_path=binary_path)
-        # service = ChromiumService(binary_path=binary_path)
 
         # Instantiate a chrome webdriver to load contents from the url
         # browser = webdriver.Chrome(service=service, options=options)
