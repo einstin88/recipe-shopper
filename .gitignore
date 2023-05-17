@@ -1,8 +1,7 @@
-# *.ps1
 .vscode/
 *.sql
 *.rdb
-*.json
+recipeee-gmail.json
 /secrets
 
 !**/docker.ps1

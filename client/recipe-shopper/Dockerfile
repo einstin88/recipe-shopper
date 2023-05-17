@@ -2,8 +2,10 @@ FROM node:18.16.0-slim AS builder
 
 WORKDIR /app
 
-COPY . ./
+COPY . .
+RUN ls
 
+RUN npm install -g npm@9.6.6
 RUN ["npm", "i", "-g", "@angular/cli"]
 RUN ["npm", "i"]
 
@@ -13,4 +15,4 @@ RUN ["ng", "build"]
 FROM nginx:stable-alpine
 
 COPY --from=builder /app/dist/recipe-shopper /usr/share/nginx/html
-COPY default.conf /etc/nginx/conf.d/
+# COPY default.conf /etc/nginx/conf.d/

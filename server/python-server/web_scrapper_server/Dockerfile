@@ -5,6 +5,7 @@ WORKDIR /app/scrapper
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# https://github.com/Createdd/Writing/blob/master/2021/articles/dockerizeWebscraping.md#dockerfile
 # install system dependencies
 RUN apt-get update \
     && apt-get -y install gcc make \

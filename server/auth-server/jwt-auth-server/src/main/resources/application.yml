@@ -13,8 +13,6 @@ spring:
   # MySQL
   datasource:
     url: ${MYSQL_URL_AUTH}
-    username: ${MYSQLUSER}
-    password: ${MYSQLPASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connectionTimeout: 20000

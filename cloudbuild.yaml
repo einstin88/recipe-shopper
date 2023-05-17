@@ -1,0 +1,32 @@
+steps:
+  # For CI/CD on Google Cloud Build
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'compose', '-f', 'docker-compose.yml', 'build']
+    secretEnv: ['MYSQL_URL_BACKEND', 'MYSQL_URL_AUTH',
+      'REDISHOST', 'REDISPORT', 'REDISUSER', 'REDISPASSWORD',
+      'SCRAPPER_URL', 'KEY_URL', 'GOOGLE_CREDENTIALS', 'SCRAPPER_SERVER_KEY']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['compose', 'push']
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/621005217238/secrets/MYSQL_URL_BACKEND/versions/1
+    env: 'MYSQL_URL_BACKEND'
+  - versionName: projects/621005217238/secrets/MYSQL_URL_AUTH/versions/1
+    env: 'MYSQL_URL_AUTH'
+  - versionName: projects/621005217238/secrets/REDISHOST/versions/1
+    env: 'REDISHOST'
+  - versionName: projects/621005217238/secrets/REDISPORT/versions/1
+    env: 'REDISPORT'
+  - versionName: projects/621005217238/secrets/REDISUSER/versions/1
+    env: 'REDISUSER'
+  - versionName: projects/621005217238/secrets/REDISPASSWORD/versions/1
+    env: 'REDISPASSWORD'
+  - versionName: projects/621005217238/secrets/SCRAPPER_URL/versions/1
+    env: 'SCRAPPER_URL'
+  - versionName: projects/621005217238/secrets/KEY_URL/versions/1
+    env: 'KEY_URL'
+  - versionName: projects/621005217238/secrets/GOOGLE_CREDENTIALS/versions/1
+    env: 'GOOGLE_CREDENTIALS'
+  - versionName: projects/621005217238/secrets/SCRAPPER_SERVER_KEY/versions/1
+    env: 'SCRAPPER_SERVER_KEY'
