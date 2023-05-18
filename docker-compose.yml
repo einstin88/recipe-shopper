@@ -36,8 +36,8 @@ services:
     ports:
       - "8000:8080"
     links:
-      - scrapper
       - auth
+      # - scrapper
     depends_on:
       - auth
       # - scrapper
