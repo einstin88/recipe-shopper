@@ -1,8 +1,9 @@
 version: "3.9"
 
 #####
-# Networks and Secrets are used with Docker Compose in local environment only
-# 'Image' key is for pushing to Artifact Registry in the cloud after build the steps
+# - Networks and Secrets are used with Docker Compose in local environment only
+# - sensitive data are mounted with secrets for local setup, or managed by secret environment variables in production
+# 'Image' key here is used for pushing to Artifact Registry in the cloud after the build steps. Comment it out when composing locally
 #####
 services:
   frontend:
@@ -60,6 +61,8 @@ services:
       - core
     ports:
       - "8010:8080"
+    depends_on:
+      - redis
 
   scrapper:
     build:
@@ -73,6 +76,16 @@ services:
       - core
     ports:
       - "8020:8000"
+
+  redis:
+    build: ./redis
+    container_name: redis
+    # Deployment machine may not run this command automatically. Remember to set it
+    command: "redis-server --save 60 10 --requirepass $REDISPASSWORD"
+    networks:
+      - core
+    ports:
+      - "6379:6379"
 
 secrets:
   MYSQL_URL_BACKEND:

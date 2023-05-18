@@ -27,8 +27,8 @@ public class RedisConfig {
     @Value("${spring.redis.database}")
     private Integer redisDatabase;
 
-    @Value("${spring.redis.user}")
-    private String redisUser;
+    // @Value("${spring.redis.user}")
+    // private String redisUser;
 
     @Value("${spring.redis.password}")
     private String redisPassword;
@@ -40,10 +40,13 @@ public class RedisConfig {
         config.setDatabase(redisDatabase);
         config.setHostName(redisHost);
         config.setPort(redisPort);
-        if (!redisUser.isBlank() && !redisPassword.isBlank()) {
-            config.setUsername(redisUser);
+        if (!redisPassword.isBlank()) {
             config.setPassword(redisPassword);
         }
+        // if (!redisUser.isBlank() && !redisPassword.isBlank()) {
+        //     config.setUsername(redisUser);
+        //     config.setPassword(redisPassword);
+        // }
 
         final GenericObjectPoolConfig<Connection> poolConfig = new GenericObjectPoolConfig<>();
         poolConfig.setMaxTotal(5);
