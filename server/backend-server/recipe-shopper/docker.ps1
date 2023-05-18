@@ -8,4 +8,5 @@ docker service create --name backend `
     --secret SCRAPPER_URL `
     --secret KEY_URL `
     --secret GOOGLE_CREDENTIALS `
+    --secret GOOGLE_APPLICATION_CREDENTIALS `
     recipee-shopping-backend:0.0.1

@@ -1,3 +1,0 @@
-How to:-
-- integrate docker with CI/CD using Git :: https://docs.docker.com/build/building/context/#git-repositories
-- add environment variables 

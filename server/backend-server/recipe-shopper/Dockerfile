@@ -15,7 +15,5 @@ WORKDIR /app
 
 COPY --from=maven /app/backend/target/recipe-shopper-0.0.1-SNAPSHOT.jar ./
 
-ENV GOOGLE_APPLICATION_CREDENTIALS=" "
-
 EXPOSE 8080
 CMD ["java", "-jar", "recipe-shopper-0.0.1-SNAPSHOT.jar"]
