@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(path = Urls.URL_PREFIX_API, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-public class ShopperController {
+public class RecipeController {
         @Autowired
         private RecipeService recipeSvc;
 

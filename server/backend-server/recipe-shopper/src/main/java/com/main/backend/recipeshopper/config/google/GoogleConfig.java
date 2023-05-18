@@ -28,6 +28,7 @@ public class GoogleConfig {
     public GoogleCredentials getCloudCredentials() {
         // Load credentials from Google Cloud environment (not using end user's identity
         // via Google SDK)
+        // https://cloud.google.com/docs/authentication/application-default-credentials
         // https://cloud.google.com/java/docs/reference/google-auth-library/latest/com.google.auth.oauth2.GoogleCredentials#com_google_auth_oauth2_GoogleCredentials_getApplicationDefault__
         try {
             return GoogleCredentials

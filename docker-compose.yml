@@ -1,12 +1,16 @@
 version: "3.9"
 
+#####
+# Networks and Secrets are used with Docker Compose in local environment only
+# 'Image' key is for pushing to Artifact Registry in the cloud after build the steps
+#####
 services:
   frontend:
     build:
       context: ./client/recipe-shopper
       dockerfile: Dockerfile
     container_name: frontend
-    image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-frontend"
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend"
     networks:
       - core
     ports:
@@ -23,31 +27,29 @@ services:
       context: ./server/backend-server/recipe-shopper
       dockerfile: Dockerfile
     container_name: backend
-    image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend"
-    # Secrets are used with Docker Compose
-    secrets: 
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-backend"
+    secrets:
       - MYSQL_URL_BACKEND
       - SCRAPPER_URL
       - KEY_URL
       - GOOGLE_CREDENTIALS
     networks:
       - core
-    # TODO remove before production
     ports:
       - "8000:8080"
     links:
       - auth
-      # - scrapper
+      - scrapper
     depends_on:
       - auth
-      # - scrapper
+      - scrapper
 
   auth:
     build:
       context: ./server/auth-server/jwt-auth-server
       dockerfile: Dockerfile
     container_name: auth
-    image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-auth"
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-auth"
     secrets:
       - REDISPORT
       - REDISHOST
@@ -59,18 +61,18 @@ services:
     ports:
       - "8010:8080"
 
-  # scrapper:
-  #   build:
-  #     context: ./server/python-server/web_scrapper_server
-  #     dockerfile: Dockerfile
-  #   container_name: scrapper
-  #   image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper"
-  #   secrets:
-  #     - scrapper_server_key
-  #   networks:
-  #     - core
-  #   ports:
-  #     - "8020:8000"
+  scrapper:
+    build:
+      context: ./server/python-server/web_scrapper_server
+      dockerfile: Dockerfile
+    container_name: scrapper
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper"
+    secrets:
+      - scrapper_server_key
+    networks:
+      - core
+    ports:
+      - "8020:8000"
 
 secrets:
   MYSQL_URL_BACKEND:
