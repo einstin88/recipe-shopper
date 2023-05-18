@@ -30,12 +30,6 @@ services:
       - SCRAPPER_URL
       - KEY_URL
       - GOOGLE_CREDENTIALS
-    # Env vars are used for Cloud build/ deployment
-    # environment:
-    #   MYSQL_URL_BACKEND: "${MYSQL_URL_BACKEND}"
-    #   SCRAPPER_URL: "${SCRAPPER_URL}"
-    #   KEY_URL: "${KEY_URL}"
-    #   GOOGLE_CREDENTIALS: "${GOOGLE_CREDENTIALS}"
     networks:
       - core
     # TODO remove before production
@@ -46,7 +40,7 @@ services:
       - auth
     depends_on:
       - auth
-      - scrapper
+      # - scrapper
 
   auth:
     build:
@@ -60,32 +54,23 @@ services:
       - REDISUSER
       - REDISPASSWORD
       - MYSQL_URL_AUTH
-      - GOOGLE_APPLICATION_CREDENTIALS
-    # environment:
-    #   REDISPORT: "${REDISPORT}"
-    #   REDISHOST: "${REDISHOST}"
-    #   REDISUSER: "${REDISUSER}"
-    #   REDISPASSWORD: "${REDISPASSWORD}"
-    #   MYSQL_URL_AUTH: "${MYSQL_URL_AUTH}"
     networks:
       - core
     ports:
       - "8010:8080"
 
-  scrapper:
-    build:
-      context: ./server/python-server/web_scrapper_server
-      dockerfile: Dockerfile
-    container_name: scrapper
-    image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper"
-    secrets:
-      - scrapper_server_key
-    # environment:
-    #   scrapper_server_key: "${scrapper_server_key}"
-    networks:
-      - core
-    ports:
-      - "8020:8000"
+  # scrapper:
+  #   build:
+  #     context: ./server/python-server/web_scrapper_server
+  #     dockerfile: Dockerfile
+  #   container_name: scrapper
+  #   image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper"
+  #   secrets:
+  #     - scrapper_server_key
+  #   networks:
+  #     - core
+  #   ports:
+  #     - "8020:8000"
 
 secrets:
   MYSQL_URL_BACKEND:
@@ -109,7 +94,7 @@ secrets:
   scrapper_server_key:
     environment: "SCRAPPER_SERVER_KEY"
   GOOGLE_APPLICATION_CREDENTIALS:
-    environment: "GOOGLE_APPLICATION_CREDENTIALS"
+    file: ./server/backend-server/recipe-shopper/src/main/resources/recipeee-gmail.json
 
 networks:
   core:
