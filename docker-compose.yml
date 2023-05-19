@@ -34,16 +34,21 @@ services:
       - SCRAPPER_URL
       - KEY_URL
       - GOOGLE_CREDENTIALS
+    environment:
+      MYSQL_URL_BACKEND: "$MYSQL_URL_BACKEND"
+      SCRAPPER_URL: "$SCRAPPER_URL"
+      KEY_URL: "$KEY_URL"
+      GOOGLE_CREDENTIALS: "$GOOGLE_CREDENTIALS"
     networks:
       - core
     ports:
       - "8000:8080"
     links:
       - auth
-      - scrapper
+      # - scrapper
     depends_on:
       - auth
-      - scrapper
+      # - scrapper
 
   auth:
     build:
@@ -64,24 +69,25 @@ services:
     depends_on:
       - redis
 
-  scrapper:
-    build:
-      context: ./server/python-server/web_scrapper_server
-      dockerfile: Dockerfile
-    container_name: scrapper
-    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper"
-    secrets:
-      - scrapper_server_key
-    networks:
-      - core
-    ports:
-      - "8020:8000"
+  # scrapper:
+  #   build:
+  #     context: ./server/python-server/web_scrapper_server
+  #     dockerfile: Dockerfile
+  #   container_name: scrapper
+  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper"
+  #   secrets:
+  #     - scrapper_server_key
+  #   networks:
+  #     - core
+  #   ports:
+  #     - "8020:8000"
 
   redis:
     build: ./redis
     container_name: redis
     # Deployment machine may not run this command automatically. Remember to set it
     command: "redis-server --save 60 10 --requirepass $REDISPASSWORD"
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-redis"
     networks:
       - core
     ports:

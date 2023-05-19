@@ -1,5 +1,5 @@
 steps:
-  # For CI/CD on Google Cloud Build & Run
+  # For CI/CD on Google Cloud Build & GKE
   - name: "gcr.io/cloud-builders/docker"
     args: ["compose", "-f", "docker-compose.yml", "build"]
     env:
@@ -21,8 +21,11 @@ steps:
     args: ["compose", "push"]
     env:
       - "PROJECT_ID=$PROJECT_ID"
+  # - name: 'gcr.io/cloud-builders/gke-deploy'
+    # gke-deploy is a wrapper for 'kubectl'
 
-# Secrets are used by the Cloud builder to satisfy docker-compose file requirements
+
+# Secrets here are used by the Cloud builder to satisfy docker-compose.yml's 'secrets' requirements
 availableSecrets:
   secretManager:
     - versionName: projects/621005217238/secrets/MYSQL_URL_BACKEND/versions/1
