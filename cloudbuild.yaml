@@ -50,10 +50,6 @@ availableSecrets:
       env: "REDISHOST"
     - versionName: projects/621005217238/secrets/REDISPORT/versions/1
       env: "REDISPORT"
-    # - versionName: projects/621005217238/secrets/REDISUSER/versions/1
-    #   env: "REDISUSER"
-    # - versionName: projects/621005217238/secrets/REDISPASSWORD/versions/2
-    #   env: "REDISPASSWORD"
     - versionName: projects/621005217238/secrets/SCRAPPER_URL/versions/2
       env: "SCRAPPER_URL"
     - versionName: projects/621005217238/secrets/KEY_URL/versions/2

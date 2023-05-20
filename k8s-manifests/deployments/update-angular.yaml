@@ -32,25 +32,25 @@ spec:
               cpu: 500m
               ephemeral-storage: 1Gi
               memory: 1Gi
----
-apiVersion: "autoscaling/v2"
-kind: "HorizontalPodAutoscaler"
-metadata:
-  name: "server-frontend-hpa-vfz0"
-  namespace: "backend"
-  labels:
-    app: "server-frontend"
-spec:
-  scaleTargetRef:
-    kind: "Deployment"
-    name: "server-frontend"
-    apiVersion: "apps/v1"
-  minReplicas: 2
-  maxReplicas: 5
-  metrics:
-  - type: "Resource"
-    resource:
-      name: "cpu"
-      target:
-        type: "Utilization"
-        averageUtilization: 80
+# ---
+# apiVersion: "autoscaling/v2"
+# kind: "HorizontalPodAutoscaler"
+# metadata:
+#   name: "server-frontend-hpa-vfz0"
+#   namespace: "backend"
+#   labels:
+#     app: "server-frontend"
+# spec:
+#   scaleTargetRef:
+#     kind: "Deployment"
+#     name: "server-frontend"
+#     apiVersion: "apps/v1"
+#   minReplicas: 2
+#   maxReplicas: 5
+#   metrics:
+#   - type: "Resource"
+#     resource:
+#       name: "cpu"
+#       target:
+#         type: "Utilization"
+#         averageUtilization: 80
