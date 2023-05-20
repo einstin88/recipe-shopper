@@ -2,26 +2,26 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "server-api"
+  name: "server-auth"
   namespace: "backend"
   labels:
-    app: "server-api"
+    app: "server-auth"
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: "server-api"
+      app: "server-auth"
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: "server-api"
+        app: "server-auth"
     spec:
       containers:
-        - name: "project-backend-sha256-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend:0.0.1"
-          resources:
+      - name: "project-auth-sha256-1"
+        image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-auth:0.0.1"
+        resources:
             limits:
               cpu: 500m
               ephemeral-storage: 1Gi
@@ -34,14 +34,14 @@ spec:
 apiVersion: "autoscaling/v2"
 kind: "HorizontalPodAutoscaler"
 metadata:
-  name: "server-api-hpa-gnh4"
+  name: "server-auth-hpa-ne4y"
   namespace: "backend"
   labels:
-    app: "server-api"
+    app: "server-auth"
 spec:
   scaleTargetRef:
     kind: "Deployment"
-    name: "server-api"
+    name: "server-auth"
     apiVersion: "apps/v1"
   minReplicas: 2
   maxReplicas: 5

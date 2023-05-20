@@ -6,7 +6,7 @@ COPY . .
 RUN ls
 
 # Install app's dependencies
-RUN npm install -g npm@9.6.6
+RUN npm install -g npm@latest
 RUN ["npm", "i", "-g", "@angular/cli"]
 RUN ["npm", "i"]
 
@@ -17,3 +17,4 @@ FROM nginx:stable-alpine
 
 COPY --from=builder /app/dist/recipe-shopper /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/sites-available/default
+
