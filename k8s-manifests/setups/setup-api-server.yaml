@@ -19,6 +19,15 @@ spec:
       containers:
       - name: "project-backend-sha256-1"
         image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend@sha256:152239fafe8e162b01086b17a7ab61de8fc4c85bf84e807ecffa8b5f2aa2dfb8"
+        resources:
+            limits:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
 ---
 apiVersion: "autoscaling/v2"
 kind: "HorizontalPodAutoscaler"
@@ -33,7 +42,7 @@ spec:
     name: "server-api"
     apiVersion: "apps/v1"
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 3
   metrics:
   - type: "Resource"
     resource:

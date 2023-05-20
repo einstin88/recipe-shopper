@@ -19,6 +19,15 @@ spec:
       containers:
       - name: "project-auth-sha256-1"
         image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-auth@sha256:e1039fe66a7f745f507f1b31dce6acef6004eaa953d6f79379c342e3c8f645d5"
+        resources:
+            limits:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
 ---
 apiVersion: "autoscaling/v2"
 kind: "HorizontalPodAutoscaler"

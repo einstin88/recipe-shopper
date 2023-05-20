@@ -1,0 +1,56 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "server-frontend"
+  namespace: "backend"
+  labels:
+    app: "server-frontend"
+# Deployment Spec - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/deployment-v1/#DeploymentSpec
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "server-frontend"
+  strategy:
+    type: RollingUpdate
+  # Pod Template - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-template-v1/#PodTemplateSpec
+  template:
+    metadata:
+      labels:
+        app: "server-frontend"
+    # Pod Spec - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+    spec:
+      containers:
+        - name: "project-frontend-sha256-1"
+          resources:
+            limits:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "server-frontend-hpa-vfz0"
+  namespace: "backend"
+  labels:
+    app: "server-frontend"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "server-frontend"
+    apiVersion: "apps/v1"
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      target:
+        type: "Utilization"
+        averageUtilization: 80

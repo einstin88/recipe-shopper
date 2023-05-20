@@ -3,17 +3,6 @@ steps:
   # 1 - build images
   - name: "gcr.io/cloud-builders/docker"
     args: ["compose", "-f", "docker-compose.yml", "build"]
-    secretEnv:
-      [
-        "MYSQL_URL_BACKEND",
-        "MYSQL_URL_AUTH",
-        "REDISHOST",
-        "REDISPORT",
-        "SCRAPPER_URL",
-        "KEY_URL",
-        "GOOGLE_CREDENTIALS",
-        "SCRAPPER_SERVER_KEY",
-      ]
 
   # 2- Push images to private repository
   - name: "gcr.io/cloud-builders/docker"
@@ -23,12 +12,11 @@ steps:
   # gke-deploy is a wrapper for 'kubectl'
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
-      [
-        "set",
-        "image",
-        "deployment/server-frontend",
-        "project-frontend-sha256-1=asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend:${_APP_VERSION}",
-      ]
+      - run
+      - --filename=k8s-manifests/deployments/update-angular.yaml
+      - "--image=asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend:${_APP_VERSION}"
+      - --location=asia-southeast1
+      - --cluster=recipee-cluster-1
 
 substitutions:
   _APP_VERSION: 0.0.1
@@ -38,6 +26,17 @@ options:
   env:
     - "PROJECT_ID=$PROJECT_ID"
     - "APP_VERSION=${_APP_VERSION}"
+  secretEnv:
+    [
+      "MYSQL_URL_BACKEND",
+      "MYSQL_URL_AUTH",
+      "REDISHOST",
+      "REDISPORT",
+      "SCRAPPER_URL",
+      "KEY_URL",
+      "GOOGLE_CREDENTIALS",
+      "SCRAPPER_SERVER_KEY",
+    ]
 
 # Secrets
 # Used by the Cloud builder to satisfy docker-compose.yml's 'secrets' requirements
