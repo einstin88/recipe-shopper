@@ -13,6 +13,13 @@ steps:
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
       - run
+      - --filename=k8s-manifests/deployments/update-server-api.yaml
+      - "--image=asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-backend:${_APP_VERSION}"
+      - --location=asia-southeast1
+      - --cluster=recipee-cluster-1
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - run
       - --filename=k8s-manifests/deployments/update-angular.yaml
       - "--image=asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend:${_APP_VERSION}"
       - --location=asia-southeast1

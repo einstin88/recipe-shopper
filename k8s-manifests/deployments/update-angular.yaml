@@ -8,7 +8,7 @@ metadata:
     app: "server-frontend"
 # Deployment Spec - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/deployment-v1/#DeploymentSpec
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: "server-frontend"

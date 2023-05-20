@@ -5,88 +5,6 @@ version: "3.9"
 # - sensitive data are mounted with secrets for local setup, or available as secret environment variables in the production pipe
 # 'Image' key here is used for pushing to Artifact Registry in the cloud after the build steps. Comment it out when composing locally
 #####
-services:
-  frontend:
-    build:
-      context: ./client/recipe-shopper
-      dockerfile: Dockerfile
-    container_name: frontend
-    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend:$APP_VERSION"
-    networks:
-      - core
-    ports:
-      - "80:80"
-    links:
-      - auth
-      - backend
-    depends_on:
-      - auth
-      - backend
-
-  backend:
-    build:
-      context: ./server/backend-server/recipe-shopper
-      dockerfile: Dockerfile
-      args:
-        - "MYSQL_URL_BACKEND=$MYSQL_URL_BACKEND"
-        - "SCRAPPER_URL=$SCRAPPER_URL"
-        - "KEY_URL=$KEY_URL"
-        - "GOOGLE_CREDENTIALS=$GOOGLE_CREDENTIALS"
-    container_name: backend
-    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-backend:$APP_VERSION"
-    # secrets:
-    # - MYSQL_URL_BACKEND
-    # - SCRAPPER_URL
-    # - KEY_URL
-    # - GOOGLE_CREDENTIALS
-    networks:
-      - core
-    ports:
-      - "8000:8080"
-    links:
-      - auth
-      - scrapper
-    depends_on:
-      - auth
-      - scrapper
-
-  auth:
-    build:
-      # Configured to a Redis instance running in the cloud instead of in the cluster
-      context: ./server/auth-server/jwt-auth-server
-      dockerfile: Dockerfile
-      args:
-        - "REDISPORT=$REDISPORT"
-        - "REDISHOST=$REDISHOST"
-        - "MYSQL_URL_AUTH=$MYSQL_URL_AUTH"
-    container_name: auth
-    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-auth:$APP_VERSION"
-    # secrets:
-    #   - REDISPORT
-    #   - REDISHOST
-    #   - REDISUSER
-    #   - REDISPASSWORD
-    #   - MYSQL_URL_AUTH
-    networks:
-      - core
-    ports:
-      - "8010:8080"
-
-  scrapper:
-    build:
-      context: ./server/python-server/web_scrapper_server
-      dockerfile: Dockerfile
-      args:
-        - "SCRAPPER_SERVER_KEY=$SCRAPPER_SERVER_KEY"
-    container_name: scrapper
-    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper:$APP_VERSION"
-    # secrets:
-    #   - SCRAPPER_SERVER_KEY
-    networks:
-      - core
-    ports:
-      - "8020:8000"
-
 secrets:
   MYSQL_URL_BACKEND:
     environment: "MYSQL_URL_BACKEND"
@@ -112,3 +30,85 @@ secrets:
 networks:
   core:
     driver: bridge
+
+services:
+  frontend:
+    build:
+      context: ./client/recipe-shopper
+      dockerfile: Dockerfile
+    container_name: frontend
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend:$APP_VERSION"
+    networks:
+      - core
+    ports:
+      - "80:80"
+    links:
+      - auth
+      - backend
+    depends_on:
+      - auth
+      - backend
+
+  # backend:
+  #   build:
+  #     context: ./server/backend-server/recipe-shopper
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - "MYSQL_URL_BACKEND=$MYSQL_URL_BACKEND"
+  #       - "SCRAPPER_URL=$SCRAPPER_URL"
+  #       - "KEY_URL=$KEY_URL"
+  #       - "GOOGLE_CREDENTIALS=$GOOGLE_CREDENTIALS"
+  #   container_name: backend
+  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-backend:$APP_VERSION"
+  #   # secrets:
+  #   # - MYSQL_URL_BACKEND
+  #   # - SCRAPPER_URL
+  #   # - KEY_URL
+  #   # - GOOGLE_CREDENTIALS
+  #   networks:
+  #     - core
+  #   ports:
+  #     - "8000:8080"
+  #   links:
+  #     - auth
+  #     - scrapper
+  #   depends_on:
+  #     - auth
+  #     - scrapper
+
+  # auth:
+  #   build:
+  #     # Configured to a Redis instance running in the cloud instead of in the cluster
+  #     context: ./server/auth-server/jwt-auth-server
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - "REDISPORT=$REDISPORT"
+  #       - "REDISHOST=$REDISHOST"
+  #       - "MYSQL_URL_AUTH=$MYSQL_URL_AUTH"
+  #   container_name: auth
+  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-auth:$APP_VERSION"
+  #   # secrets:
+  #   #   - REDISPORT
+  #   #   - REDISHOST
+  #   #   - REDISUSER
+  #   #   - REDISPASSWORD
+  #   #   - MYSQL_URL_AUTH
+  #   networks:
+  #     - core
+  #   ports:
+  #     - "8010:8080"
+
+  # scrapper:
+  #   build:
+  #     context: ./server/python-server/web_scrapper_server
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - "SCRAPPER_SERVER_KEY=$SCRAPPER_SERVER_KEY"
+  #   container_name: scrapper
+  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper:$APP_VERSION"
+  #   # secrets:
+  #   #   - SCRAPPER_SERVER_KEY
+  #   networks:
+  #     - core
+  #   ports:
+  #     - "8020:8000"

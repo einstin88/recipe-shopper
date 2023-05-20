@@ -16,4 +16,4 @@ RUN ["ng", "build"]
 FROM nginx:stable-alpine
 
 COPY --from=builder /app/dist/recipe-shopper /usr/share/nginx/html
-COPY default.conf /etc/nginx/conf.d/
+COPY nginx.conf /etc/nginx/sites-available/default
