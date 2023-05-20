@@ -8,8 +8,8 @@ spring:
     host: ${REDISHOST}
     port: ${REDISPORT}
     database: 0
-    user: ${REDISUSER}
-    password: ${REDISPASSWORD}
+    # user: ${REDISUSER}
+    # password: ${REDISPASSWORD}
   # MySQL
   datasource:
     url: ${MYSQL_URL_AUTH}

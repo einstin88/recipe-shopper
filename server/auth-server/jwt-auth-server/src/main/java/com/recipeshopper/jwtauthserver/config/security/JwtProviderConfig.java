@@ -1,4 +1,4 @@
-package com.recipeshopper.jwtauthserver.security;
+package com.recipeshopper.jwtauthserver.config.security;
 
 import java.text.ParseException;
 

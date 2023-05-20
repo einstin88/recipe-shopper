@@ -1,4 +1,4 @@
-package com.recipeshopper.jwtauthserver.security;
+package com.recipeshopper.jwtauthserver.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

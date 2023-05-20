@@ -1,48 +1,63 @@
 steps:
   # For CI/CD on Google Cloud Build & GKE
+  # 1 - build images
   - name: "gcr.io/cloud-builders/docker"
     args: ["compose", "-f", "docker-compose.yml", "build"]
-    env:
-      - "PROJECT_ID=$PROJECT_ID"
     secretEnv:
       [
         "MYSQL_URL_BACKEND",
         "MYSQL_URL_AUTH",
         "REDISHOST",
         "REDISPORT",
-        "REDISUSER",
-        "REDISPASSWORD",
         "SCRAPPER_URL",
         "KEY_URL",
         "GOOGLE_CREDENTIALS",
         "SCRAPPER_SERVER_KEY",
       ]
+
+  # 2- Push images to private repository
   - name: "gcr.io/cloud-builders/docker"
     args: ["compose", "push"]
-    env:
-      - "PROJECT_ID=$PROJECT_ID"
-  # - name: 'gcr.io/cloud-builders/gke-deploy'
-    # gke-deploy is a wrapper for 'kubectl'
 
+  # 3 - Deploy images
+  # gke-deploy is a wrapper for 'kubectl'
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      [
+        "set",
+        "image",
+        "deployment/server-frontend",
+        "project-frontend-sha256-1=asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend:${_APP_VERSION}",
+      ]
 
-# Secrets here are used by the Cloud builder to satisfy docker-compose.yml's 'secrets' requirements
+substitutions:
+  _APP_VERSION: 0.0.1
+
+# Global vars
+options:
+  env:
+    - "PROJECT_ID=$PROJECT_ID"
+    - "APP_VERSION=${_APP_VERSION}"
+
+# Secrets
+# Used by the Cloud builder to satisfy docker-compose.yml's 'secrets' requirements
 availableSecrets:
   secretManager:
     - versionName: projects/621005217238/secrets/MYSQL_URL_BACKEND/versions/1
       env: "MYSQL_URL_BACKEND"
     - versionName: projects/621005217238/secrets/MYSQL_URL_AUTH/versions/1
       env: "MYSQL_URL_AUTH"
-    - versionName: projects/621005217238/secrets/REDISHOST/versions/2
+    - versionName: projects/621005217238/secrets/REDISHOST/versions/3
       env: "REDISHOST"
     - versionName: projects/621005217238/secrets/REDISPORT/versions/1
       env: "REDISPORT"
-    - versionName: projects/621005217238/secrets/REDISUSER/versions/1
-      env: "REDISUSER"
-    - versionName: projects/621005217238/secrets/REDISPASSWORD/versions/2
-      env: "REDISPASSWORD"
-    - versionName: projects/621005217238/secrets/SCRAPPER_URL/versions/1
+    # - versionName: projects/621005217238/secrets/REDISUSER/versions/1
+    #   env: "REDISUSER"
+    # - versionName: projects/621005217238/secrets/REDISPASSWORD/versions/2
+    #   env: "REDISPASSWORD"
+    - versionName: projects/621005217238/secrets/SCRAPPER_URL/versions/2
       env: "SCRAPPER_URL"
-    - versionName: projects/621005217238/secrets/KEY_URL/versions/1
+    - versionName: projects/621005217238/secrets/KEY_URL/versions/2
       env: "KEY_URL"
     - versionName: projects/621005217238/secrets/GOOGLE_CREDENTIALS/versions/1
       env: "GOOGLE_CREDENTIALS"

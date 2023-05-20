@@ -26,4 +26,7 @@ COPY . ./
 RUN python -m pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
+ARG SCRAPPER_SERVER_KEY
+ENV SCRAPPER_SERVER_KEY=${SCRAPPER_SERVER_KEY}
+
 CMD ["gunicorn", "web_scrapper_server.wsgi", "--bind", "0.0.0.0:8000", "--timeout", "60"]
