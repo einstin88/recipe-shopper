@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: "project-frontend-sha256-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-frontend:0.0.1"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-frontend:0.0.2"
           resources:
             limits:
               cpu: 500m
@@ -33,25 +33,25 @@ spec:
               cpu: 500m
               ephemeral-storage: 1Gi
               memory: 1Gi
----
-apiVersion: "autoscaling/v2"
-kind: "HorizontalPodAutoscaler"
-metadata:
-  name: "server-frontend-hpa-vfz0"
-  namespace: "backend"
-  labels:
-    app: "server-frontend"
-spec:
-  scaleTargetRef:
-    kind: "Deployment"
-    name: "server-frontend"
-    apiVersion: "apps/v1"
-  minReplicas: 1
-  maxReplicas: 5
-  metrics:
-  - type: "Resource"
-    resource:
-      name: "cpu"
-      target:
-        type: "Utilization"
-        averageUtilization: 80
+# ---
+# apiVersion: "autoscaling/v2"
+# kind: "HorizontalPodAutoscaler"
+# metadata:
+#   name: "server-frontend-hpa-vfz0"
+#   namespace: "backend"
+#   labels:
+#     app: "server-frontend"
+# spec:
+#   scaleTargetRef:
+#     kind: "Deployment"
+#     name: "server-frontend"
+#     apiVersion: "apps/v1"
+#   minReplicas: 1
+#   maxReplicas: 5
+#   metrics:
+#   - type: "Resource"
+#     resource:
+#       name: "cpu"
+#       target:
+#         type: "Utilization"
+#         averageUtilization: 80

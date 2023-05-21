@@ -19,7 +19,7 @@ steps:
       # - -R
 
 substitutions:
-  _APP_VERSION: 0.0.1
+  _APP_VERSION: 0.0.2
 
 # Global vars
 options:
