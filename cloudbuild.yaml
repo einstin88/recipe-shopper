@@ -13,10 +13,10 @@ steps:
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
       - run
-      - --filename=k8s-manifests/deployments/update-angular.yaml
+      - --filename=k8s-manifests/deployments/
       - --location=asia-southeast1
       - --cluster=recipee-cluster-1
-      # - -R
+      - -R
 
 substitutions:
   _APP_VERSION: 0.0.1
