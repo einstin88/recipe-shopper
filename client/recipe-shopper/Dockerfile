@@ -15,6 +15,8 @@ RUN ["ng", "build"]
 FROM nginx:stable-alpine
 
 COPY --from=builder /app/dist/recipe-shopper /usr/share/nginx/html
-# COPY nginx.conf /etc/nginx/conf.d
+COPY nginx-proxy.conf /etc/nginx/conf.d
+COPY nginx.conf /etc/nginx
 
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
