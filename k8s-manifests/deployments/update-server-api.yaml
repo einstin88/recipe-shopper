@@ -7,7 +7,7 @@ metadata:
   labels:
     app: "server-api"
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: "server-api"
@@ -23,32 +23,32 @@ spec:
           image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend:0.0.1"
           resources:
             limits:
-              cpu: 500m
-              ephemeral-storage: 1Gi
-              memory: 1Gi
+              cpu: 750m
+              ephemeral-storage: 2Gi
+              memory: 2Gi
             requests:
               cpu: 500m
               ephemeral-storage: 1Gi
               memory: 1Gi
-# ---
-# apiVersion: "autoscaling/v2"
-# kind: "HorizontalPodAutoscaler"
-# metadata:
-#   name: "server-api-hpa-gnh4"
-#   namespace: "backend"
-#   labels:
-#     app: "server-api"
-# spec:
-#   scaleTargetRef:
-#     kind: "Deployment"
-#     name: "server-api"
-#     apiVersion: "apps/v1"
-#   minReplicas: 2
-#   maxReplicas: 5
-#   metrics:
-#   - type: "Resource"
-#     resource:
-#       name: "cpu"
-#       target:
-#         type: "Utilization"
-#         averageUtilization: 80
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "server-api-hpa-gnh4"
+  namespace: "backend"
+  labels:
+    app: "server-api"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "server-api"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      target:
+        type: "Utilization"
+        averageUtilization: 80

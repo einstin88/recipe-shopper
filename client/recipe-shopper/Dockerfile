@@ -16,6 +16,6 @@ RUN ["ng", "build"]
 FROM nginx:stable-alpine
 
 COPY --from=builder /app/dist/recipe-shopper /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/sites-available/default
+COPY nginx.conf /etc/nginx/conf.d/
 
 CMD ["nginx" "-g" "daemon off;"]
