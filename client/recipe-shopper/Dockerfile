@@ -3,7 +3,6 @@ FROM node:18.16.0-slim AS builder
 WORKDIR /app
 
 COPY . .
-RUN ls
 
 # Install app's dependencies
 RUN npm install -g npm@latest
@@ -18,4 +17,4 @@ FROM nginx:stable-alpine
 COPY --from=builder /app/dist/recipe-shopper /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d
 
-CMD ["nginx" "-g" "daemon off;"]
+CMD ["/usr/sbin/nginx" "-g" "daemon off;"]
