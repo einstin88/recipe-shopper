@@ -2,24 +2,26 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "server-frontend"
+  name: "server-frontend-1"
   namespace: "backend"
   labels:
-    app: "server-frontend"
+    app: "server-frontend-1"
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: "server-frontend"
+      app: "server-frontend-1"
   template:
     metadata:
       labels:
-        app: "server-frontend"
+        app: "server-frontend-1"
     spec:
       containers:
-      - name: "project-frontend-sha256-1"
-        image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-frontend@sha256:f1379628a1ebd8818a093a1a039f85d5805c699a062ac1276db7bfa46cc2d5d4"
-        resources:
+        - name: "project-frontend-1"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-frontend:0.0.2"
+          ports:
+            - containerPort: 80
+          resources:
             limits:
               cpu: 500m
               ephemeral-storage: 1Gi
@@ -32,38 +34,21 @@ spec:
 apiVersion: "autoscaling/v2"
 kind: "HorizontalPodAutoscaler"
 metadata:
-  name: "server-frontend-hpa-vfz0"
+  name: "server-frontend-autoscaler"
   namespace: "backend"
   labels:
-    app: "server-frontend"
+    app: "server-frontend-1"
 spec:
   scaleTargetRef:
     kind: "Deployment"
-    name: "server-frontend"
+    name: "server-frontend-1"
     apiVersion: "apps/v1"
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 5
   metrics:
-  - type: "Resource"
-    resource:
-      name: "cpu"
-      target:
-        type: "Utilization"
-        averageUtilization: 80
----
-apiVersion: "v1"
-kind: "Service"
-metadata:
-  name: "server-frontend-service"
-  namespace: "backend"
-  labels:
-    app: "server-frontend"
-spec:
-  ports:
-  - protocol: "TCP"
-    port: 80
-    targetPort: 80
-  selector:
-    app: "server-frontend"
-  type: "LoadBalancer"
-  loadBalancerIP: ""
+    - type: "Resource"
+      resource:
+        name: "cpu"
+        target:
+          type: "Utilization"
+          averageUtilization: 80

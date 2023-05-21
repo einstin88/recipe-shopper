@@ -10,12 +10,12 @@ steps:
 
   # 3 - Deploy images to cluster
   # gke-deploy is a wrapper for 'kubectl'
-  - name: "gcr.io/cloud-builders/gke-deploy"
-    args:
-      - run
-      - --filename=k8s-manifests/deployments/update-angular.yaml
-      - --location=asia-southeast1
-      - --cluster=recipee-cluster-1
+  # - name: "gcr.io/cloud-builders/gke-deploy"
+  #   args:
+  #     - run
+  #     - --filename=k8s-manifests/deployments/update-angular.yaml
+  #     - --location=asia-southeast1
+  #     - --cluster=recipee-cluster-1
       # - -R
 
 substitutions:
