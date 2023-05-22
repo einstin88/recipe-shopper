@@ -61,7 +61,7 @@ public class ProductService {
                 .path(Urls.URL_PARSE_URL)
                 .queryParam("category", category)
                 .build().toUri();
-        log.info(">>> API URL to call: {}", url.toString());
+        log.debug(">>> API URL to call: {}", url.toString());
 
         // Build request entity
         RequestEntity<Void> request = RequestEntity
@@ -201,7 +201,7 @@ public class ProductService {
                 })
                 .toList();
 
-        log.info(">>> Products saved to DB: {}", products.size());
+        log.debug(">>> Products saved to DB: {}", products.size());
 
         return products;
     }

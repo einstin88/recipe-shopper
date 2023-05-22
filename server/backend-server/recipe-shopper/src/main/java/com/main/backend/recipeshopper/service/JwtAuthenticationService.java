@@ -42,7 +42,7 @@ public class JwtAuthenticationService {
             ResponseEntity<String> response = client.exchange(request, String.class);
 
             String pubKey = response.getBody();
-            log.info("pubKey: {}", pubKey);
+            log.debug("pubKey: {}", pubKey);
 
             return pubKey;
 

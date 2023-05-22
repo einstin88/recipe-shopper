@@ -55,27 +55,27 @@ services:
     #   - auth
       # - scrapper
 
-  # auth:
-  #   build:
-  #     # Configured to a Redis instance running in the cloud instead of in the cluster
-  #     context: ./server/auth-server/jwt-auth-server
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - "REDISPORT=$REDISPORT"
-  #       - "REDISHOST=$REDISHOST"
-  #       - "MYSQL_URL_AUTH=$MYSQL_URL_AUTH"
-  #   container_name: auth
-  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-auth:$APP_VERSION"
-  #   # secrets:
-  #   #   - REDISPORT
-  #   #   - REDISHOST
-  #   #   - REDISUSER
-  #   #   - REDISPASSWORD
-  #   #   - MYSQL_URL_AUTH
-  #   networks:
-  #     - core
-  #   ports:
-  #     - "8010:8080"
+  auth:
+    build:
+      # Configured to a Redis instance running in the cloud instead of in the cluster
+      context: ./server/auth-server/jwt-auth-server
+      dockerfile: Dockerfile
+      args:
+        - "REDISPORT=$REDISPORT"
+        - "REDISHOST=$REDISHOST"
+        - "MYSQL_URL_AUTH=$MYSQL_URL_AUTH"
+    container_name: auth
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-auth:$APP_VERSION"
+    # secrets:
+    #   - REDISPORT
+    #   - REDISHOST
+    #   - REDISUSER
+    #   - REDISPASSWORD
+    #   - MYSQL_URL_AUTH
+    networks:
+      - core
+    ports:
+      - "8010:8080"
 
   # scrapper:
   #   build:

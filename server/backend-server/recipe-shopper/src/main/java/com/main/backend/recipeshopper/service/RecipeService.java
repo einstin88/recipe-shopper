@@ -28,7 +28,7 @@ public class RecipeService {
      * @return
      */
     public List<Recipe<Ingredient>> getRecipeList(Integer limit, Integer offset) {
-        log.info(">>> Retrieving recipes from DB...");
+        log.debug(">>> Retrieving recipes from DB...");
 
         return repo.findRecipes(offset, limit);
     }

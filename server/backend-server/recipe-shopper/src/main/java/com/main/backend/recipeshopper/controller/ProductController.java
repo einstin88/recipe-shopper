@@ -39,7 +39,7 @@ public class ProductController {
         public ResponseEntity<List<Product>> parseUrl(
                         @RequestParam String category) {
 
-                log.info(">>> Test parsing products for category -> {}", category);
+                log.debug(">>> Test parsing products for category -> {}", category);
 
                 return ResponseEntity
                                 .ok(productSvc.scrapeFromUrl(category.strip().toLowerCase()));
@@ -63,7 +63,7 @@ public class ProductController {
                         @RequestParam String category,
                         @RequestPart MultipartFile file) {
 
-                log.info(">>> Request to parse '{}' in category '{}'",
+                log.debug(">>> Request to parse '{}' in category '{}'",
                                 file.getOriginalFilename(), category);
 
                 return ResponseEntity
@@ -86,7 +86,7 @@ public class ProductController {
                         @RequestParam(defaultValue = "20") Integer limit,
                         @RequestParam(defaultValue = "0") Integer offset) {
 
-                log.info(">>> Request for products in category '{}' with limit-{}, offset-{}",
+                log.debug(">>> Request for products in category '{}' with limit-{}, offset-{}",
                                 category, limit, offset);
 
                 return ResponseEntity

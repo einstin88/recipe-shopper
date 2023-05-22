@@ -35,7 +35,7 @@ public class AuthorizationController {
     public ResponseEntity<Map<String, Object>> getUserPublicKey(
             @PathVariable String username) {
 
-        log.info(">>> Get key for user: {}", username);
+        log.debug(">>> Get key for user: {}", username);
 
         return ResponseEntity.ok(repo.findToken(username)
                 .orElseThrow(() -> {

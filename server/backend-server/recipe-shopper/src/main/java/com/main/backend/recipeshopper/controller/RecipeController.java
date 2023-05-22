@@ -37,7 +37,7 @@ public class RecipeController {
          */
         @GetMapping(path = Urls.URL_HEALTH, produces = MediaType.TEXT_PLAIN_VALUE)
         public ResponseEntity<String> healthCheck() {
-                log.info(">>> Test point called...");
+                log.debug(">>> Test point called...");
                 return ResponseEntity
                                 .ok(Utils.serverOkResponse());
         }
@@ -55,7 +55,7 @@ public class RecipeController {
                         @RequestParam(defaultValue = "10") Integer limit,
                         @RequestParam(defaultValue = "0") Integer offset) {
 
-                log.info(">>> Request for recipe list...");
+                log.debug(">>> Request for recipe list...");
 
                 return ResponseEntity
                                 .ok(recipeSvc.getRecipeList(limit, offset));
@@ -71,7 +71,7 @@ public class RecipeController {
         public ResponseEntity<Recipe<Ingredient>> getRecipeById(
                         @PathVariable String recipeId) {
 
-                log.info(">>> Request for recipe with id: {}", recipeId);
+                log.debug(">>> Request for recipe with id: {}", recipeId);
 
                 return ResponseEntity
                                 .ok(recipeSvc.getRecipeById(recipeId));
@@ -91,7 +91,7 @@ public class RecipeController {
         public ResponseEntity<Void> postNewRecipe(
                         @RequestBody Recipe<Ingredient> recipe) {
 
-                log.info(">>> Posting new recipe: {}", recipe);
+                log.debug(">>> Posting new recipe: {}", recipe);
                 recipeSvc.insertNewRecipe(recipe);
 
                 return ResponseEntity
@@ -111,7 +111,7 @@ public class RecipeController {
         public ResponseEntity<Void> updateRecipe(
                         @RequestBody Recipe<Ingredient> recipe) {
 
-                log.info(">>> Updating new recipe: {}", recipe);
+                log.debug(">>> Updating new recipe: {}", recipe);
                 recipeSvc.updateRecipe(recipe);
 
                 return ResponseEntity

@@ -36,10 +36,10 @@ public class AppUserAuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info(">>> Looking for user: {}", username);
+        log.debug(">>> Looking for user: {}", username);
         return userRepo.findUserByUsername(username)
                 .orElseThrow(() -> {
-                    log.info(">>> {} is not valid", username);
+                    log.debug(">>> {} is not valid", username);
                     throw new UsernameNotFoundException(username);
                 });
     }
@@ -79,7 +79,7 @@ public class AppUserAuthenticationService implements UserDetailsService {
 
     private String generateAndSaveToken(String username, String email) {
         Token token = JwtUtils.generateJwt(username, email);
-        log.info(">>> Token generated...");
+        log.debug(">>> Token generated...");
         if (!tokenRepo.insertToken(username, token))
             generateServerError(
                     "Token not saved for user: %s",
@@ -92,7 +92,7 @@ public class AppUserAuthenticationService implements UserDetailsService {
             String errMsg, Class<T> exceptionClass, Object... args) {
 
         errMsg = errMsg.formatted(args);
-        log.info("--- {}", errMsg);
+        log.debug("--- {}", errMsg);
 
         try {
             throw exceptionClass
