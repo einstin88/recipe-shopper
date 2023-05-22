@@ -33,7 +33,7 @@ public class JwtUtils {
                 .issuer(Consts.JWT_ISSUER)
                 .subject(username)
                 .issueTime(Date.from(issueInstant))
-                .expirationTime(Date.from(issueInstant.plus(60, ChronoUnit.MINUTES)))
+                .expirationTime(Date.from(issueInstant.plus(Consts.JWT_VALIDITY, ChronoUnit.MINUTES)))
                 .claim("scope", SCOPES.READ)
                 .claim("email", email)
                 .build().toPayload();
@@ -51,9 +51,8 @@ public class JwtUtils {
 
             // Sign token with the private key
             token.sign(signer);
-            log.debug(">>> Token after signing: {}", token.serialize());
-
             String tokenString = token.serialize();
+            log.debug(">>> Token after signing: {}", tokenString);
 
             return new Token(keyPair.toPublicJWK().toJSONObject(), tokenString);
 

@@ -19,7 +19,7 @@ public class ScheduleTask {
     /**
      * 
      */
-    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 5)
+    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 120, initialDelay = 2)
     public void scheduleScraping() {
         log.info(">>> Running scheduled product scrapping...");
         for (String category : Constants.PRODUCT_CATEGORIES) {

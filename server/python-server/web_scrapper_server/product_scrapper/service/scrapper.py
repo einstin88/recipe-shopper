@@ -2,12 +2,12 @@ import time
 import json
 
 from bs4 import BeautifulSoup
-from chromedriver_py import binary_path
+# from chromedriver_py import binary_path
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
+# from selenium.webdriver.chrome.service import Service
 import jsonpickle
 
 from .constants import *
@@ -34,19 +34,21 @@ class Scrapper:
         '''
         # Set options of selenium webdriver
         options = Options()
+        # options = ChromiumOptions()
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--blink-settings=imagesEnabled=false')
 
         # Set binary path of the chrome webdriver
-        service = Service(binary_path=binary_path)
+        # service = Service(binary_path=binary_path)
 
         # Instantiate a chrome webdriver to load contents from the url
-        browser = webdriver.Chrome(service=service, options=options)
+        # browser = webdriver.Chrome(service=service, options=options)
+        browser = webdriver.Chrome(options=options)
         browser.implicitly_wait(WEBPAGE_LOAD_TIME_LIMIT)
 
-        print(f'>>> Loading html from source: {self.url}\n')
+        # print(f'>>> Loading html from source: {self.url}\n')
         browser.get(self.url)
 
         # Scrolls to bottom of the page
@@ -68,7 +70,7 @@ class Scrapper:
 
         Returns: list of products as dict 
         '''
-        print(f'>>> Parsing html for product details...')
+        # print(f'>>> Parsing html for product details...')
 
         products_list = BeautifulSoup(self.products_html, 'lxml').find(
             'div', class_=SS_PRODUCT_CONTAINER

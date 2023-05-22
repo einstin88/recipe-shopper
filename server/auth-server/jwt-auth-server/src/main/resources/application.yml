@@ -1,16 +1,21 @@
-# Redis & MySQL
 spring:
+  # Docker
+  # https://stackoverflow.com/questions/70007676/how-to-handle-docker-secrets-in-application-properties-files
+  config:
+    import: optional:configtree:/run/secrets/
+  # Redis
   redis:
     host: ${REDISHOST}
     port: ${REDISPORT}
     database: 0
-    user: ${REDISUSER}
-    password: ${REDISPASSWORD}
+    # user: ${REDISUSER}
+    # password: ${REDISPASSWORD}
+  # MySQL
   datasource:
-    url: ${MYSQL_URL_JDBC}
-    username: ${MYSQLUSER}
-    password: ${MYSQLPASSWORD}
+    url: ${MYSQL_URL_AUTH}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connectionTimeout: 20000
       maximumPoolSize: 5
+    devtools:
+      add-properties: false

@@ -13,5 +13,3 @@ SS_PRODUCT_NAME = 'product-name'
 SS_PRODUCT_UNIT = 'product-packSize'
 SS_PRODUCT_PRICE = 'product-price'
 SS_PAGE_FOOTER = 'footer'
-
-# 

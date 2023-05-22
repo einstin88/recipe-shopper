@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.recipeshopper.jwtauthserver.exception.NoTokenFoundException;
 import com.recipeshopper.jwtauthserver.repository.TokenRepo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,16 +28,20 @@ public class AuthorizationController {
 
     /**
      * Endpoint for retrieving user's public key
+     * 
      * @param username
      */
     @GetMapping("/key-uri/{username}")
     public ResponseEntity<Map<String, Object>> getUserPublicKey(
             @PathVariable String username) {
 
-        log.info(">>> Get key for user: {}", username);
+        log.debug(">>> Get key for user: {}", username);
 
         return ResponseEntity.ok(repo.findToken(username)
-                .orElseThrow()
+                .orElseThrow(() -> {
+                    throw new NoTokenFoundException(
+                            "'%s' is not logged in...".formatted(username));
+                })
                 .key());
     }
 

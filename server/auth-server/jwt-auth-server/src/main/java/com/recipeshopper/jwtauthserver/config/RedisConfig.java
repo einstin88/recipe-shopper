@@ -27,11 +27,11 @@ public class RedisConfig {
     @Value("${spring.redis.database}")
     private Integer redisDatabase;
 
-    @Value("${spring.redis.user}")
-    private String redisUser;
+    // @Value("${spring.redis.user}")
+    // private String redisUser;
 
-    @Value("${spring.redis.password}")
-    private String redisPassword;
+    // @Value("${spring.redis.password}")
+    // private String redisPassword;
 
     @Bean
     @Scope("singleton")
@@ -40,13 +40,16 @@ public class RedisConfig {
         config.setDatabase(redisDatabase);
         config.setHostName(redisHost);
         config.setPort(redisPort);
-        if (!redisUser.isEmpty() && !redisPassword.isEmpty()) {
-            config.setUsername(redisUser);
-            config.setPassword(redisPassword);
-        }
+        // if (!redisPassword.isBlank()) {
+        //     config.setPassword(redisPassword);
+        // }
+        // if (!redisUser.isBlank() && !redisPassword.isBlank()) {
+        //     config.setUsername(redisUser);
+        //     config.setPassword(redisPassword);
+        // }
 
         final GenericObjectPoolConfig<Connection> poolConfig = new GenericObjectPoolConfig<>();
-        poolConfig.setMaxTotal(5);
+        poolConfig.setMaxTotal(10);
         poolConfig.setMaxIdle(2);
 
         final JedisClientConfiguration jedisClient = JedisClientConfiguration

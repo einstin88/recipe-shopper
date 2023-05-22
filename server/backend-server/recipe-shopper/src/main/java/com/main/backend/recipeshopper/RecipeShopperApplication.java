@@ -12,5 +12,4 @@ public class RecipeShopperApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RecipeShopperApplication.class, args);
 	}
-
 }

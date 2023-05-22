@@ -3,7 +3,8 @@ selenium
 beautifulsoup4
 # mysqlclient
 lxml
-chromedriver-py
+# chromedriver-py
 jsonpickle
 gunicorn
-mysql-connector-python
+# mysql-connector-python
+# get-docker-secret

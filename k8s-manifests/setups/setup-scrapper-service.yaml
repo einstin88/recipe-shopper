@@ -1,0 +1,16 @@
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "server-scrapper-1-service"
+  namespace: "backend"
+  labels:
+    app: "server-scrapper-1"
+spec:
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8000
+  selector:
+    app: "server-scrapper-1"
+  type: "NodePort"

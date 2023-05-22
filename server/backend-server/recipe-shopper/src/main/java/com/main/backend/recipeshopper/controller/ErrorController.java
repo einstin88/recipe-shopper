@@ -11,7 +11,7 @@ import com.main.backend.recipeshopper.exceptions.IncorrectRequestException;
 import com.main.backend.recipeshopper.exceptions.ProductUpsertException;
 import com.main.backend.recipeshopper.exceptions.RecipeTransactionException;
 
-@RestControllerAdvice(basePackageClasses = { ShopperController.class, ProductController.class })
+@RestControllerAdvice(basePackageClasses = { RecipeController.class, ProductController.class })
 public class ErrorController {
         /**
          * Generate error responses for exception types:

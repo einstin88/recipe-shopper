@@ -1,0 +1,15 @@
+.vscode/
+*.md
+*.sql
+*.rdb
+/secrets
+node_modules/
+dist/
+target/
+test/
+*.ps1
+*.mjs
+Lib/
+Scripts/
+oauth-server/
+.angular/cache/

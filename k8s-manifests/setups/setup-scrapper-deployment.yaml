@@ -1,0 +1,58 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "server-scrapper-1"
+  namespace: "backend"
+  labels:
+    app: "server-scrapper-1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "server-scrapper-1"
+  template:
+    metadata:
+      labels:
+        app: "server-scrapper-1"
+    spec:
+      containers:
+        - name: "project-scrapper-1"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper:0.0.1"
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              port: 8000
+              path: /scrape/health
+          resources:
+            limits:
+              cpu: "1"
+              ephemeral-storage: 2.5Gi
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 2Gi
+              memory: 1.5Gi
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "server-scrapper-autoscaler"
+  namespace: "backend"
+  labels:
+    app: "server-scrapper-1"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "server-scrapper-1"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: "Resource"
+      resource:
+        name: "cpu"
+        target:
+          type: "Utilization"
+          averageUtilization: 80

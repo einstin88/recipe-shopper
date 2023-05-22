@@ -1,0 +1,58 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "server-auth-1"
+  namespace: "backend"
+  labels:
+    app: "server-auth-1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "server-auth-1"
+  template:
+    metadata:
+      labels:
+        app: "server-auth-1"
+    spec:
+      containers:
+        - name: "project-auth-1"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-auth:0.0.1"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /auth/health
+          resources:
+            limits:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+# ---
+# apiVersion: "autoscaling/v2"
+# kind: "HorizontalPodAutoscaler"
+# metadata:
+#   name: "server-auth-autoscaler"
+#   namespace: "backend"
+#   labels:
+#     app: "server-auth-1"
+# spec:
+#   scaleTargetRef:
+#     kind: "Deployment"
+#     name: "server-auth-1"
+#     apiVersion: "apps/v1"
+#   minReplicas: 1
+#   maxReplicas: 5
+#   metrics:
+#     - type: "Resource"
+#       resource:
+#         name: "cpu"
+#         target:
+#           type: "Utilization"
+#           averageUtilization: 80

@@ -27,7 +27,7 @@ export class HydrationEffect implements OnInitEffects {
             console.debug('>> parsed state: ', state);
 
             const decodedToken = decodeJwt(state.auth.jwt.token);
-            const expiry = decodedToken.exp!;
+            // const expiry = decodedToken.exp!;
 
             // if (expiry - Date.now() <= 0)
             //   return HydrationActions.hydrateFailure();

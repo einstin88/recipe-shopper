@@ -19,7 +19,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('product_scrapper.urls'))
+    path('scrape/', include('product_scrapper.urls'))
 ]
 
 handler404 = 'product_scrapper.views.custom_404_response'

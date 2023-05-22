@@ -20,13 +20,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+# 
+def read_docker_secret(key: str):
+    with open(f'/run/secrets/{key}') as f:
+        return f.read()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SERVER_KEY']
+SECRET_KEY = os.environ['SCRAPPER_SERVER_KEY'] if os.getenv('SCRAPPER_SERVER_KEY') else read_docker_secret('scrapper_server_key')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# TODO SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', '.localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*', '.localhost', '127.0.0.1', 'server-api-1-service']
 
 
 # Application definition
@@ -77,23 +82,22 @@ WSGI_APPLICATION = 'web_scrapper_server.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
         # 'ENGINE': 'django.db.backends.mysql',
         # 'OPTIONS': {
         #     'user': os.environ['MYSQLUSER'],
         #     'password': os.environ['MYSQLPASSWORD'],
         #     'host': os.environ['MYSQLHOST'],
         #     'port': int(os.environ['MYSQLPORT']),
-        #     # TODO Create separate DB on the cloud
         #     'database': os.environ['MYSQL_DB']
         # }
-        'ENGINE': 'mysql.connector.django',
-        'HOST': os.environ['MYSQLHOST'],
-        'PORT': int(os.environ['MYSQLPORT']),
-        'USER': os.environ['MYSQLUSER'],
-        'PASSWORD': os.environ['MYSQLPASSWORD'],
-        'NAME': os.environ['MYSQL_DB']
+        # 'ENGINE': 'mysql.connector.django',
+        # 'HOST': os.environ['MYSQLHOST'] if os.getenv('MYSQLHOST') else get_docker_secret('MYSQLHOST'),
+        # 'PORT': int(os.environ['MYSQLPORT']) if os.getenv('MYSQLPORT') else get_docker_secret('MYSQLPORT'),
+        # 'USER': os.environ['MYSQLUSER'] if os.getenv('MYSQLUSER') else get_docker_secret('MYSQLUSER'),
+        # 'PASSWORD': os.environ['MYSQLPASSWORD'] if os.getenv('MYSQLUSER') else get_docker_secret('MYSQLUSER'),
+        # 'NAME': os.environ['MYSQL_DB_SCRAPPER'] if os.getenv('MYSQL_DB_SCRAPPER') else get_docker_secret('MYSQL_DB_SCRAPPER')
     }
 }
 
@@ -133,8 +137,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

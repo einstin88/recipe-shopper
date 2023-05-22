@@ -33,7 +33,7 @@ public class AuthenticationController {
 
         @GetMapping(URL_HEALTH)
         public ResponseEntity<String> statusCheck() {
-                log.info(">>> Checking server status...");
+                log.debug(">>> Checking server status...");
 
                 return ResponseEntity
                                 .ok("Server is up");
@@ -49,7 +49,7 @@ public class AuthenticationController {
         public ResponseEntity<String> postNewUser(
                         @RequestBody AppUser newUser) {
 
-                log.info(">>> Request to register new user: {}", newUser);
+                log.debug(">>> Request to register new user: {}", newUser);
                 AppUser populatedUser = Utils.createNewUser(newUser);
 
                 return ResponseEntity
@@ -69,7 +69,7 @@ public class AuthenticationController {
                         @AuthenticationPrincipal AppUser user) {
 
                 String username = user.getUsername();
-                log.info(">>> Succesfully authenticated {}", username);
+                log.debug(">>> Succesfully authenticated {}", username);
 
                 return ResponseEntity.ok(
                                 Utils.createTokenResponse(
@@ -81,7 +81,7 @@ public class AuthenticationController {
                         @RequestParam(required = false) String error) {
 
                 if (error != null) {
-                        log.info(">>> Log in failed");
+                        log.debug(">>> Log in failed");
                         return ResponseEntity
                                         .badRequest()
                                         .body("User not found");
