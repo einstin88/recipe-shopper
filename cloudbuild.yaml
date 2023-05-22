@@ -10,18 +10,18 @@ steps:
 
   # 3 - Deploy images to cluster
   # gke-deploy is a wrapper for 'kubectl'
-  # - name: "gcr.io/cloud-builders/gke-deploy"
-  #   args:
-  #     - run
-  #     - --filename=k8s-manifests/deployments/update-angular.yaml
-  #     - --location=asia-southeast1
-  #     - --cluster=recipee-cluster-1
-      # - -R
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - run
+      - --filename=k8s-manifests/deployments/
+      - --location=asia-southeast1
+      - --cluster=recipee-cluster-1
+      - -R
 
 substitutions:
   _APP_VERSION: 0.0.2
 
-# Global vars
+# Global vars for CI pipeline
 options:
   env:
     - "PROJECT_ID=$PROJECT_ID"
@@ -42,17 +42,17 @@ options:
 # Used by the Cloud builder to satisfy docker-compose.yml's 'secrets' requirements
 availableSecrets:
   secretManager:
-    - versionName: projects/621005217238/secrets/MYSQL_URL_BACKEND/versions/1
+    - versionName: projects/621005217238/secrets/MYSQL_URL_BACKEND/versions/2
       env: "MYSQL_URL_BACKEND"
-    - versionName: projects/621005217238/secrets/MYSQL_URL_AUTH/versions/1
+    - versionName: projects/621005217238/secrets/MYSQL_URL_AUTH/versions/2
       env: "MYSQL_URL_AUTH"
     - versionName: projects/621005217238/secrets/REDISHOST/versions/3
       env: "REDISHOST"
     - versionName: projects/621005217238/secrets/REDISPORT/versions/1
       env: "REDISPORT"
-    - versionName: projects/621005217238/secrets/SCRAPPER_URL/versions/2
+    - versionName: projects/621005217238/secrets/SCRAPPER_URL/versions/3
       env: "SCRAPPER_URL"
-    - versionName: projects/621005217238/secrets/KEY_URL/versions/2
+    - versionName: projects/621005217238/secrets/KEY_URL/versions/3
       env: "KEY_URL"
     - versionName: projects/621005217238/secrets/GOOGLE_CREDENTIALS/versions/1
       env: "GOOGLE_CREDENTIALS"

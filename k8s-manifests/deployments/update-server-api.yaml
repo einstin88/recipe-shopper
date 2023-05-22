@@ -2,25 +2,32 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "server-api"
+  name: "server-api-1"
   namespace: "backend"
   labels:
-    app: "server-api"
+    app: "server-api-1"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "server-api"
+      app: "server-api-1"
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: "server-api"
+        app: "server-api-1"
     spec:
+      serviceAccountName: google-services
       containers:
-        - name: "project-backend-sha256-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend:0.0.1"
+        - name: "project-backend-1"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend:0.0.2"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /api/health
           resources:
             limits:
               cpu: 750m
@@ -34,14 +41,14 @@ spec:
 # apiVersion: "autoscaling/v2"
 # kind: "HorizontalPodAutoscaler"
 # metadata:
-#   name: "server-api-hpa-gnh4"
+#   name: "server-api-autoscaler"
 #   namespace: "backend"
 #   labels:
-#     app: "server-api"
+#     app: "server-api-1"
 # spec:
 #   scaleTargetRef:
 #     kind: "Deployment"
-#     name: "server-api"
+#     name: "server-api-1"
 #     apiVersion: "apps/v1"
 #   minReplicas: 1
 #   maxReplicas: 5

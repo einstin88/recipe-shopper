@@ -2,30 +2,29 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "server-frontend-1"
+  name: "server-auth-1"
   namespace: "backend"
   labels:
-    app: "server-frontend-1"
-# Deployment Spec - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/deployment-v1/#DeploymentSpec
+    app: "server-auth-1"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "server-frontend-1"
-  strategy:
-    type: RollingUpdate
-  # Pod Template - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-template-v1/#PodTemplateSpec
+      app: "server-auth-1"
   template:
     metadata:
       labels:
-        app: "server-frontend-1"
-    # Pod Spec - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+        app: "server-auth-1"
     spec:
       containers:
-        - name: "project-frontend-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-frontend:0.0.2"
+        - name: "project-auth-1"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-auth:0.0.1"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /auth/health
           resources:
             limits:
               cpu: 500m
@@ -39,14 +38,14 @@ spec:
 # apiVersion: "autoscaling/v2"
 # kind: "HorizontalPodAutoscaler"
 # metadata:
-#   name: "server-frontend-autoscaler"
+#   name: "server-auth-autoscaler"
 #   namespace: "backend"
 #   labels:
-#     app: "server-frontend-1"
+#     app: "server-auth-1"
 # spec:
 #   scaleTargetRef:
 #     kind: "Deployment"
-#     name: "server-frontend-1"
+#     name: "server-auth-1"
 #     apiVersion: "apps/v1"
 #   minReplicas: 1
 #   maxReplicas: 5

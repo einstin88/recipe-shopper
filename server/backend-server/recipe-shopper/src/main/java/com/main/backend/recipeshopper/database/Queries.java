@@ -2,7 +2,7 @@ package com.main.backend.recipeshopper.database;
 
 public class Queries {
     public static final String SQL_INSERT_PRODUCT = """
-            INSERT INTO products (
+            INSERT INTO recipe_shopper.products (
                 product_id,
                 name,
                 url,
@@ -15,7 +15,7 @@ public class Queries {
                 """;
 
     public static final String SQL_UPDATE_PRODUCT = """
-            UPDATE products
+            UPDATE recipe_shopper.products
             SET url = ?,
                 price = ?,
                 img = ?
@@ -26,7 +26,7 @@ public class Queries {
 
     public static final String SQL_FIND_PRODUCT = """
             SELECT *
-            FROM products
+            FROM recipe_shopper.products
             WHERE name = ?
                 AND pack_size = ?
                 AND category = ?
@@ -34,14 +34,14 @@ public class Queries {
 
     public static final String SQL_FIND_PRODUCTS = """
             SELECT *
-            FROM products
+            FROM recipe_shopper.products
             WHERE category = ?
             LIMIT ? OFFSET ?
                 """;
 
     public static final String SQL_FIND_RECIPES = """
             SELECT *
-            FROM recipes
+            FROM recipe_shopper.recipes
             LIMIT ? OFFSET ?
                 """;
 
@@ -55,26 +55,26 @@ public class Queries {
                 pdt.category,
                 pdt.timeStamp,
                 ri.quantity
-            FROM recipe_ingredients AS ri
-                INNER JOIN products AS pdt ON ri.product_id = pdt.product_id
+            FROM recipe_shopper.recipe_ingredients AS ri
+                INNER JOIN recipe_shopper.products AS pdt ON ri.product_id = pdt.product_id
             WHERE ri.recipe_id = ?;
                 """;
 
     public static final String SQL_FIND_RECIPE_NAME_CREATOR = """
             SELECT *
-            FROM recipes
+            FROM recipe_shopper.recipes
             WHERE recipe_name = ?
                 AND recipe_creator = ?
                 """;
 
     public static final String SQL_FIND_RECIPE_ID = """
             SELECT *
-            FROM recipes
+            FROM recipe_shopper.recipes
             WHERE recipe_id = ?;
                 """;
 
     public static final String SQL_INSERT_RECIPE = """
-            INSERT INTO recipes (
+            INSERT INTO recipe_shopper.recipes (
                     recipe_id,
                     recipe_name,
                     recipe_creator,
@@ -84,12 +84,12 @@ public class Queries {
                 """;
 
     public static final String SQL_INSERT_RECIPE_INGREDIENT = """
-            INSERT INTO recipe_ingredients (recipe_id, product_id, quantity)
+            INSERT INTO recipe_shopper.recipe_ingredients (recipe_id, product_id, quantity)
             VALUES (?, ?, ?)
                 """;
 
     public static final String SQL_UPDATE_RECIPE = """
-            UPDATE recipes
+            UPDATE recipe_shopper.recipes
             SET recipe_name = ?,
                 recipe_creator = ?,
                 procedures = ?
@@ -97,7 +97,7 @@ public class Queries {
                 """;
 
     public static final String SQL_DEL_INGREDIENT = """
-            DELETE FROM recipe_ingredients
+            DELETE FROM recipe_shopper.recipe_ingredients
             WHERE product_id = ?
                 """;
 }

@@ -15,8 +15,10 @@ RUN ["ng", "build"]
 FROM nginx:stable-alpine
 
 COPY --from=builder /app/dist/recipe-shopper /usr/share/nginx/html
-COPY nginx-proxy.conf /etc/nginx/conf.d
-COPY nginx.conf /etc/nginx
+
+# Adapt nginx config to suit k8s's DNS - http://nginx.org/en/docs/http/server_names.html
+COPY nginx-deployment.conf /etc/nginx/conf.d
+# COPY nginx.conf /etc/nginx
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

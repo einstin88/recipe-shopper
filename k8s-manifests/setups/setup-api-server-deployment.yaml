@@ -16,6 +16,7 @@ spec:
       labels:
         app: "server-api-1"
     spec:
+      serviceAccountName: google-services
       containers:
       - name: "project-backend-1"
         image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend:0.0.1"
@@ -34,25 +35,25 @@ spec:
               cpu: 500m
               ephemeral-storage: 1Gi
               memory: 1Gi
----
-apiVersion: "autoscaling/v2"
-kind: "HorizontalPodAutoscaler"
-metadata:
-  name: "server-api-autoscaler"
-  namespace: "backend"
-  labels:
-    app: "server-api-1"
-spec:
-  scaleTargetRef:
-    kind: "Deployment"
-    name: "server-api-1"
-    apiVersion: "apps/v1"
-  minReplicas: 1
-  maxReplicas: 5
-  metrics:
-  - type: "Resource"
-    resource:
-      name: "cpu"
-      target:
-        type: "Utilization"
-        averageUtilization: 80
+# ---
+# apiVersion: "autoscaling/v2"
+# kind: "HorizontalPodAutoscaler"
+# metadata:
+#   name: "server-api-autoscaler"
+#   namespace: "backend"
+#   labels:
+#     app: "server-api-1"
+# spec:
+#   scaleTargetRef:
+#     kind: "Deployment"
+#     name: "server-api-1"
+#     apiVersion: "apps/v1"
+#   minReplicas: 1
+#   maxReplicas: 5
+#   metrics:
+#   - type: "Resource"
+#     resource:
+#       name: "cpu"
+#       target:
+#         type: "Utilization"
+#         averageUtilization: 80

@@ -39,6 +39,13 @@ public class GmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
+    /**
+     * Sends out an email to the receipient
+     * 
+     * @param cart
+     * @param username
+     * @param toEmail
+     */
     public void sendEmail(Cart cart, String username, String toEmail) {
         try {
             // Gmail API client
@@ -53,7 +60,7 @@ public class GmailService {
             Session session = Session.getDefaultInstance(new Properties());
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress("recipee-cart@recipee-shopping.com"));
-            // TODO: change to toEmail
+            // TODO: change to-> toEmail
             message.addRecipient(RecipientType.TO, new InternetAddress("pelie.888888@gmail.com"));
             message.setSubject("Cart Summary: %s".formatted(username));
             message.setContent(generateMail(cart, username), "text/html; charset=UTF-8");
@@ -80,6 +87,13 @@ public class GmailService {
         }
     }
 
+    /**
+     * Uses Thymeleaf to generate the mail template for the email body
+     * 
+     * @param cart
+     * @param username
+     * @return
+     */
     private String generateMail(Cart cart, String username) {
         Context ctx = new Context();
         ctx.setVariable("cart", cart);

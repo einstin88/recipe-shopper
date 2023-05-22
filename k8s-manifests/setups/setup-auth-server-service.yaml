@@ -2,15 +2,15 @@
 apiVersion: "v1"
 kind: "Service"
 metadata:
-  name: "server-frontend-1-service"
+  name: "server-auth-1-service"
   namespace: "backend"
   labels:
-    app: "server-frontend-1"
+    app: "server-auth-1"
 spec:
   ports:
     - protocol: "TCP"
       port: 80
-      targetPort: 80
+      targetPort: 8080
   selector:
-    app: "server-frontend-1"
+    app: "server-auth-1"
   type: "NodePort"

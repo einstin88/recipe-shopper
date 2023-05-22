@@ -22,8 +22,8 @@ spring:
   redis:
     user:
     password:
-  datasource:
-    username: ${MYSQLUSER}
-    password: ${MYSQLPASSWORD}
+  # datasource:
+  #   username: ${MYSQLUSER}
+  #   password: ${MYSQLPASSWORD}
   devtools:
     add-properties: true
