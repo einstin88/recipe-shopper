@@ -9,14 +9,14 @@ steps:
     args: ["compose", "push"]
 
   # 3 - Deploy images to cluster
-  # gke-deploy is a wrapper for 'kubectl'
-  # - name: "gcr.io/cloud-builders/gke-deploy"
-  #   args:
-  #     - run
-  #     - --filename=k8s-manifests/deployments/
-  #     - --location=asia-southeast1
-  #     - --cluster=recipee-cluster-1
-  #     - -R
+  # gke-deploy is a wrapper for 'kubectl apply'
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - run
+      - --filename=k8s-manifests/deployments/
+      - --location=asia-southeast1
+      - --cluster=recipee-cluster-1
+      - -R
 
 substitutions:
   _APP_VERSION: 0.0.2
@@ -39,7 +39,7 @@ options:
     ]
 
 # Secrets
-# Used by the Cloud builder to satisfy docker-compose.yml's 'secrets' requirements
+# Used to supply environment variables to CI/CD pipeline
 availableSecrets:
   secretManager:
     - versionName: projects/621005217238/secrets/MYSQL_URL_BACKEND/versions/2

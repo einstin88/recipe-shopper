@@ -5,7 +5,6 @@ version: "3.9"
 # - sensitive data are mounted with secrets for local setup, or available as secret environment variables in the production pipe
 # 'Image' key here is used for pushing to Artifact Registry in the cloud after the build steps. Comment it out when composing locally
 #####
-
 networks:
   core:
     driver: bridge
@@ -50,10 +49,10 @@ services:
       - "8000:8080"
     # links:
     #   - auth
-      # - scrapper
+    # - scrapper
     # depends_on:
     #   - auth
-      # - scrapper
+    # - scrapper
 
   auth:
     build:
@@ -77,20 +76,20 @@ services:
     ports:
       - "8010:8080"
 
-  # scrapper:
-  #   build:
-  #     context: ./server/python-server/web_scrapper_server
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - "SCRAPPER_SERVER_KEY=$SCRAPPER_SERVER_KEY"
-  #   container_name: scrapper
-  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper:$APP_VERSION"
-  #   # secrets:
-  #   #   - SCRAPPER_SERVER_KEY
-  #   networks:
-  #     - core
-  #   ports:
-  #     - "8020:8000"
+  scrapper:
+    build:
+      context: ./server/python-server/web_scrapper_server
+      dockerfile: Dockerfile
+      args:
+        - "SCRAPPER_SERVER_KEY=$SCRAPPER_SERVER_KEY"
+    container_name: scrapper
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper:$APP_VERSION"
+    # secrets:
+    #   - SCRAPPER_SERVER_KEY
+    networks:
+      - core
+    ports:
+      - "8020:8000"
 # secrets:
 #   MYSQL_URL_BACKEND:
 #     environment: "MYSQL_URL_BACKEND"

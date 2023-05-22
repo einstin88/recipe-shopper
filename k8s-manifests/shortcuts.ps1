@@ -12,3 +12,6 @@ kubectl -n backend exec -it server-auth-86f8c66795-9ft7d -- sh
 
 # Replace deployed manifests/resources
 kubectl replace -f k8s-manifests\setups\setup-ingress.yaml
+
+# Bash shell with redis-cli
+kubectl run -i --tty busybox --image=busybox -- sh

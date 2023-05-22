@@ -48,7 +48,7 @@ class Scrapper:
         browser = webdriver.Chrome(options=options)
         browser.implicitly_wait(WEBPAGE_LOAD_TIME_LIMIT)
 
-        print(f'>>> Loading html from source: {self.url}\n')
+        # print(f'>>> Loading html from source: {self.url}\n')
         browser.get(self.url)
 
         # Scrolls to bottom of the page
@@ -70,7 +70,7 @@ class Scrapper:
 
         Returns: list of products as dict 
         '''
-        print(f'>>> Parsing html for product details...')
+        # print(f'>>> Parsing html for product details...')
 
         products_list = BeautifulSoup(self.products_html, 'lxml').find(
             'div', class_=SS_PRODUCT_CONTAINER

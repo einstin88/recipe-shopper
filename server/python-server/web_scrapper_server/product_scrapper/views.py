@@ -13,7 +13,7 @@ API_KEY = ''
 
 @require_GET
 def health(reqeust):
-    print('>>> Health check is requested...')
+    # print('>>> Health check is requested...')
     return HttpResponse('Server is up.')
 
 
@@ -33,7 +33,7 @@ def parse_from_url(request: HttpRequest):
     Endpoint 1: returns a json array of products based on given category
     '''
     category = request.GET['category']
-    print('>>> Scraping for products in category: ' + category)
+    # print('>>> Scraping for products in category: ' + category)
 
     # Validate category
     if category not in SS_URLS.keys():
@@ -46,7 +46,7 @@ def parse_from_url(request: HttpRequest):
     scrapper.fetch_html()
 
     products = scrapper.parse_for_products()
-    print(f'>>> Found {len(products)} products.')
+    # print(f'>>> Found {len(products)} products.')
 
     return JsonResponse(create_json_response(category, products))
 
@@ -57,25 +57,25 @@ def parse_from_html(request: HttpRequest):
     '''
     Endpoint 2: returns a json array of products based on given html
     '''
-    print('>>> Getting html source from file...')
+    # print('>>> Getting html source from file...')
     
     category = request.POST['category']
 
     file = request.FILES['file']
-    print('>>> File size: ' + str(file.size))
-    print('>>> File name: ' + file.name)
+    # print('>>> File size: ' + str(file.size))
+    # print('>>> File name: ' + file.name)
 
     scrapper = Scrapper('')
     scrapper.save_html(file.read())
 
     # Parse for products
     products = scrapper.parse_for_products()
-    print(f'>>> Found {len(products)} products.')
+    # print(f'>>> Found {len(products)} products.')
 
     return JsonResponse(create_json_response(category, products))
 
 
 def custom_404_response(request: HttpRequest, exception):
-    print('>> 404 handler methods called...')
+    # print('>> 404 handler methods called...')
     return JsonResponse({"error": f"{request.path} is not valid url"},
                         status=HTTPStatus.NOT_FOUND)

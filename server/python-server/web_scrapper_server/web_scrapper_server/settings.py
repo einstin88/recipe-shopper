@@ -29,9 +29,9 @@ def read_docker_secret(key: str):
 SECRET_KEY = os.environ['SCRAPPER_SERVER_KEY'] if os.getenv('SCRAPPER_SERVER_KEY') else read_docker_secret('scrapper_server_key')
 
 # TODO SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', '.localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*', '.localhost', '127.0.0.1', 'server-api-1-service']
 
 
 # Application definition
