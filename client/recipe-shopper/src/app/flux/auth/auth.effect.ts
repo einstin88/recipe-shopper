@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { selectCurrentUser } from './auth.selector';
 import { CartActions } from '../cart/cart.action';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class AuthEffects {
@@ -18,7 +19,9 @@ export class AuthEffects {
     private router: Router
   ) {}
 
-  // Filter and handle the logout action trigger
+  /**
+   * Filter and handle the logout action trigger
+   */
   logout$ = createEffect(() => {
     return this.action$.pipe(
       ofType(AuthActions.logout),
@@ -29,13 +32,21 @@ export class AuthEffects {
       exhaustMap(([, user]) => {
         return this.authSvc.logoutUser(user).pipe(
           map(() => AuthActions.logoutSuccess()),
-          catchError(() => of(AuthActions.logoutFailure()))
+          catchError((err: HttpErrorResponse) => {
+            // Hacky way to bypass expired token for now
+            if (err.status == 500) return of(AuthActions.logoutSuccess());
+            return of(AuthActions.logoutFailure());
+          })
         );
       })
     );
   });
 
-  // Handle side effects upon logout success (aka clean up actions)
+  /**
+   *   Handle side effects upon logout success (aka clean up actions)
+   *
+   * - Clear storage of current user's artifacts
+   */
   logoutSuccess$ = createEffect(() => {
     return this.action$.pipe(
       ofType(AuthActions.logoutSuccess),

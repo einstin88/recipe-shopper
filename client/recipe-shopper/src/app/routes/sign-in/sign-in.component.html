@@ -3,7 +3,9 @@
   <p class="error">
     {{ errorMsg }}
   </p>
-  <p><a routerLink="/registration">Register</a> for a new account instead?</p>
+  <p *ngIf="errorStatus == 400">
+    <a routerLink="/registration">Register</a> for a new account instead?
+  </p>
 </div>
 <form [formGroup]="signinForm" (ngSubmit)="processForm()">
   <table>

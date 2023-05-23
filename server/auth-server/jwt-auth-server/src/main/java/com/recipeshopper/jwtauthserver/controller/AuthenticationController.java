@@ -87,7 +87,7 @@ public class AuthenticationController {
                                         .body("User not found");
                 }
 
-                // No log-in page. This error status should be handled by front-end
+                // No log-in page. This error status should be handled by front-end/load balancer
                 return ResponseEntity
                                 .status(HttpStatus.FORBIDDEN)
                                 .build();

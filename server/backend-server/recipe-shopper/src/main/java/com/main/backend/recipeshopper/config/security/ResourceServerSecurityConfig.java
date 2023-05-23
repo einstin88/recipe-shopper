@@ -21,9 +21,11 @@ import static com.main.backend.recipeshopper.utils.Urls.*;
 /**
  * Spring Security Configurations - mainly to
  * (1.) define which endpoints are protected/ publicly accessible,
- * (2.) protect endpoints (as oauth2 resource server) by validating JWS with public key
+ * (2.) protect endpoints (as oauth2 resource server) by validating JWS with
+ * public key
  * 
- * User Identity authentication is handled by a separate Auth-Server and is the source of
+ * User Identity authentication is handled by a separate Auth-Server and is the
+ * source of
  * truth used by the OAuth resource server to validate JWT claims
  */
 @Configuration

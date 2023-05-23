@@ -1,13 +1,10 @@
 package com.main.backend.recipeshopper.config.google;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ClassPathResource;
 
 import com.google.api.services.gmail.GmailScopes;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -19,9 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @Slf4j
 public class GoogleConfig {
-
-    @Value("${GOOGLE_CREDENTIALS}")
-    private String credentialsFile;
 
     @Bean
     @Profile("!dev")
@@ -51,9 +45,8 @@ public class GoogleConfig {
         try {
             // Load credentials from file (used for local development)
             // https://developers.google.com/identity/protocols/oauth2/service-account#authorizingrequests
-            InputStream is = new ClassPathResource(credentialsFile).getInputStream();
             return GoogleCredentials
-                    .fromStream(is)
+                    .getApplicationDefault()
                     .createScoped(GmailScopes.GMAIL_SEND)
                     .createDelegated("recipee-cart@recipee-shopping.com");
 

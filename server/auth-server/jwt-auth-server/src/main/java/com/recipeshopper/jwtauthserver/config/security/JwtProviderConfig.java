@@ -57,7 +57,7 @@ public class JwtProviderConfig {
                     RSAKey userKey = RSAKey.parse(
                             tokenRepo.findToken(username)
                                     .orElseThrow(() -> {
-                                        throw new AccessDeniedException(
+                                        return new AccessDeniedException(
                                                 "Token expired for user: " + username);
                                     })
                                     .key());
