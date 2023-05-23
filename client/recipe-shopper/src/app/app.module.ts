@@ -30,6 +30,7 @@ import { IngredientSelectionsComponent } from './components/ingredient-selection
 import { AuthDataService } from './services/auth-data.service';
 import { CartDataService } from './services/cart-data.service';
 import { AuthEffects } from './flux/auth/auth.effect';
+import { BootStrapModule } from 'src/app-bootstrap.module';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { AuthEffects } from './flux/auth/auth.effect';
       HydrationEffect,
       { persistStoreEffect },
     ]),
+    BootStrapModule
   ],
   providers: [
     AuthDataService,
