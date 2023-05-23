@@ -1,33 +1,100 @@
-<nav class="navbar navbar-expand-md">
+<nav class="navbar navbar-expand-sm rounded navs">
   <div class="container-fluid">
+    <a class="navbar-brand">
+      <img
+        src="/assets/logo-192x192.png"
+        alt="Home"
+        height="37"
+        class="align-text-ctr"
+      />
+      <span *ngIf="!isLoggedIn">
+        Recipee - Shop your groceries by recipes!
+      </span>
+    </a>
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/">Browse Recipes</a>
-      </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="/recipe/new">New Recipe</a>
-      </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="/parse-html">Parse HTML</a>
+        <a
+          class="nav-link"
+          routerLink="/recipes"
+          [routerLinkActive]="['btn', 'btn-outline-dark']"
+        >
+          <b> Browse Recipes </b>
+        </a>
       </li>
       <li class="nav-item" *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="/cart/view">Cart({{ cartCount }})</a>
+        <a
+          class="nav-link"
+          routerLink="/recipe/new"
+          [routerLinkActive]="['btn', 'btn-outline-dark']"
+        >
+          <b> New Recipe </b>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="isLoggedIn">
+        <a
+          class="nav-link"
+          routerLink="/parse-html"
+          [routerLinkActive]="['btn', 'btn-outline-dark']"
+        >
+          <b> Parse HTML </b>
+        </a>
       </li>
       <li class="nav-item" *ngIf="!isLoggedIn">
-        <a class="nav-link" routerLink="/registration">Register</a>
+        <a
+          class="nav-link"
+          routerLink="/registration"
+          [routerLinkActive]="['btn', 'btn-outline-dark']"
+        >
+          <b> Register </b>
+        </a>
       </li>
       <li class="nav-item" *ngIf="!isLoggedIn">
-        <a class="nav-link" routerLink="/login">Sign In</a>
-      </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="/logout">Sign Out</a>
-      </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a class="nav-link">Welcome back, {{ currentUser }}!</a>
+        <a
+          class="nav-link"
+          routerLink="/login"
+          [routerLinkActive]="['btn', 'btn-outline-dark']"
+        >
+          <b> Sign In </b>
+        </a>
       </li>
     </ul>
+    <span *ngIf="isLoggedIn" class="navbar-text dropdown">
+      <a
+        class="dropdown-toggle"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <button type="button" class="btn btn-dark position-relative">
+          <b> Welcome back, {{ currentUser | uppercase }}! </b>
+          <span
+            class="position-absolute top-0 end-0 translate-middle-y badge bg-danger"
+          >
+            {{ cartCount }}
+          </span>
+        </button>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a
+            routerLink="/cart/view"
+            [routerLinkActive]="['btn', 'btn-outline-dark']"
+            class="dropdown-item"
+          >
+            <b> View Basket({{ cartCount }}) </b>
+          </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="/logout"
+            [routerLinkActive]="['btn', 'btn-outline-dark']"
+          >
+            <b> Sign Out </b>
+          </a>
+        </li>
+      </ul>
+    </span>
   </div>
 </nav>

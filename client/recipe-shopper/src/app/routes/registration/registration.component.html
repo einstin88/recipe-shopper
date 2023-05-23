@@ -1,59 +1,61 @@
-<h3>Register a new account</h3>
-<div *ngIf="errorMsg">
-  <p class="error">
-    {{ errorMsg }}
-  </p>
+<div class="position-relative">
+  <div class="position-absolute start-50 translate-middle-x">
+    <h3>Register a new account</h3>
+    <div *ngIf="errorMsg" class="alert alert-danger col col-md-3">
+        {{ errorMsg }}
+    </div>
+    <form [formGroup]="registrationForm" (ngSubmit)="processform()">
+      <table>
+        <tr>
+          <td>Username:</td>
+          <td><input type="text" formControlName="username" /></td>
+        </tr>
+        <tr>
+          <td>Password:</td>
+          <td>
+            <input
+              type="password"
+              formControlName="password"
+              (blur)="confirmPasswordMatched()"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>Re-enter password:</td>
+          <td>
+            <input
+              type="password"
+              [formControl]="confirmPassword"
+              (blur)="confirmPasswordMatched()"
+            />
+            <span
+              *ngIf="isPasswordMatched != null && !isPasswordMatched"
+              class="error"
+              >Password does not match!</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>First Name:</td>
+          <td><input type="text" formControlName="firstName" /></td>
+        </tr>
+        <tr>
+          <td>Last Name:</td>
+          <td><input type="text" formControlName="lastName" /></td>
+        </tr>
+        <tr>
+          <td>Email:</td>
+          <td><input type="email" formControlName="email" /></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <button type="submit" [disabled]="registrationForm.invalid">
+              Register
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
 </div>
-<form [formGroup]="registrationForm" (ngSubmit)="processform()">
-  <table>
-    <tr>
-      <td>Username:</td>
-      <td><input type="text" formControlName="username" /></td>
-    </tr>
-    <tr>
-      <td>Password:</td>
-      <td>
-        <input
-          type="password"
-          formControlName="password"
-          (blur)="confirmPasswordMatched()"
-        />
-      </td>
-    </tr>
-    <tr>
-      <td>Re-enter password:</td>
-      <td>
-        <input
-          type="password"
-          [formControl]="confirmPassword"
-          (blur)="confirmPasswordMatched()"
-        />
-        <span
-          *ngIf="isPasswordMatched != null && !isPasswordMatched"
-          class="error"
-          >Password does not match!</span
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>First Name:</td>
-      <td><input type="text" formControlName="firstName" /></td>
-    </tr>
-    <tr>
-      <td>Last Name:</td>
-      <td><input type="text" formControlName="lastName" /></td>
-    </tr>
-    <tr>
-      <td>Email:</td>
-      <td><input type="email" formControlName="email" /></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <button type="submit" [disabled]="registrationForm.invalid">
-          Register
-        </button>
-      </td>
-    </tr>
-  </table>
-</form>

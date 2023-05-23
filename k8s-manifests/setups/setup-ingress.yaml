@@ -9,14 +9,21 @@ metadata:
     # Assigning static IP to ingress - https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip#use_an_ingress
     kubernetes.io/ingress.global-static-ip-name: recipee-ip-global
 spec:
-  defaultBackend:
-    service:
-      name: "server-frontend-1-service"
-      port:
-        number: 80
+  # defaultBackend:
+  #   service:
+  #     name: "server-frontend-1-service"
+  #     port:
+  #       number: 80
   rules:
     - http:
         paths:
+          - path: "/*"
+            backend:
+              service:
+                name: "server-frontend-1-service"
+                port:
+                  number: 80
+            pathType: "ImplementationSpecific"
           - path: "/api/*"
             backend:
               service:

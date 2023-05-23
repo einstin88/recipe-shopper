@@ -1,27 +1,34 @@
-<h3>Sign In</h3>
-<div *ngIf="errorMsg">
-  <p class="error">
-    {{ errorMsg }}
-  </p>
-  <p *ngIf="errorStatus == 400">
-    <a routerLink="/registration">Register</a> for a new account instead?
-  </p>
+<div class="position-relative">
+  <div class="position-absolute start-50 translate-middle-x">
+    <h3>Sign In to Recipee Shopping</h3>
+    <div *ngIf="errorMsg">
+      <p class="alert alert-danger">
+        {{ errorMsg }}
+      </p>
+      <p *ngIf="errorStatus == 400" class="alert alert-info">
+        <a routerLink="/registration">Register</a> for a new account to start
+        Recipee Shopping!
+      </p>
+    </div>
+    <form [formGroup]="signinForm" (ngSubmit)="processForm()">
+      <table>
+        <tr>
+          <td>Username:</td>
+          <td><input type="text" formControlName="username" /></td>
+        </tr>
+        <tr>
+          <td>Password:</td>
+          <td><input type="password" formControlName="password" /></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <button type="submit" [disabled]="signinForm.invalid">
+              Log In
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
 </div>
-<form [formGroup]="signinForm" (ngSubmit)="processForm()">
-  <table>
-    <tr>
-      <td>Username:</td>
-      <td><input type="text" formControlName="username" /></td>
-    </tr>
-    <tr>
-      <td>Password:</td>
-      <td><input type="password" formControlName="password" /></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <button type="submit" [disabled]="signinForm.invalid">Log In</button>
-      </td>
-    </tr>
-  </table>
-</form>
