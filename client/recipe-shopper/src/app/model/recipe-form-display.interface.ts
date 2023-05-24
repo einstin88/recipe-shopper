@@ -11,10 +11,12 @@ export interface RecipeFormDisplay {
    */
   recipeForm: RecipeFormComponent;
 
+  recipeCreator: string;
+
   /**
    * @description Receiver of the {@link RecipeFormComponent}'s validity status
    */
-  isValid$: Observable<boolean>;
+  isInvalid: boolean;
 
   /**
    * @description Producer of products to add to the {@link RecipeFormComponent}

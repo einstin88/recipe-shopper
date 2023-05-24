@@ -13,7 +13,15 @@
     <td>{{ product.name }}</td>
     <td>{{ product.pack_size }}</td>
     <td><img [src]="product.img" /></td>
-    <td><button type="button" (click)="addIngredient(product)">Add</button></td>
+    <td>
+      <button
+        type="button"
+        (click)="addIngredient(product)"
+        class="btn btn-success"
+      >
+        Add
+      </button>
+    </td>
   </tr>
 </table>
 <div *ngIf="category">

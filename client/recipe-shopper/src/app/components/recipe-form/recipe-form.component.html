@@ -4,29 +4,51 @@
 
 <ng-container *ngIf="!loading; else loadingMsg">
   <form [formGroup]="recipeForm">
-    <table>
-      <tr>
-        <td>Recipe Name:</td>
-        <td><input type="text" formControlName="recipeName" /></td>
-      </tr>
-      <tr>
-        <td>Your Name:</td>
-        <td><input type="text" formControlName="recipeCreator" /></td>
-      </tr>
-      <tr>
-        <td>Procedures:</td>
-        <td>
-          <textarea cols="30" rows="10" formControlName="procedures"></textarea>
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>
-          <ng-content></ng-content>
-        </td>
-      </tr>
-    </table>
-    <br />
+    <div class="form-floating m-1 ms-0">
+      <input
+        type="text"
+        id="recipeCreator"
+        formControlName="recipeCreator"
+        placeholder="recipeCreator"
+        class="form-control-plaintext"
+        readonly
+      />
+      <label for="recipeCreator">Recipe Creator</label>
+    </div>
+
+    <div class="form-floating m-1 ms-0">
+      <input
+        type="text"
+        id="recipeName"
+        formControlName="recipeName"
+        placeholder="recipeName"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': validateFormInput('recipeName') }"
+      />
+      <label for="recipeName">Recipe Name</label>
+      <div *ngIf="validateFormInput('recipeName')" class="invalid-feedback">
+        Min. 10 characters
+      </div>
+    </div>
+
+    <div class="form-floating m-1 ms-0">
+      <textarea
+        type="text"
+        id="procedures"
+        formControlName="procedures"
+        placeholder="procedures"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': validateFormInput('procedures') }"
+        style="height: 300px"
+      ></textarea>
+      <label for="procedures">Procedures</label>
+      <div *ngIf="validateFormInput('procedures')" class="invalid-feedback">
+        Min. 4 characters
+      </div>
+    </div>
+
+    <!-- Button goes here -->
+    <ng-content></ng-content>
 
     <ng-container *ngIf="recipeIngredients.length; else emptyMsg">
       <table formGroupName="ingredients">
@@ -49,7 +71,13 @@
             <input type="number" formControlName="quantity" step="1" />
           </td>
           <td>
-            <button type="button" (click)="removeIngredient(idx)">X</button>
+            <button
+              type="button"
+              (click)="removeIngredient(idx)"
+              class="btn btn-outline-danger"
+            >
+              X
+            </button>
           </td>
         </tr>
       </table>

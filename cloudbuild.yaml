@@ -19,7 +19,7 @@ steps:
       - -R
 
 substitutions:
-  _APP_VERSION: 0.0.2
+  _APP_VERSION: 0.0.3
 
 # Global vars for CI pipeline
 options:
@@ -34,7 +34,6 @@ options:
       "REDISPORT",
       "SCRAPPER_URL",
       "KEY_URL",
-      "GOOGLE_CREDENTIALS",
       "SCRAPPER_SERVER_KEY",
     ]
 
@@ -54,7 +53,5 @@ availableSecrets:
       env: "SCRAPPER_URL"
     - versionName: projects/621005217238/secrets/KEY_URL/versions/3
       env: "KEY_URL"
-    - versionName: projects/621005217238/secrets/GOOGLE_CREDENTIALS/versions/1
-      env: "GOOGLE_CREDENTIALS"
     - versionName: projects/621005217238/secrets/SCRAPPER_SERVER_KEY/versions/2
       env: "SCRAPPER_SERVER_KEY"

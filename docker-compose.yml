@@ -10,22 +10,22 @@ networks:
     driver: bridge
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./client/recipe-shopper
-  #     dockerfile: Dockerfile
-  #   container_name: frontend
-  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend:$APP_VERSION"
-  #   networks:
-  #     - core
-  #   ports:
-  #     - "80:80"
-  #   links:
-  #     - auth
-  #     - backend
-  #   depends_on:
-  #     - auth
-  #     - backend
+  frontend:
+    build:
+      context: ./client/recipe-shopper
+      dockerfile: Dockerfile
+    container_name: frontend
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-frontend:$APP_VERSION"
+    networks:
+      - core
+    ports:
+      - "80:80"
+    links:
+      - auth
+      - backend
+    depends_on:
+      - auth
+      - backend
 
   backend:
     build:
@@ -35,7 +35,6 @@ services:
         - "MYSQL_URL_BACKEND=$MYSQL_URL_BACKEND"
         - "SCRAPPER_URL=$SCRAPPER_URL"
         - "KEY_URL=$KEY_URL"
-        - "GOOGLE_CREDENTIALS=$GOOGLE_CREDENTIALS"
     container_name: backend
     image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-backend:$APP_VERSION"
     # secrets:
@@ -54,42 +53,42 @@ services:
     #   - auth
     # - scrapper
 
-  # auth:
-  #   build:
-  #     # Configured to a Redis instance running in the cloud instead of in the cluster
-  #     context: ./server/auth-server/jwt-auth-server
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - "REDISPORT=$REDISPORT"
-  #       - "REDISHOST=$REDISHOST"
-  #       - "MYSQL_URL_AUTH=$MYSQL_URL_AUTH"
-  #   container_name: auth
-  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-auth:$APP_VERSION"
-  #   # secrets:
-  #   #   - REDISPORT
-  #   #   - REDISHOST
-  #   #   - REDISUSER
-  #   #   - REDISPASSWORD
-  #   #   - MYSQL_URL_AUTH
-  #   networks:
-  #     - core
-  #   ports:
-  #     - "8010:8080"
+  auth:
+    build:
+      # Configured to a Redis instance running in the cloud instead of in the cluster
+      context: ./server/auth-server/jwt-auth-server
+      dockerfile: Dockerfile
+      args:
+        - "REDISPORT=$REDISPORT"
+        - "REDISHOST=$REDISHOST"
+        - "MYSQL_URL_AUTH=$MYSQL_URL_AUTH"
+    container_name: auth
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-auth:$APP_VERSION"
+    # secrets:
+    #   - REDISPORT
+    #   - REDISHOST
+    #   - REDISUSER
+    #   - REDISPASSWORD
+    #   - MYSQL_URL_AUTH
+    networks:
+      - core
+    ports:
+      - "8010:8080"
 
-  # scrapper:
-  #   build:
-  #     context: ./server/python-server/web_scrapper_server
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - "SCRAPPER_SERVER_KEY=$SCRAPPER_SERVER_KEY"
-  #   container_name: scrapper
-  #   image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper:$APP_VERSION"
-  #   # secrets:
-  #   #   - SCRAPPER_SERVER_KEY
-  #   networks:
-  #     - core
-  #   ports:
-  #     - "8020:8000"
+  scrapper:
+    build:
+      context: ./server/python-server/web_scrapper_server
+      dockerfile: Dockerfile
+      args:
+        - "SCRAPPER_SERVER_KEY=$SCRAPPER_SERVER_KEY"
+    container_name: scrapper
+    image: "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper:$APP_VERSION"
+    # secrets:
+    #   - SCRAPPER_SERVER_KEY
+    networks:
+      - core
+    ports:
+      - "8020:8000"
 # ##########
 # secrets:
 #   MYSQL_URL_BACKEND:

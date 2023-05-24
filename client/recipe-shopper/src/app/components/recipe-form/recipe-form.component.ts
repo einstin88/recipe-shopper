@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription, map } from 'rxjs';
+import { Subject, Subscription, map, startWith } from 'rxjs';
 import { Product } from 'src/app/model/product.model';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
@@ -22,6 +22,9 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   @Input()
   recipeId: string = '';
 
+  @Input()
+  recipeCreator!: string;
+
   // Getters and setters to work with View Projection
   get recipeData() {
     return this.recipeForm.value as Recipe;
@@ -29,7 +32,10 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
 
   get isInvalid$() {
     return this.recipeForm.statusChanges.pipe(
-      map((status) => status == 'INVALID')
+      startWith('INVALID'),
+      map((status) => {
+        return status == 'INVALID';
+      })
     );
   }
 
@@ -42,13 +48,13 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   }
 
   // Variables
-  private sub$!: Subscription;
-
   loading!: boolean;
 
   recipeError = '';
   recipeForm!: FormGroup;
   recipeIngredients!: FormArray;
+
+  private sub$!: Subscription;
 
   // Interface methods
   ngOnInit(): void {
@@ -77,8 +83,10 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
       [Validators.required, Validators.minLength(1)]
     );
 
+    // Logic block for pulling recipe to update
     if (this.recipeId) {
-      // console.log('>> Recipe ID: ', this.recipeId);
+      console.debug('>> Recipe ID: ', this.recipeId);
+
       await this.recipeSvc
         .getRecipeById(this.recipeId)
         .then((res) => {
@@ -108,14 +116,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
           Validators.maxLength(40),
         ],
       ],
-      recipeCreator: [
-        recipe?.recipeCreator ?? '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(40),
-        ],
-      ],
+      recipeCreator: [recipe?.recipeCreator ?? this.recipeCreator],
       procedures: [
         recipe?.procedures ?? '',
         [Validators.required, Validators.minLength(10)],
@@ -127,7 +128,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @description A function to add neccessary attributes into the {@link recipeIngredients} FormArray 
+   * @description A function to add neccessary attributes into the {@link recipeIngredients} FormArray
    * @param {Product | Ingredient} product the Product to add to the ingredient list
    * @param {number} quantity An optional argument to populate the quantity input field
    */
@@ -148,5 +149,10 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
    */
   removeIngredient(idx: number) {
     this.recipeIngredients.removeAt(idx);
+  }
+
+  validateFormInput(fieldName: string) {
+    const field = this.recipeForm.get(fieldName)!;
+    return field.invalid && field.touched;
   }
 }

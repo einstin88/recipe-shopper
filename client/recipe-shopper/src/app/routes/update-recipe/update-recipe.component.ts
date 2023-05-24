@@ -1,7 +1,13 @@
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { RecipeFormComponent } from 'src/app/components/recipe-form/recipe-form.component';
 import { Product } from 'src/app/model/product.model';
 import { RecipeFormDisplay } from 'src/app/model/recipe-form-display.interface';
@@ -15,7 +21,7 @@ import { RecipeDataService } from 'src/app/services/recipe-data.service';
   styleUrls: ['./update-recipe.component.css'],
 })
 export class UpdateRecipeComponent
-  implements OnInit, AfterViewChecked, RecipeFormDisplay
+  implements OnInit, OnDestroy, AfterViewChecked, RecipeFormDisplay
 {
   constructor(
     private recipeSvc: RecipeDataService,
@@ -27,10 +33,13 @@ export class UpdateRecipeComponent
   recipeForm!: RecipeFormComponent;
 
   // Variables
-  isValid$!: Observable<boolean>;
+  isInvalid!: boolean;
 
   ingredientToAdd = new Subject<Product>();
   recipeId!: string;
+  recipeCreator!: string;
+
+  sub$!: Subscription;
 
   ngOnInit(): void {
     this.recipeId = this.route.snapshot.params['recipeId'];
@@ -39,7 +48,13 @@ export class UpdateRecipeComponent
   }
 
   ngAfterViewChecked(): void {
-    this.isValid$ = this.recipeForm.isInvalid$;
+    this.sub$ = this.recipeForm.isInvalid$.subscribe((isInvalid) => {
+      this.isInvalid = isInvalid;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub$.unsubscribe();
   }
 
   processForm() {

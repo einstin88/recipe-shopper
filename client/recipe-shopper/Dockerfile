@@ -16,7 +16,8 @@ FROM nginx:stable-alpine
 
 COPY --from=builder /app/dist/recipe-shopper /usr/share/nginx/html
 
-# Adapt nginx config to suit k8s's DNS - http://nginx.org/en/docs/http/server_names.html
+# Adapt nginx config to suit production k8s's DNS
+#  http://nginx.org/en/docs/http/server_names.html
 COPY nginx-deployment.conf /etc/nginx/conf.d
 
 # For testing on localhost

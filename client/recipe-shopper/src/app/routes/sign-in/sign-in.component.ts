@@ -54,4 +54,9 @@ export class SignInComponent implements OnInit {
         console.debug('Sign in Error! ', this.errorMsg);
       });
   }
+
+  validateFormInput(fieldName: string) {
+    const field = this.signinForm.get(fieldName)!;
+    return field.invalid && field.touched;
+  }
 }

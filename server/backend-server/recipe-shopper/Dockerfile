@@ -15,9 +15,9 @@ WORKDIR /app
 
 COPY --from=maven /app/backend/target/recipe-shopper-0.0.1-SNAPSHOT.jar ./
 
-ARG MYSQL_URL_BACKEND=jdbc:mysql://recipe_shopper?cloudSqlInstance=recipe-shopper-5d242:asia-southeast1:recipee-mysql&socketFactory=com.google.cloud.sql.mysql.SocketFactory&user=recipee-gke-service&ipTypes=PUBLIC&enableIamAuth=true
-ARG SCRAPPER_URL=http://server-scrapper-1-service/api/
-ARG KEY_URL=http://server-auth-1-service/auth/key-uri/
+ARG MYSQL_URL_BACKEND
+ARG SCRAPPER_URL
+ARG KEY_URL
 
 ENV MYSQL_URL_BACKEND=${MYSQL_URL_BACKEND}
 ENV SCRAPPER_URL=${SCRAPPER_URL}

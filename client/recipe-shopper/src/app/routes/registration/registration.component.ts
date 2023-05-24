@@ -32,11 +32,14 @@ export class RegistrationComponent implements OnInit {
 
   private initForm() {
     this.registrationForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(3)]],
+      username: ['', [Validators.required, Validators.minLength(4)]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.minLength(5)]],
+      email: [
+        '',
+        [Validators.required, Validators.minLength(5), Validators.email],
+      ],
     });
   }
 
@@ -58,17 +61,22 @@ export class RegistrationComponent implements OnInit {
   }
 
   confirmPasswordMatched() {
-    const password = this.registrationForm.get('password')!.value as string;
-    const confirmPassword = this.confirmPassword.value as string;
+    const password = this.registrationForm.get('password');
+    const confirmPassword = this.confirmPassword;
 
-    if (password == '' || confirmPassword == '') return;
+    if (password?.pristine || confirmPassword.pristine) return;
 
-    console.debug('>>> confirmed password: ', confirmPassword);
+    console.debug('>>> confirmed password: ', confirmPassword.value);
 
-    if (password != confirmPassword) {
+    if (password?.value != confirmPassword.value) {
       this.isPasswordMatched = false;
       return;
     }
     this.isPasswordMatched = true;
+  }
+
+  validateFormInput(fieldName: string) {
+    const field = this.registrationForm.get(fieldName)!;
+    return field.invalid && field.touched;
   }
 }

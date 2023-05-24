@@ -1,61 +1,123 @@
-<div class="position-relative">
-  <div class="position-absolute start-50 translate-middle-x">
+<div class="d-flex flex-column">
+  <div
+    class="align-self-center border border-dark rounded-4 forms"
+  >
     <h3>Register a new account</h3>
     <div *ngIf="errorMsg" class="alert alert-danger col col-md-3">
-        {{ errorMsg }}
+      {{ errorMsg }}
     </div>
     <form [formGroup]="registrationForm" (ngSubmit)="processform()">
-      <table>
-        <tr>
-          <td>Username:</td>
-          <td><input type="text" formControlName="username" /></td>
-        </tr>
-        <tr>
-          <td>Password:</td>
-          <td>
-            <input
-              type="password"
-              formControlName="password"
-              (blur)="confirmPasswordMatched()"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>Re-enter password:</td>
-          <td>
-            <input
-              type="password"
-              [formControl]="confirmPassword"
-              (blur)="confirmPasswordMatched()"
-            />
-            <span
-              *ngIf="isPasswordMatched != null && !isPasswordMatched"
-              class="error"
-              >Password does not match!</span
-            >
-          </td>
-        </tr>
-        <tr>
-          <td>First Name:</td>
-          <td><input type="text" formControlName="firstName" /></td>
-        </tr>
-        <tr>
-          <td>Last Name:</td>
-          <td><input type="text" formControlName="lastName" /></td>
-        </tr>
-        <tr>
-          <td>Email:</td>
-          <td><input type="email" formControlName="email" /></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>
-            <button type="submit" [disabled]="registrationForm.invalid">
-              Register
-            </button>
-          </td>
-        </tr>
-      </table>
+      <!--  -->
+      <div class="form-floating m-1">
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          placeholder="username"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': validateFormInput('username') }"
+        />
+        <label for="username">Username</label>
+        <div *ngIf="validateFormInput('username')" class="invalid-feedback">
+          Min. 4 characters
+        </div>
+      </div>
+      <!--  -->
+      <div class="form-floating m-1">
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          (blur)="confirmPasswordMatched()"
+          placeholder="password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': validateFormInput('password') }"
+        />
+        <label for="password">Password</label>
+        <div *ngIf="validateFormInput('password')" class="invalid-feedback">
+          Min. 4 characters
+        </div>
+      </div>
+      <!--  -->
+      <div class="form-floating m-1">
+        <input
+          type="password"
+          id="validate-password"
+          [formControl]="confirmPassword"
+          (blur)="confirmPasswordMatched()"
+          placeholder="password"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': isPasswordMatched != null && !isPasswordMatched
+          }"
+        />
+        <label for="validate-password">Re-enter Password</label>
+        <div
+          *ngIf="isPasswordMatched != null && !isPasswordMatched"
+          class="invalid-feedback"
+        >
+          Password does not match
+        </div>
+      </div>
+      <!--  -->
+      <div class="form-floating m-1">
+        <input
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+          placeholder="firstName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': validateFormInput('firstName') }"
+        />
+        <label for="firstName">First Name</label>
+        <div *ngIf="validateFormInput('firstName')" class="invalid-feedback">
+          Required
+        </div>
+      </div>
+      <!--  -->
+      <div class="form-floating m-1">
+        <input
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          placeholder="lastName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': validateFormInput('lastName') }"
+        />
+        <label for="lastName">Last Name</label>
+        <div *ngIf="validateFormInput('lastName')" class="invalid-feedback">
+          Required
+        </div>
+      </div>
+      <!--  -->
+      <div class="form-floating m-1">
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="email"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': validateFormInput('email') }"
+        />
+        <label for="email"> Email </label>
+        <div *ngIf="validateFormInput('email')" class="invalid-feedback">
+          Invalid email
+        </div>
+      </div>
+      <!--  -->
+      <div class="m-2 d-flex flex-column">
+        <button
+          type="submit"
+          [disabled]="registrationForm.invalid"
+          class="btn align-self-center"
+          [ngClass]="{
+            'btn-outline-secondary': registrationForm.invalid,
+            'btn-outline-primary': registrationForm.valid
+          }"
+        >
+          Register
+        </button>
+      </div>
     </form>
   </div>
 </div>

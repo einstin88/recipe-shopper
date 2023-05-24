@@ -4,6 +4,7 @@
     *ngIf="currentUser == recipe.recipeCreator"
     type="button"
     [routerLink]="['/recipe/update', recipeId]"
+    class="btn btn-outline-primary"
   >
     Update Recipe
   </button>
@@ -24,6 +25,7 @@
   <app-ingredient-selections
     [ingredients]="recipe.ingredients"
     (ingredientsToAdd)="addToCart($event)"
-  ></app-ingredient-selections>
+  >
+  </app-ingredient-selections>
 </div>
 <ng-template #err>{{ errMsg }}</ng-template>
