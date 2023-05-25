@@ -1,7 +1,5 @@
 <div class="d-flex flex-column">
-  <div
-    class="align-self-center border border-dark rounded-4 forms"
-  >
+  <div class="align-self-center border border-dark rounded-4 forms">
     <h3>Sign In to Recipee Shopping</h3>
 
     <div *ngIf="redirectPath.length > 1" class="alert alert-info m-2">
@@ -58,6 +56,10 @@
             'btn-outline-primary': signinForm.valid
           }"
         >
+          <span
+            *ngIf="isLoading"
+            class="spinner-border spinner-border-sm text-primary"
+          ></span>
           Log In
         </button>
       </div>

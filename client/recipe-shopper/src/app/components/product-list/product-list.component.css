@@ -1,3 +1,9 @@
 img {
-    height: 14vh;
+  height: 14vh;
+  padding: 5px;
 }
+
+.evens {
+  background-color: #f1e9e3;
+}
+

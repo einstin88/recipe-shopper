@@ -28,19 +28,13 @@ export class ProductDataService {
    *
    * @returns Promise with a list of products in the chosen {@link category}
    */
-  getProducts(category: Category | '', limit: number, offset: number) {
-    if (!category) {
-      this.products.next([]);
-      return;
-    }
-
+  getProducts(category: Category, limit: number, offset: number) {
     const url = EP_GET_PRODUCTS + category;
     const params = new HttpParams().appendAll({ limit, offset });
 
     return firstValueFrom(
-      this.http
-        .get<Product[]>(url, { params })
-        .pipe(tap((products) => this.products.next(products)))
+      this.http.get<Product[]>(url, { params })
+      // .pipe(tap((products) => this.products.next(products)))
     );
   }
 

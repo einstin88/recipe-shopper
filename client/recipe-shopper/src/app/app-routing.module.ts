@@ -11,13 +11,14 @@ import { RegistrationComponent } from './routes/registration/registration.compon
 import { SignOutComponent } from './routes/sign-out/sign-out.component';
 import { AuthGuard } from './routes/auth.guard';
 import { AnonymousGuard } from './routes/anonymous.guard';
+import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: SignInComponent,
     title: 'Log In Page',
-    canMatch: [AnonymousGuard]
+    canMatch: [AnonymousGuard],
   },
   {
     path: 'logout',
@@ -29,7 +30,7 @@ const routes: Routes = [
     path: 'registration',
     component: RegistrationComponent,
     title: 'Register Account',
-    canMatch: [AnonymousGuard]
+    canMatch: [AnonymousGuard],
   },
   {
     path: 'cart/view',
@@ -59,7 +60,16 @@ const routes: Routes = [
     component: ViewRecipeComponent,
     canActivate: [AuthGuard],
   },
-  { path: 'recipes', component: BrowseRecipeComponent, title: 'Browse Recipes' },
+  {
+    path: 'recipes',
+    component: BrowseRecipeComponent,
+    title: 'Browse Recipes',
+  },
+  {
+    path: 'recipes/:userName',
+    component: MyRecipesComponent,
+    title: 'My Recipes',
+  },
   { path: '**', redirectTo: '/recipes', pathMatch: 'full' },
 ];
 

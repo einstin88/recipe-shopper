@@ -7,18 +7,28 @@
         height="37"
         class="align-text-ctr"
       />
-      <span *ngIf="!isLoggedIn">
+      <span *ngIf="!isLoggedIn" class="nav-titles">
         Recipee - Shop your groceries by recipes!
       </span>
     </a>
-    <ul class="navbar-nav">
+    <ul class="navbar-nav ">
       <li class="nav-item">
         <a
           class="nav-link"
           routerLink="/recipes"
           [routerLinkActive]="['btn', 'btn-outline-dark']"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-          <b> Browse Recipes </b>
+          <strong class="router-titles"> Browse Recipes </strong>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="isLoggedIn">
+        <a
+          class="nav-link"
+          [routerLink]="['/recipes', currentUser]"
+          [routerLinkActive]="['btn', 'btn-outline-dark']"
+        >
+          <b class="router-titles"> My Recipes </b>
         </a>
       </li>
       <li class="nav-item" *ngIf="isLoggedIn">
@@ -27,16 +37,16 @@
           routerLink="/recipe/new"
           [routerLinkActive]="['btn', 'btn-outline-dark']"
         >
-          <b> New Recipe </b>
+          <b class="router-titles"> Create New Recipe </b>
         </a>
       </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
+      <li class="nav-item" *ngIf="isAdmin">
         <a
           class="nav-link"
           routerLink="/parse-html"
           [routerLinkActive]="['btn', 'btn-outline-dark']"
         >
-          <b> Parse HTML </b>
+          <b class="router-titles"> Parse HTML </b>
         </a>
       </li>
       <li class="nav-item" *ngIf="!isLoggedIn">
@@ -45,7 +55,7 @@
           routerLink="/registration"
           [routerLinkActive]="['btn', 'btn-outline-dark']"
         >
-          <b> Register </b>
+          <b class="router-titles"> Register </b>
         </a>
       </li>
       <li class="nav-item" *ngIf="!isLoggedIn">
@@ -54,7 +64,7 @@
           routerLink="/login"
           [routerLinkActive]="['btn', 'btn-outline-dark']"
         >
-          <b> Sign In </b>
+          <b class="router-titles"> Sign In </b>
         </a>
       </li>
     </ul>

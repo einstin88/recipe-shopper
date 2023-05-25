@@ -1,7 +1,5 @@
 <div class="d-flex flex-column">
-  <div
-    class="align-self-center border border-dark rounded-4 forms"
-  >
+  <div class="align-self-center border border-dark rounded-4 forms">
     <h3>Register a new account</h3>
     <div *ngIf="errorMsg" class="alert alert-danger col col-md-3">
       {{ errorMsg }}
@@ -108,13 +106,18 @@
       <div class="m-2 d-flex flex-column">
         <button
           type="submit"
-          [disabled]="registrationForm.invalid"
+          [disabled]="registrationForm.invalid || !isPasswordMatched"
           class="btn align-self-center"
           [ngClass]="{
-            'btn-outline-secondary': registrationForm.invalid,
+            'btn-outline-secondary':
+              registrationForm.invalid || !isPasswordMatched,
             'btn-outline-primary': registrationForm.valid
           }"
         >
+          <span
+            *ngIf="isLoading"
+            class="spinner-border spinner-border-sm text-primary"
+          ></span>
           Register
         </button>
       </div>

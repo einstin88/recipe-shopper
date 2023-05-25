@@ -15,6 +15,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   cartCount!: number;
   currentUser!: string;
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false
 
   sub$!: Subscription;
   sub1$!: Subscription;

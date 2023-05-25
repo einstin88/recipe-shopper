@@ -1,34 +1,67 @@
-<app-category-choser (category)="updateCategory($event)"></app-category-choser>
+<h3 style="color: navy">Pick a product category to add ingredients</h3>
 
-<table *ngIf="products.length">
-  <tr>
-    <th></th>
-    <th>Name</th>
-    <th>Pack Size</th>
-    <th>Product Image</th>
-    <th></th>
-  </tr>
-  <tr *ngFor="let product of products; index as idx">
-    <td>{{ idx + offset + 1 }}</td>
-    <td>{{ product.name }}</td>
-    <td>{{ product.pack_size }}</td>
-    <td><img [src]="product.img" /></td>
-    <td>
+<div class="d-flex justify-content-center mb-2">
+  <div *ngFor="let category of categories" class="m-1">
+    <button
+      class="btn btn-success shadow-lg"
+      (click)="updateCategory(category)"
+    >
+      {{ category | titlecase }}
+    </button>
+  </div>
+</div>
+<hr />
+
+<ng-container *ngIf="products.length">
+  <div class="row mb-3 text-center" style="color: navy">
+    <div class="col-1"></div>
+    <div class="col-4"><b>Product Name</b></div>
+    <div class="col-2"><b>Pack Size</b></div>
+    <div class="col-2"><b>Product Image</b></div>
+    <div class="col-2"></div>
+  </div>
+
+  <div style="height: 66vh; overflow-y: scroll; overflow-x: hidden">
+    <div
+      *ngFor="let product of products; index as idx; even as evens"
+      class="row mb-2"
+      [ngClass]="{ evens }"
+    >
+      <div class="col-1 align-self-center text-center">
+        {{ idx + offset + 1 }}
+      </div>
+      <div class="col-4 align-self-center">{{ product.name }}</div>
+      <div class="col-2 align-self-center text-center">
+        {{ product.pack_size }}
+      </div>
+      <div class="col-3 align-self-center"><img [src]="product.img" /></div>
+      <div class="col-2 align-self-center">
+        <button
+          type="button"
+          (click)="addIngredient(product)"
+          class="btn btn-success"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="position-relative">
+    <div class="mt-2 btn-group postion-absolute start-50 translate-middle-x">
       <button
         type="button"
-        (click)="addIngredient(product)"
+        (click)="updateProductList(offset - limit)"
         class="btn btn-success"
       >
-        Add
+        Prev
       </button>
-    </td>
-  </tr>
-</table>
-<div *ngIf="category">
-  <button type="button" (click)="updateProductList(offset - limit)">
-    Prev
-  </button>
-  <button type="button" (click)="updateProductList(offset + limit)">
-    Next
-  </button>
-</div>
+      <button
+        type="button"
+        (click)="updateProductList(offset + limit)"
+        class="btn btn-outline-success"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</ng-container>

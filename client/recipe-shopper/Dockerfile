@@ -6,10 +6,10 @@ COPY . .
 
 # Install app's dependencies
 RUN npm install -g npm@latest
-RUN ["npm", "i", "-g", "@angular/cli"]
-RUN ["npm", "i", "--legacy-peer-deps"]
+RUN npm i -g @angular/cli
+RUN npm i --legacy-peer-deps
 
-RUN ["ng", "build"]
+RUN ng build
 
 # Stage 2: setup reverse-proxy server to serve app behind external load balancer
 FROM nginx:stable-alpine

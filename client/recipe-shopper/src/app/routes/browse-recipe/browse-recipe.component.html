@@ -1,16 +1,51 @@
-<h2>Recipes</h2>
-<div *ngIf="!resultsLoading; else loadingMsg">
-  <ng-container *ngIf="recipes.length; else emptyMsg">
-    <div *ngFor="let recipe of recipes">
-      <!-- <p>{{ recipe.recipeId }}</p>
-      <p>{{ recipe.recipeName }}</p>
-      <p>{{ recipe.recipeCreator }}</p>
-      <p>{{ recipe.ingredients | json }}</p> -->
-      <p [routerLink]="['/recipe/view', recipe.recipeId]">
-        {{ recipe | json }}
-      </p>
+<h2 class="ms-4">
+  Click on any recipes to view the ingredients you can add to your basket
+</h2>
+<div *ngIf="!resultsLoading; else loadingMsg" class="mt-5">
+  <div
+    *ngIf="recipes.length; else emptyMsg"
+    class="d-flex justify-content-evenly"
+  >
+    <div
+      *ngFor="let recipe of recipes"
+      class="card border-success shadow-lg p-2"
+      [routerLink]="['/recipe/view', recipe.recipeId]"
+      style="width: 20vw"
+    >
+      <div class="card-body">
+        <h4 class="card-title recipe-name">
+          {{ recipe.recipeName | titlecase }}
+        </h4>
+        <h6 class="card-subtitle text-muted">
+          By:
+          <a
+            [routerLink]="['/recipes', recipe.recipeCreator]"
+            class="link-info"
+          >
+            {{ recipe.recipeCreator }}
+          </a>
+        </h6>
+        <p class="card-text text-muted">Preparation time: approx...</p>
+        <p class="card-text">{{ recipe.procedures.substring(0, 400) }}...</p>
+      </div>
+
+      <ul class="list-group list-group-flush">
+        <ng-container
+          *ngFor="let ingredient of recipe.ingredients; index as idx"
+        >
+          <li *ngIf="idx < 4" class="list-group-item">
+            {{ ingredient.name }} x {{ ingredient.quantity }}
+          </li>
+        </ng-container>
+      </ul>
+
+      <div class="card-footer text-muted">
+        <small> Created on: {{ recipe.timeStamp | date }} </small>
+      </div>
     </div>
-  </ng-container>
+  </div>
+
   <ng-template #emptyMsg>No recipes found.</ng-template>
 </div>
+
 <ng-template #loadingMsg>{{ resultsLoading }}</ng-template>

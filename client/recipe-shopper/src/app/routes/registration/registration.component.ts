@@ -23,6 +23,7 @@ export class RegistrationComponent implements OnInit {
   confirmPassword = new FormControl('');
   errorMsg: string = '';
   isPasswordMatched: boolean | null = null;
+  isLoading: boolean = false
 
   registrationForm!: FormGroup;
 
@@ -44,6 +45,8 @@ export class RegistrationComponent implements OnInit {
   }
 
   processform() {
+    this.isLoading = true
+
     const newUser = this.registrationForm.value as User;
     console.info('>>> New User: ', newUser);
 
@@ -55,16 +58,18 @@ export class RegistrationComponent implements OnInit {
         this.router.navigate(['/']);
       })
       .catch((error: Error) => {
+        this.isLoading = false
+
         this.errorMsg = error.message;
         console.debug('Registration error! ', this.errorMsg);
       });
   }
 
   confirmPasswordMatched() {
-    const password = this.registrationForm.get('password');
+    const password = this.registrationForm.get('password')!;
     const confirmPassword = this.confirmPassword;
 
-    if (password?.pristine || confirmPassword.pristine) return;
+    if (password.pristine || confirmPassword.pristine) return;
 
     console.debug('>>> confirmed password: ', confirmPassword.value);
 

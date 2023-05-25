@@ -1,3 +1,5 @@
+<h3 style="color: navy">Write your recipe here</h3>
+
 <div *ngIf="recipeError" class="error">
   {{ recipeError }}
 </div>
@@ -43,7 +45,7 @@
       ></textarea>
       <label for="procedures">Procedures</label>
       <div *ngIf="validateFormInput('procedures')" class="invalid-feedback">
-        Min. 4 characters
+        Min. 10 characters
       </div>
     </div>
 
@@ -51,39 +53,55 @@
     <ng-content></ng-content>
 
     <ng-container *ngIf="recipeIngredients.length; else emptyMsg">
-      <table formGroupName="ingredients">
-        <tr>
-          <th>Name</th>
-          <th>Pack Size</th>
-          <th>Quantity</th>
-        </tr>
-        <tr
-          *ngFor="let ingredient of recipeIngredients.controls; index as idx"
-          [formGroupName]="idx"
-        >
-          <td>
-            {{ recipeIngredients.at(idx).get("name")?.value }}
-          </td>
-          <td>
-            {{ recipeIngredients.at(idx).get("pack_size")?.value }}
-          </td>
-          <td>
-            <input type="number" formControlName="quantity" step="1" />
-          </td>
-          <td>
-            <button
-              type="button"
-              (click)="removeIngredient(idx)"
-              class="btn btn-outline-danger"
-            >
-              X
-            </button>
-          </td>
-        </tr>
-      </table>
+      <div formGroupName="ingredients">
+        <div class="row text-center mt-2">
+          <div class="col-5"><b>Ingredient name</b></div>
+          <div class="col-2"><b>Pack Size</b></div>
+          <div class="col-3"><b>Quantity</b></div>
+          <div class="col-1"></div>
+        </div>
+        <hr />
+
+        <div style="height: 27vh; overflow-y: auto; overflow-x: hidden">
+          <div
+            *ngFor="
+              let ingredient of recipeIngredients.controls;
+              index as idx;
+              odd as odds
+            "
+            [formGroupName]="idx"
+            class="row mt-2 p-1"
+            [ngClass]="{odds}"
+          >
+            <div class="col-5 ms-1 align-self-center">
+              {{ recipeIngredients.at(idx).get("name")?.value }}
+            </div>
+            <div class="col-2 align-self-center">
+              {{ recipeIngredients.at(idx).get("pack_size")?.value }}
+            </div>
+            <div class="col-3 align-self-center">
+              <input
+                type="number"
+                formControlName="quantity"
+                step="1"
+                class="form-control"
+              />
+            </div>
+            <div class="col-1 align-self-center">
+              <button
+                type="button"
+                (click)="removeIngredient(idx)"
+                class="btn btn-outline-danger"
+              >
+                X
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </ng-container>
     <ng-template #emptyMsg>
-      <h4>Please add at least one ingredient..</h4>
+      <h4 class="m-1 mt-3">Please add at least one ingredient..</h4>
     </ng-template>
   </form>
 </ng-container>

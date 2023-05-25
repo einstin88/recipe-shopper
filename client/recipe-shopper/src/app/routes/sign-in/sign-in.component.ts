@@ -19,6 +19,7 @@ export class SignInComponent implements OnInit {
 
   errorMsg: string = '';
   errorStatus!: number;
+  isLoading: boolean = false;
   redirectPath: string = '/';
   signinForm!: FormGroup;
 
@@ -42,6 +43,8 @@ export class SignInComponent implements OnInit {
     const credentials = this.signinForm.value as AuthPayLoad;
     console.debug('>>> Credentials: ', credentials);
 
+    this.isLoading = true;
+
     this.svc
       .loginUser(credentials)
       .then(() => {
@@ -49,6 +52,8 @@ export class SignInComponent implements OnInit {
         this.router.navigate([this.redirectPath]);
       })
       .catch((error: HttpErrorResponse) => {
+        this.isLoading = false;
+
         this.errorMsg = `Error: ${error.error}`;
         this.errorStatus = error.status;
         console.debug('Sign in Error! ', this.errorMsg);
