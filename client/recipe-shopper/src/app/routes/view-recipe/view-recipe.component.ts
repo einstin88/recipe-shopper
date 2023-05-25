@@ -29,6 +29,7 @@ export class ViewRecipeComponent implements OnInit, OnDestroy {
 
   currentUser!: string;
   errMsg: string = '';
+  isLoading: boolean = false;
 
   recipeId!: string;
   recipe!: Recipe;
@@ -53,6 +54,8 @@ export class ViewRecipeComponent implements OnInit, OnDestroy {
    * @description Initiates the API call for retrieving a recipe via {@link RecipeDataService}.
    */
   private fetchRecipe() {
+    this.isLoading = true;
+
     this.svc
       .getRecipeById(this.recipeId)
       .then((recipe) => {
@@ -62,6 +65,9 @@ export class ViewRecipeComponent implements OnInit, OnDestroy {
       .catch((err: Error) => {
         this.errMsg = err.message;
         this.title.setTitle(`Recipe ${this.recipeId} Not Found`);
+      })
+      .finally(() => {
+        this.isLoading = false;
       });
   }
 

@@ -2,3 +2,8 @@
     color: navy;
     font-family: 'Pangolin', cursive;
 }
+
+.recipe-cards {
+    width: 21vw; 
+    border-color: indigo
+}

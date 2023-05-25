@@ -1,16 +1,18 @@
-<h2 class="ms-4">
-  Click on any recipes to view the ingredients you can add to your basket
-</h2>
-<div *ngIf="!resultsLoading; else loadingMsg" class="mt-5">
+<h2>Click on any recipes to view the ingredients you can add to your basket</h2>
+
+<div *ngIf="isLoading" class="spinner-border text-info" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+<ng-container *ngIf="!errorMsg; else err">
   <div
     *ngIf="recipes.length; else emptyMsg"
-    class="d-flex justify-content-evenly"
+    class="d-flex align-items-center flex-wrap"
   >
     <div
       *ngFor="let recipe of recipes"
-      class="card border-success shadow-lg p-2"
+      class="card shadow-lg p-2 mt-3 me-5 mb-3 recipe-cards"
       [routerLink]="['/recipe/view', recipe.recipeId]"
-      style="width: 20vw"
     >
       <div class="card-body">
         <h4 class="card-title recipe-name">
@@ -26,7 +28,13 @@
           </a>
         </h6>
         <p class="card-text text-muted">Preparation time: approx...</p>
-        <p class="card-text">{{ recipe.procedures.substring(0, 400) }}...</p>
+        <div
+          *ngFor="let step of recipe.procedures.split('\n'); index as idx"
+          class="mb-1"
+        >
+          <span *ngIf="idx < 4" class="card-text">{{ step }}</span>
+          <span *ngIf="idx == 4">...</span>
+        </div>
       </div>
 
       <ul class="list-group list-group-flush">
@@ -46,6 +54,12 @@
   </div>
 
   <ng-template #emptyMsg>No recipes found.</ng-template>
-</div>
+</ng-container>
 
-<ng-template #loadingMsg>{{ resultsLoading }}</ng-template>
+<ng-template #err>
+  <div class="d-flex flex-column">
+    <div class="alert alert-danger align-self-start">
+      {{ errorMsg }}
+    </div>
+  </div>
+</ng-template>

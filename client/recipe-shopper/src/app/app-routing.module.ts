@@ -9,8 +9,8 @@ import { ViewCartComponent } from './routes/view-cart/view-cart.component';
 import { SignInComponent } from './routes/sign-in/sign-in.component';
 import { RegistrationComponent } from './routes/registration/registration.component';
 import { SignOutComponent } from './routes/sign-out/sign-out.component';
-import { AuthGuard } from './routes/auth.guard';
-import { AnonymousGuard } from './routes/anonymous.guard';
+import { AuthGuard } from './route-guards/auth.guard';
+import { AnonymousGuard } from './route-guards/anonymous.guard';
 import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
 
 const routes: Routes = [

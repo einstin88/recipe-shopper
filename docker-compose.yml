@@ -20,12 +20,12 @@ services:
       - core
     ports:
       - "80:80"
-    links:
-      - auth
-      - backend
-    depends_on:
-      - auth
-      - backend
+    # links:
+    #   - auth
+    #   - backend
+    # depends_on:
+    #   - auth
+    #   - backend
 
   backend:
     build:

@@ -52,11 +52,12 @@ export class SignInComponent implements OnInit {
         this.router.navigate([this.redirectPath]);
       })
       .catch((error: HttpErrorResponse) => {
-        this.isLoading = false;
-
         this.errorMsg = `Error: ${error.error}`;
         this.errorStatus = error.status;
         console.debug('Sign in Error! ', this.errorMsg);
+      })
+      .finally(() => {
+        this.isLoading = false;
       });
   }
 

@@ -1,70 +1,103 @@
-<table *ngIf="cartItems.length; else emptyMsg">
-  <tr>
-    <th rowspan="2">Recipe Name</th>
-    <th rowspan="2">Recipe Creator</th>
-    <th colspan="5">Ingredients</th>
-    <th rowspan="2"></th>
-  </tr>
-  <tr>
-    <th>Name</th>
-    <th>Pack Size</th>
-    <th>Unit Price</th>
-    <th>Quantity</th>
-    <th>Total</th>
-  </tr>
-  <tr *ngFor="let item of cartItems; index as idx">
-    <td>
-      {{ item.recipeName }}
-    </td>
-    <td>{{ item.recipeCreator }}</td>
-    <td>
-      <ul>
-        <li *ngFor="let ingredient of item.ingredients">
-          {{ ingredient.name }}
-        </li>
-      </ul>
-    </td>
-    <td>
-      <div *ngFor="let ingredient of item.ingredients">
-        {{ ingredient.pack_size }}
+<div class="container">
+  <h2 class="d-flex align-self-center" style="color: navy">
+    Your Basket Summary
+  </h2>
+</div>
+
+<div *ngIf="cartItems.length; else emptyMsg" class="container">
+  <div class="row border-bottom border-primary">
+    <div class="row text-center">
+      <div class="col-2 align-self-center">Recipe Name</div>
+      <div class="col-2 align-self-center">Recipe Creator</div>
+
+      <div class="col text-center border-end border-start border-info">
+        <div class="row border-bottom border-primary">
+          <div class="col">Ingredients</div>
+        </div>
+        <div class="row">
+          <div class="col-4">Name</div>
+          <div class="col">Pack Size</div>
+          <div class="col">Unit Price</div>
+          <div class="col">Quantity</div>
+          <div class="col">Total</div>
+        </div>
       </div>
-    </td>
-    <td>
-      <div *ngFor="let ingredient of item.ingredients">
-        {{ ingredient.price }}
+      <div class="col-1 align-self-center">Remove</div>
+    </div>
+  </div>
+
+  <div
+    *ngFor="let item of cartItems; index as idx"
+    class="row border-bottom border-dark"
+  >
+    <div class="row text-center align-items-center">
+      <div class="col-2">{{ item.recipeName }}</div>
+      <div class="col-2">{{ item.recipeCreator }}</div>
+
+      <div class="col text-center">
+        <div
+          *ngFor="let ingredient of item.ingredients; odd as odds"
+          class="row border-end border-start border-info align-items-center"
+          [ngClass]="{odds}"
+        >
+          <div class="col-4">{{ ingredient.name }}</div>
+          <div class="col">{{ ingredient.pack_size }}</div>
+          <div class="col">{{ ingredient.price }}</div>
+          <div class="col">{{ ingredient.quantity }}</div>
+          <div class="col">{{ ingredient.total }}</div>
+        </div>
       </div>
-    </td>
-    <td>
-      <div *ngFor="let ingredient of item.ingredients">
-        {{ ingredient.quantity }}
+
+      <div class="col-1 align-items-center">
+        <button
+          type="button"
+          (click)="removeItem(idx)"
+          class="btn btn-sm btn-outline-danger"
+        >
+          X
+        </button>
       </div>
-    </td>
-    <td>
-      <div *ngFor="let ingredient of item.ingredients">
-        {{ ingredient.total }}
-      </div>
-    </td>
-    <td><button type="button" (click)="removeItem(idx)">X</button></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>TOTAL: </td>
-    <td>{{ cartTotal}}</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><button type="button" (click)="checkOut()">Send Summary</button></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td><button type="button" (click)="emptyCart()">Empty Cart</button></td>
-    <td></td>
-  </tr>
-</table>
-<ng-template #emptyMsg>No items in the cart yet</ng-template>
+    </div>
+  </div>
+
+  <div class="row align-items-center mt-2">
+    <div class="col"></div>
+    <div class="col-1 me-2"><b> TOTAL </b></div>
+    <div class="col-1 me-3">
+      {{ cartTotal | currency : "" : "symbol" }}
+    </div>
+    <div class="col-1"></div>
+  </div>
+
+  <div class="d-flex justify-content-end me-3 mt-3">
+    <button type="button" (click)="checkOut()" class="btn btn-primary">
+      Send Summary
+    </button>
+    <button type="button" (click)="emptyCart()" class="btn btn-warning ms-3">
+      Empty Cart
+    </button>
+  </div>
+</div>
+
+<ng-template #emptyMsg>
+  <div class="container d-flex">
+    <div class="alert alert-warning d-flex align-items-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-exclamation-triangle flex-shrink-0 me-2"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"
+        />
+        <path
+          d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"
+        />
+      </svg>
+      No items in the cart yet
+    </div>
+  </div>
+</ng-template>

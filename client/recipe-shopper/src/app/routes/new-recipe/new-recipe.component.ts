@@ -5,6 +5,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { Router } from '@angular/router';
+import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Subject, Subscription } from 'rxjs';
 import { RecipeFormComponent } from 'src/app/components/recipe-form/recipe-form.component';
@@ -13,6 +15,7 @@ import { State } from 'src/app/flux/reducers';
 import { Product } from 'src/app/model/product.model';
 import { RecipeFormDisplay } from 'src/app/model/recipe-form-display.interface';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 /**
  * @description A component associated with a router path for creating new recipes
@@ -26,7 +29,8 @@ export class NewRecipeComponent
 {
   constructor(
     private store: Store<State>,
-    private recipeSvc: RecipeDataService
+    private recipeSvc: RecipeDataService,
+    private toastSvc: ToastNotificationService
   ) {}
 
   @ViewChild(RecipeFormComponent)
@@ -48,8 +52,11 @@ export class NewRecipeComponent
   }
 
   ngAfterViewInit(): void {
-    this.sub$ = this.recipeForm.isInvalid$.subscribe((isInvalid) => {
-      this.isInvalid = isInvalid;
+    // https://stackoverflow.com/questions/54366173/how-to-trigger-toast-on-page-load
+    setTimeout(() => {
+      this.sub$ = this.recipeForm.isInvalid$.subscribe((isInvalid) => {
+        this.isInvalid = isInvalid;
+      });
     });
   }
 
@@ -67,6 +74,8 @@ export class NewRecipeComponent
       .then(() => {
         this.recipeForm.recipeErr = '';
         this.recipeForm.reset = true;
+
+        this.toastSvc.show('Recipe', `New recipe '${formData.recipeName}' added`);
       })
       .catch((err) => {
         this.recipeForm.recipeError = err.error;

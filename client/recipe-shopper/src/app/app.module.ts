@@ -30,6 +30,8 @@ import { AuthDataService } from './services/auth-data.service';
 import { CartDataService } from './services/cart-data.service';
 import { AuthEffects } from './flux/auth/auth.effect';
 import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
+import { BootStrapModule } from './UI-libs/boot-strap.module';
+import { ToastsComponent } from './components/toasts/toasts.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,7 @@ import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
     SignOutComponent,
     IngredientSelectionsComponent,
     MyRecipesComponent,
+    ToastsComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +65,7 @@ import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
       HydrationEffect,
       { persistStoreEffect },
     ]),
+    BootStrapModule,
   ],
   providers: [
     AuthDataService,

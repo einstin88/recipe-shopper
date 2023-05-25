@@ -1,6 +1,6 @@
 # Recipee Shopper
 
-## Applicaion Architechture:
+## Application Architechture:
 
 The web application consists of 4 main comoponents:
 

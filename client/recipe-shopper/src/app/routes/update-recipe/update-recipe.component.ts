@@ -1,5 +1,7 @@
 import {
+  AfterContentChecked,
   AfterViewChecked,
+  AfterViewInit,
   Component,
   OnDestroy,
   OnInit,
@@ -7,11 +9,12 @@ import {
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { RecipeFormComponent } from 'src/app/components/recipe-form/recipe-form.component';
 import { Product } from 'src/app/model/product.model';
 import { RecipeFormDisplay } from 'src/app/model/recipe-form-display.interface';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 /**
  * @description A component associated with a router path for updating recipes
@@ -26,7 +29,8 @@ export class UpdateRecipeComponent
   constructor(
     private recipeSvc: RecipeDataService,
     private route: ActivatedRoute,
-    private title: Title
+    private title: Title,
+    private toastSvc: ToastNotificationService
   ) {}
 
   @ViewChild(RecipeFormComponent)
@@ -47,10 +51,13 @@ export class UpdateRecipeComponent
     this.title.setTitle(`Update Recipe: ${this.recipeId}`);
   }
 
-  ngAfterViewChecked(): void {
-    this.sub$ = this.recipeForm.isInvalid$.subscribe((isInvalid) => {
-      this.isInvalid = isInvalid;
-    });
+  ngAfterViewChecked() {
+    // setTimeout(() => {
+      this.sub$ = this.recipeForm.isInvalidUpdate$.subscribe((isInvalid) => {
+        console.log(isInvalid);
+        this.isInvalid = isInvalid;
+      });
+    // });
   }
 
   ngOnDestroy(): void {
@@ -66,6 +73,8 @@ export class UpdateRecipeComponent
       .then(() => {
         this.recipeForm.recipeErr = '';
         this.recipeForm.reset = true;
+
+        this.toastSvc.show('Recipe', `Recipe '${formData.recipeName}' updated`);
       })
       .catch((err) => {
         this.recipeForm.recipeError = err.error;

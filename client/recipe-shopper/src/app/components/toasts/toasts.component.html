@@ -1,0 +1,9 @@
+<ngb-toast
+  *ngFor="let toast of toastSvc.toasts"
+  [header]="toast.header + ' - Notification'"
+  (hidden)="toastSvc.remove(toast)"
+  
+  style="color:darkolivegreen; border-color: darkolivegreen;"
+>
+  {{ toast.body }}
+</ngb-toast>

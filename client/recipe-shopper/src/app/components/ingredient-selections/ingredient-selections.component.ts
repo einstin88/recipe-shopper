@@ -44,7 +44,7 @@ export class IngredientSelectionsComponent implements OnInit {
           ingredient.quantity,
           [Validators.required, Validators.min(1)],
         ],
-        selected: this.fb.control<boolean>(false),
+        selected: this.fb.control<boolean>(true),
       });
 
       this.ingredientSelections.push(item);
@@ -54,10 +54,11 @@ export class IngredientSelectionsComponent implements OnInit {
   processForm() {
     const cartItem = (
       this.ingredientsForm.value.selectedIngredients as CartIngredient[]
-    ).filter((item) => item.selected == true)
-    .map(item => {
-      return {...item, total: (item.quantity * item.price)}
-    });
+    )
+      .filter((item) => item.selected == true)
+      .map((item) => {
+        return { ...item, total: item.quantity * item.price };
+      });
 
     if (!cartItem.length) {
       this.errorMsg = 'Select at least ONE ingredient to add to cart';
@@ -67,5 +68,10 @@ export class IngredientSelectionsComponent implements OnInit {
     console.debug('>>> cart items to add: ', cartItem);
 
     this.ingredientsToAdd.emit(cartItem);
+  }
+
+  validateFormInput(fieldName: string) {
+    const field = this.ingredientSelections.get(fieldName)!;
+    return field.invalid && field.touched;
   }
 }
