@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: "project-scrapper-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper:0.0.4"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper:0.0.5"
           ports:
             - containerPort: 8000
           readinessProbe:
@@ -30,12 +30,12 @@ spec:
           resources:
             limits:
               cpu: "1"
-              ephemeral-storage: 300Mi
-              memory: 1.2Gi
+              ephemeral-storage: 600Mi
+              memory: 2Gi
             requests:
-              cpu: 400m
+              cpu: 500m
               ephemeral-storage: 300Mi
-              memory: 600Mi
+              memory: 1Gi
 ---
 apiVersion: "autoscaling/v2"
 kind: "HorizontalPodAutoscaler"

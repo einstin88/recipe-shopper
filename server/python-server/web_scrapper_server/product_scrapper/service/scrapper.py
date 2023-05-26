@@ -16,7 +16,7 @@ from .utils import price_in_float
 
 
 WEBPAGE_LOAD_TIME_LIMIT = 3
-WEBSITE_SCROLL_LIMIT = 10
+WEBSITE_SCROLL_LIMIT = 7
 
 
 class Scrapper:
@@ -55,7 +55,7 @@ class Scrapper:
         footer = browser.find_element(By.CLASS_NAME, SS_PAGE_FOOTER)
         for _ in range(WEBSITE_SCROLL_LIMIT):
             ActionChains(browser).scroll_to_element(footer).perform()
-            time.sleep(WEBPAGE_LOAD_TIME_LIMIT + 1.5)
+            time.sleep(WEBPAGE_LOAD_TIME_LIMIT + 2)
 
         # Saves the raw html in memory for further processing
         self.products_html = browser.page_source

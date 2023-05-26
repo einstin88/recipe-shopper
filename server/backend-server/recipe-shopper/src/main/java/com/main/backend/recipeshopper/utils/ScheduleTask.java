@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.main.backend.recipeshopper.exceptions.DjangoBadResponseException;
+import com.main.backend.recipeshopper.exceptions.ProductUpsertException;
 import com.main.backend.recipeshopper.service.ProductService;
 
 import jakarta.json.stream.JsonParsingException;
@@ -27,13 +28,17 @@ public class ScheduleTask {
         for (String category : Constants.PRODUCT_CATEGORIES) {
             try {
                 svc.scrapeFromUrl(category);
-                
+
             } catch (JsonParsingException e) {
-                log.info("--- Error parsing: {}", category);
+                log.error("--- Error parsing: {}", category);
             } catch (DjangoBadResponseException e) {
-                log.info("--- Django error for {}: {}", category, e.getMessage());
+                log.error("--- Django server error for {}: {}", category, e.getMessage());
+            } catch (ProductUpsertException e) {
+                log.error("--- Product upsert error for {}: {}", category, e.getMessage());
+
             }
         }
+        log.info(">>> Scrapping has completed.");
     }
 
 }

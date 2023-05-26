@@ -19,7 +19,7 @@ steps:
       - -R
 
 substitutions:
-  _APP_VERSION: 0.0.4
+  _APP_VERSION: 0.0.5
 
 # Global vars for CI pipeline
 options:
