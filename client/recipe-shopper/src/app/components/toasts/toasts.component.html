@@ -1,9 +1,11 @@
 <ngb-toast
   *ngFor="let toast of toastSvc.toasts"
-  [header]="toast.header + ' - Notification'"
+  [header]="'Notification - ' + toast.header"
   (hidden)="toastSvc.remove(toast)"
-  
-  style="color:darkolivegreen; border-color: darkolivegreen;"
+  style="color: darkolivegreen; border-color: darkolivegreen"
 >
   {{ toast.body }}
+  <a *ngIf="toast.link" [routerLink]="[toast.link]">
+    {{ toast.linkName }}
+  </a>
 </ngb-toast>

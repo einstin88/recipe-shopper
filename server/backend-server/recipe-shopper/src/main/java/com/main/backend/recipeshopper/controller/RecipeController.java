@@ -74,7 +74,8 @@ public class RecipeController {
                 log.debug(">>> Request for recipe with id: {}", recipeId);
 
                 return ResponseEntity
-                                .ok(recipeSvc.getRecipeById(recipeId));
+                                .ok()
+                                .body(recipeSvc.getRecipeById(recipeId));
         }
 
         /**
@@ -88,15 +89,15 @@ public class RecipeController {
          * @return Response status 201
          */
         @PostMapping(path = Urls.URL_RECIPE_NEW, consumes = MediaType.APPLICATION_JSON_VALUE)
-        public ResponseEntity<Void> postNewRecipe(
+        public ResponseEntity<String> postNewRecipe(
                         @RequestBody Recipe<Ingredient> recipe) {
 
                 log.debug(">>> Posting new recipe: {}", recipe);
-                recipeSvc.insertNewRecipe(recipe);
 
                 return ResponseEntity
                                 .status(HttpStatus.CREATED)
-                                .build();
+                                .body(Utils.createJsonRepsone("recipeId",
+                                                recipeSvc.insertNewRecipe(recipe)));
         }
 
         /**

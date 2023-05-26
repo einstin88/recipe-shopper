@@ -1,7 +1,10 @@
 <h3 class="section-title">Pick the ingredients you need for this recipe:</h3>
 
 <div class="d-flex">
-  <div *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</div>
+  <ngb-alert *ngIf="errorMsg" [dismissible]="false" type="danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ errorMsg }}
+  </ngb-alert>
 </div>
 
 <form [formGroup]="ingredientsForm" (ngSubmit)="processForm()">

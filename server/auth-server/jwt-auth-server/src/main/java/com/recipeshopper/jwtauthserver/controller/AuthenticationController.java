@@ -98,6 +98,8 @@ public class AuthenticationController {
 
                 log.debug("Logging '{}' out...", username);
 
+                svc.removeToken(username);
+
                 return ResponseEntity
                                 .ok()
                                 .build();

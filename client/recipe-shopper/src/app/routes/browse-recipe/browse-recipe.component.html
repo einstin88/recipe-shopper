@@ -59,9 +59,9 @@
 
 <ng-template #err>
   <div class="d-flex flex-column">
-    <div class="alert alert-danger align-self-start">
+    <ngb-alert [dismissible]="false" type="danger" class="align-self-start">
       <i class="bi bi-exclamation-triangle me-2"></i>
       {{ errorMsg }}
-    </div>
+    </ngb-alert>
   </div>
 </ng-template>

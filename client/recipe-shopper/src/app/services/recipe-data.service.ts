@@ -13,6 +13,7 @@ import {
   EP_POST_RECIPE,
   EP_UPDATE_RECIPE,
 } from '../utils/urls';
+import { RecipeId } from '../model/recipeId-payload.model';
 
 /**
  * @description Service to handle API calls related to {@link Recipe} transactions
@@ -64,17 +65,13 @@ export class RecipeDataService {
 
   /**
    * @description Posts a new recipe to be saved by the backend
-   *
-   * @param newRecipe The new {@link Recipe}
-   * @returns Empty promise
    */
   postNewRecipe(newRecipe: Recipe) {
-    return firstValueFrom(
-      this.http.post<void>(EP_POST_RECIPE, newRecipe)
-    ).catch((error: HttpErrorResponse) => {
-      console.error(`Error response: ${error.message}`);
-      throw new Error(`${error.status}: ${error.statusText}`);
-    });
+    return firstValueFrom(this.http.post<RecipeId>(EP_POST_RECIPE, newRecipe))
+      .catch((error: HttpErrorResponse) => {
+        console.error(`Error response: ${error.message}`);
+        throw new Error(`${error.status}: ${error.error}`);
+      });
   }
 
   /**

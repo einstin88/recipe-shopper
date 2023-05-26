@@ -98,9 +98,13 @@
 
 <ng-template #emptyMsg>
   <div class="container d-flex">
-    <div class="alert alert-warning d-flex align-items-center">
+    <ngb-alert
+      type="warning"
+      [dismissible]="false"
+      class="d-flex align-items-center"
+    >
       <i class="bi bi-exclamation-triangle me-2"></i>
       No items in the cart yet
-    </div>
+    </ngb-alert>
   </div>
 </ng-template>

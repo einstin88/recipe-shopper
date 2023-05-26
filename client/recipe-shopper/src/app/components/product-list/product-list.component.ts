@@ -22,12 +22,13 @@ export class ProductListComponent implements OnInit {
   // Variables
   chosenCategory!: Category;
   categories = Categories;
-  isLoading: boolean = false;
+  products: Product[] = [];
 
   offset: number = 0;
   limit: number = 20;
 
-  products: Product[] = [];
+  errorMsg: string = '';
+  isLoading: boolean = false;
 
   ngOnInit(): void {
     this.chosenCategory = this.categories.at(0)!;
@@ -70,11 +71,12 @@ export class ProductListComponent implements OnInit {
     this.svc
       .getProducts(this.chosenCategory, this.limit, this.offset)
       .then((products) => {
-        this.isLoading = false;
+        this.errorMsg = '';
         this.products = products;
       })
-      .catch(() => {
-        this.isLoading = false;
-      });
+      .catch((error: Error) => {
+        this.errorMsg = error.message;
+      })
+      .finally(() => (this.isLoading = false));
   }
 }

@@ -1,8 +1,10 @@
 <h3 style="color: navy">Write your recipe here</h3>
 
-<div *ngIf="recipeError" class="error">
+<ngb-alert *ngIf="recipeError" type="danger" [dismissible]="false">
+  <i class="bi bi-exclamation-triangle me-2"></i>
   {{ recipeError }}
-</div>
+</ngb-alert>
+
 <ng-container *ngIf="!loading; else loadingMsg">
   <form [formGroup]="recipeForm">
     <div class="form-floating m-1 ms-0">
@@ -109,4 +111,9 @@
     </ng-template>
   </form>
 </ng-container>
-<ng-template #loadingMsg>Loading Recipe...</ng-template>
+
+<ng-template #loadingMsg>
+  <div class="spinner-border text-info" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</ng-template>

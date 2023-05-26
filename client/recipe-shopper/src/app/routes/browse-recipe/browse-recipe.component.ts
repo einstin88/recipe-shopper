@@ -32,8 +32,9 @@ export class BrowseRecipeComponent {
       .then((recipes) => {
         this.recipes = recipes;
       })
-      .catch(() => {
-        this.errorMsg = 'Error communicating with server.';
+      .catch((err: Error) => {
+        // this.errorMsg = 'Error communicating with server.';
+        this.errorMsg = err.message;
       })
       .finally(() => {
         this.isLoading = false;

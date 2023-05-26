@@ -2,10 +2,10 @@
   Pick a product category to add ingredients to your recipe
 </h3>
 
-<div class="d-flex justify-content-center mb-2">
+<div class="d-flex flex-wrap justify-content-center mb-2">
   <div *ngFor="let category of categories" class="m-1">
     <button
-      class="btn btn-primary shadow-lg"
+      class="btn btn-outline-secondary shadow"
       (click)="updateCategory(category)"
     >
       {{ category | titlecase }}
@@ -14,7 +14,20 @@
 </div>
 <hr />
 
-<ng-container *ngIf="products.length">
+<ng-container *ngIf="isLoading">
+  <div class="spinner-border text-info" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</ng-container>
+
+<ng-template #err>
+  <ngb-alert type="danger" [dismissible]="false">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ errorMsg ? errorMsg : "No Products" }}
+  </ngb-alert>
+</ng-template>
+
+<ng-container *ngIf="products.length || !errorMsg; else err">
   <div class="row mb-3 text-center" style="color: navy">
     <div class="col-1"></div>
     <div class="col-4"><b>Product Name</b></div>
@@ -23,7 +36,7 @@
     <div class="col-2"></div>
   </div>
 
-  <div style="height: 66vh; overflow-y: auto; overflow-x: hidden">
+  <div style="height: 62vh; overflow-y: auto; overflow-x: hidden">
     <div
       *ngFor="let product of products; index as idx; even as evens"
       class="row mb-2"
@@ -49,7 +62,7 @@
       </div>
     </div>
   </div>
-  <div class="position-relative">
+  <!-- <div class="position-relative">
     <div class="mt-2 btn-group postion-absolute start-50 translate-middle-x">
       <button
         type="button"
@@ -66,5 +79,5 @@
         Next
       </button>
     </div>
-  </div>
+  </div> -->
 </ng-container>

@@ -78,14 +78,6 @@ public class AuthFilterChainConfig {
             })
             .authenticationProvider(daoAuthProvider)
             ;
-            // .logout(logoutRequest -> {
-            //     logoutRequest
-            //         .logoutUrl(EP_LOG_OUT)
-            //         .addLogoutHandler(logoutHandler)
-            //         .logoutSuccessHandler((request, response, auth) -> {
-            //             SecurityContextHolder.clearContext();
-            //         });
-            // });
             // .httpBasic(withDefaults())
         // @formatter:on
 

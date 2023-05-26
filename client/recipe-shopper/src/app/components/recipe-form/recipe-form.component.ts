@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription, map, skipLast, startWith } from 'rxjs';
+import { Subject, Subscription, map, startWith } from 'rxjs';
 import { Product } from 'src/app/model/product.model';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
@@ -59,7 +59,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   // Variables
   loading!: boolean;
 
-  recipeError = '';
+  recipeError: string = '';
   recipeForm!: FormGroup;
   recipeIngredients!: FormArray;
 

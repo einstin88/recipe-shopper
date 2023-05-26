@@ -1,7 +1,5 @@
 import {
-  AfterContentChecked,
   AfterViewChecked,
-  AfterViewInit,
   Component,
   OnDestroy,
   OnInit,
@@ -52,12 +50,10 @@ export class UpdateRecipeComponent
   }
 
   ngAfterViewChecked() {
-    // setTimeout(() => {
-      this.sub$ = this.recipeForm.isInvalidUpdate$.subscribe((isInvalid) => {
-        console.log(isInvalid);
-        this.isInvalid = isInvalid;
-      });
-    // });
+    this.sub$ = this.recipeForm.isInvalidUpdate$.subscribe((isInvalid) => {
+      console.debug(isInvalid);
+      this.isInvalid = isInvalid;
+    });
   }
 
   ngOnDestroy(): void {
@@ -74,7 +70,12 @@ export class UpdateRecipeComponent
         this.recipeForm.recipeErr = '';
         this.recipeForm.reset = true;
 
-        this.toastSvc.show('Recipe', `Recipe '${formData.recipeName}' updated`);
+        this.toastSvc.show(
+          'Recipe',
+          `Recipe '${formData.recipeName}' updated`,
+          `/recipe/view/${formData.recipeId}`,
+          formData.recipeName
+        );
       })
       .catch((err) => {
         this.recipeForm.recipeError = err.error;

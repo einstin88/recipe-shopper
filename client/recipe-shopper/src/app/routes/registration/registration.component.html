@@ -1,10 +1,15 @@
 <div class="d-flex flex-column">
   <div class="align-self-center border border-dark rounded-4 forms">
     <h3 style="color: navy">Register a new account</h3>
-    <div *ngIf="errorMsg" class="alert alert-danger col col-md-3">
+    <ngb-alert
+      *ngIf="errorMsg"
+      [dismissible]="false"
+      type="danger"
+      class="col col-md-3"
+    >
       <i class="bi bi-exclamation-triangle me-2"></i>
       {{ errorMsg }}
-    </div>
+    </ngb-alert>
 
     <form [formGroup]="registrationForm" (ngSubmit)="processform()">
       <div class="form-floating m-1">

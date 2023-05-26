@@ -6,8 +6,8 @@ import { Injectable } from '@angular/core';
 export class ToastNotificationService {
   toasts: ToastInfo[] = [];
 
-  show(header: string, body: string) {
-    this.toasts.push({ header, body });
+  show(header: string, body: string, link: string = '', linkName: string = '') {
+    this.toasts.push({ header, body, link, linkName });
   }
 
   remove(toast: ToastInfo) {
@@ -18,4 +18,6 @@ export class ToastNotificationService {
 export type ToastInfo = {
   header: string;
   body: string;
+  link?:string
+  linkName?: string
 };

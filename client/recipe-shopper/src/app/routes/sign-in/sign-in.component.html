@@ -2,19 +2,24 @@
   <div class="align-self-center border border-dark rounded-4 forms">
     <h3 style="color: navy">Sign In to Recipee Shopping</h3>
 
-    <div *ngIf="redirectPath.length > 1" class="alert alert-info m-2">
+    <ngb-alert
+      *ngIf="redirectPath.length > 1"
+      type="info"
+      [dismissible]="false"
+      class="m-2"
+    >
       Sign in to view recipe
-    </div>
+    </ngb-alert>
 
     <div *ngIf="errorMsg">
-      <p class="alert alert-danger">
+      <ngb-alert type="danger" [dismissible]="false">
         <i class="bi bi-exclamation-triangle me-2"></i>
         {{ errorMsg }}
-      </p>
-      <p *ngIf="errorStatus == 400" class="alert alert-info">
+      </ngb-alert>
+      <ngb-alert *ngIf="errorStatus == 400" type="info" [dismissible]="false">
         <a routerLink="/registration" class="alert-link">Register</a> for a new
         account to start Recipee Shopping!
-      </p>
+      </ngb-alert>
     </div>
 
     <form [formGroup]="signinForm" (ngSubmit)="processForm()">

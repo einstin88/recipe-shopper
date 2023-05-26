@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
@@ -5,8 +6,6 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Subject, Subscription } from 'rxjs';
 import { RecipeFormComponent } from 'src/app/components/recipe-form/recipe-form.component';
@@ -49,6 +48,8 @@ export class NewRecipeComponent
     this.sub1$ = this.store.select(selectCurrentUser).subscribe((username) => {
       this.recipeCreator = username;
     });
+
+    // this.toastSvc.show('Recipe', 'New recipe added', '/recipe/view', 'test');
   }
 
   ngAfterViewInit(): void {
@@ -71,14 +72,20 @@ export class NewRecipeComponent
 
     this.recipeSvc
       .postNewRecipe(formData)
-      .then(() => {
+      .then((res) => {
         this.recipeForm.recipeErr = '';
         this.recipeForm.reset = true;
 
-        this.toastSvc.show('Recipe', `New recipe '${formData.recipeName}' added`);
+        this.toastSvc.show(
+          'Recipe',
+          'New recipe added: ',
+          `/recipe/view/${res.recipeId}`,
+          formData.recipeName
+        );
       })
-      .catch((err) => {
-        this.recipeForm.recipeError = err.error;
+      .catch((err: HttpErrorResponse) => {
+        console.log('error', err);
+        this.recipeForm.recipeErr = err.error;
       });
   }
 

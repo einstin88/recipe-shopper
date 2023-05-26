@@ -51,8 +51,7 @@ public class RecipeRepository {
     public List<Recipe<Ingredient>> findRecipes(Integer offset, Integer limit) {
         return template.query(
                 SQL_FIND_RECIPES,
-                new RecipeRowMapper(),
-                limit, offset);
+                new RecipeRowMapper());
     }
 
     /**
