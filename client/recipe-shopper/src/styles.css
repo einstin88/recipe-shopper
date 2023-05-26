@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  font-family: "Nunito", sans-serif;
+}
+
+body {
+  background-color: #edf5f1;
+}
+
+@import "~bootstrap-icons/font/bootstrap-icons.css";

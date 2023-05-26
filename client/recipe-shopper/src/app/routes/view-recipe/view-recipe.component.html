@@ -1,29 +1,58 @@
-<div *ngIf="!errMsg; else err">
-  <h2>Recipe: {{ recipe.recipeName }}</h2>
-  <button
-    *ngIf="currentUser == recipe.recipeCreator"
-    type="button"
-    [routerLink]="['/recipe/update', recipeId]"
-  >
-    Update Recipe
-  </button>
-  <table>
-    <tr>
-      <td>Created by:</td>
-      <td>{{ recipe.recipeCreator }}</td>
-    </tr>
-    <tr>
-      <td>Created on:</td>
-      <td>{{ recipe.timeStamp | date : "longDate" }}</td>
-    </tr>
-    <tr>
-      <td>Procedures:</td>
-      <td>{{ recipe.procedures }}</td>
-    </tr>
-  </table>
-  <app-ingredient-selections
-    [ingredients]="recipe.ingredients"
-    (ingredientsToAdd)="addToCart($event)"
-  ></app-ingredient-selections>
-</div>
-<ng-template #err>{{ errMsg }}</ng-template>
+<ng-container *ngIf="!errMsg; else err">
+  <div class="row d-flex justify-content-center mt-2">
+    <div class="col-4">
+      <h2 class="recipe-title">
+        Recipe:
+        <span *ngIf="!isLoading; else loadingSpinner">
+          {{ recipe.recipeName | titlecase }}
+        </span>
+        <ng-template #loadingSpinner>
+          <div class="spinner-border text-info" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </ng-template>
+      </h2>
+
+      <div class="mt-2">
+        <h4>Created by:</h4>
+        <p>{{ recipe.recipeCreator }}</p>
+
+        <h5>Created on:</h5>
+        <p class="text-muted">{{ recipe.timeStamp | date : "longDate" }}</p>
+
+        <button
+          *ngIf="currentUser == recipe.recipeCreator"
+          type="button"
+          [routerLink]="['/recipe/update', recipeId]"
+          class="btn btn-outline-primary btn-sm mb-2"
+          ngbTooltip="Update your procedures, name and ingredients list"
+          placement="right"
+        >
+          <i class="bi bi-arrow-left-right me-1"></i>
+          Update your recipe
+        </button>
+
+        <h4>Procedures:</h4>
+        <p *ngFor="let step of recipe.procedures.split('\n')" class="ms-1">
+          {{ step }}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <app-ingredient-selections
+        [ingredients]="recipe.ingredients"
+        (ingredientsToAdd)="addToCart($event)"
+      >
+      </app-ingredient-selections>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #err>
+  <div class="d-flex flex-column">
+    <ngb-alert type="danger" [dismissible]="false" class="align-self-start">
+      {{ errMsg }}
+    </ngb-alert>
+  </div>
+</ng-template>

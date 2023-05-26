@@ -1,12 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription, map } from 'rxjs';
+import { Subject, Subscription, map, startWith } from 'rxjs';
 import { Product } from 'src/app/model/product.model';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
 
 /**
- * @description A reusable component designed to display the recipe form - a populated form if {@link recipeId} input is provided, else empty form
+ * @description A reusable component designed to display the recipe form - a populated form if input is provided, else empty form
  */
 @Component({
   selector: 'app-recipe-form',
@@ -22,6 +22,9 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   @Input()
   recipeId: string = '';
 
+  @Input()
+  recipeCreator!: string;
+
   // Getters and setters to work with View Projection
   get recipeData() {
     return this.recipeForm.value as Recipe;
@@ -29,12 +32,24 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
 
   get isInvalid$() {
     return this.recipeForm.statusChanges.pipe(
-      map((status) => status == 'INVALID')
+      startWith('INVALID'),
+      map((status) => {
+        return status == 'INVALID';
+      })
+    );
+  }
+
+  get isInvalidUpdate$() {
+    return this.recipeForm.statusChanges.pipe(
+      map((status) => {
+        return status == 'INVALID';
+      })
     );
   }
 
   set reset(_: boolean) {
     this.recipeForm.reset();
+    this.recipeIngredients.clear();
   }
 
   set recipeErr(msg: string) {
@@ -42,13 +57,13 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   }
 
   // Variables
-  private sub$!: Subscription;
-
   loading!: boolean;
 
-  recipeError = '';
+  recipeError: string = '';
   recipeForm!: FormGroup;
   recipeIngredients!: FormArray;
+
+  private sub$!: Subscription;
 
   // Interface methods
   ngOnInit(): void {
@@ -69,7 +84,6 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
    */
   private async initForm() {
     let recipe!: Recipe | null;
-    this.loading = true;
 
     // Initialize the ingredients FormArray
     this.recipeIngredients = this.fb.array(
@@ -77,8 +91,12 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
       [Validators.required, Validators.minLength(1)]
     );
 
+    // Logic block for pulling recipe to update
     if (this.recipeId) {
-      // console.log('>> Recipe ID: ', this.recipeId);
+      console.debug('>> Recipe ID: ', this.recipeId);
+
+      this.loading = true;
+
       await this.recipeSvc
         .getRecipeById(this.recipeId)
         .then((res) => {
@@ -91,6 +109,9 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
         .catch((err) => {
           this.recipeError = err.error;
           return;
+        })
+        .finally(() => {
+          this.loading = false;
         });
     } else {
       recipe = null;
@@ -108,28 +129,19 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
           Validators.maxLength(40),
         ],
       ],
-      recipeCreator: [
-        recipe?.recipeCreator ?? '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(40),
-        ],
-      ],
+      recipeCreator: [recipe?.recipeCreator ?? this.recipeCreator],
       procedures: [
         recipe?.procedures ?? '',
         [Validators.required, Validators.minLength(10)],
       ],
       ingredients: this.recipeIngredients,
     });
-
-    this.loading = false;
   }
 
   /**
-   * @description A function to add neccessary attributes into the {@link recipeIngredients} FormArray 
-   * @param {Product | Ingredient} product the Product to add to the ingredient list
-   * @param {number} quantity An optional argument to populate the quantity input field
+   * @description A function to add neccessary attributes into the {@link recipeIngredients} FormArray
+   * @param product the Product to add to the ingredient list
+   * @param quantity An optional argument to populate the quantity input field
    */
   addIngredient({ productId, name, pack_size }: Product, quantity?: number) {
     const newIngredient = this.fb.group({
@@ -148,5 +160,10 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
    */
   removeIngredient(idx: number) {
     this.recipeIngredients.removeAt(idx);
+  }
+
+  validateFormInput(fieldName: string) {
+    const field = this.recipeForm.get(fieldName)!;
+    return field.invalid && field.touched;
   }
 }

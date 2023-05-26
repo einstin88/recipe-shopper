@@ -1,3 +1,12 @@
-.error {
-  color: red;
+img {
+  height: 14vh;
+  padding: 5px;
+}
+
+.section-title {
+  color: navy;
+}
+
+.evens {
+  background-color: beige;
 }

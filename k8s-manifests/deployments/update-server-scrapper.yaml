@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: "project-scrapper-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper:0.0.2"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper:0.0.4"
           ports:
             - containerPort: 8000
           readinessProbe:
@@ -31,7 +31,7 @@ spec:
             limits:
               cpu: 800m
               ephemeral-storage: 1Gi
-              memory: 800Mi
+              memory: 900Mi
             requests:
               cpu: 400m
               ephemeral-storage: 500Mi
@@ -50,7 +50,7 @@ spec:
     name: "server-scrapper-1"
     apiVersion: "apps/v1"
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 2
   metrics:
     - type: "Resource"
       resource:

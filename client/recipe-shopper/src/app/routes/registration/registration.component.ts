@@ -23,6 +23,7 @@ export class RegistrationComponent implements OnInit {
   confirmPassword = new FormControl('');
   errorMsg: string = '';
   isPasswordMatched: boolean | null = null;
+  isLoading: boolean = false;
 
   registrationForm!: FormGroup;
 
@@ -32,15 +33,20 @@ export class RegistrationComponent implements OnInit {
 
   private initForm() {
     this.registrationForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(3)]],
+      username: ['', [Validators.required, Validators.minLength(4)]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.minLength(5)]],
+      email: [
+        '',
+        [Validators.required, Validators.minLength(5), Validators.email],
+      ],
     });
   }
 
   processform() {
+    this.isLoading = true;
+
     const newUser = this.registrationForm.value as User;
     console.info('>>> New User: ', newUser);
 
@@ -54,21 +60,29 @@ export class RegistrationComponent implements OnInit {
       .catch((error: Error) => {
         this.errorMsg = error.message;
         console.debug('Registration error! ', this.errorMsg);
+      })
+      .finally(() => {
+        this.isLoading = false;
       });
   }
 
   confirmPasswordMatched() {
-    const password = this.registrationForm.get('password')!.value as string;
-    const confirmPassword = this.confirmPassword.value as string;
+    const password = this.registrationForm.get('password')!;
+    const confirmPassword = this.confirmPassword;
 
-    if (password == '' || confirmPassword == '') return;
+    if (password.pristine || confirmPassword.pristine) return;
 
-    console.debug('>>> confirmed password: ', confirmPassword);
+    console.debug('>>> confirmed password: ', confirmPassword.value);
 
-    if (password != confirmPassword) {
+    if (password?.value != confirmPassword.value) {
       this.isPasswordMatched = false;
       return;
     }
     this.isPasswordMatched = true;
+  }
+
+  validateFormInput(fieldName: string) {
+    const field = this.registrationForm.get(fieldName)!;
+    return field.invalid && field.touched;
   }
 }

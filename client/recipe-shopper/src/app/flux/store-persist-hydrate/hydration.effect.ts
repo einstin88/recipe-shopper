@@ -4,7 +4,6 @@ import { Action, Store } from '@ngrx/store';
 import { HydrationActions } from './hydration.action';
 import { State } from '../reducers';
 import { map } from 'rxjs';
-import { decodeJwt } from 'jose';
 
 @Injectable()
 export class HydrationEffect implements OnInitEffects {
@@ -25,12 +24,6 @@ export class HydrationEffect implements OnInitEffects {
           try {
             const state = JSON.parse(storedState) as State;
             console.debug('>> parsed state: ', state);
-
-            const decodedToken = decodeJwt(state.auth.jwt.token);
-            // const expiry = decodedToken.exp!;
-
-            // if (expiry - Date.now() <= 0)
-            //   return HydrationActions.hydrateFailure();
 
             return HydrationActions.hydrateSuccess({ state });
           } catch {

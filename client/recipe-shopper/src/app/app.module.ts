@@ -10,7 +10,6 @@ import { RecipeDataService } from './services/recipe-data.service';
 import { NewRecipeComponent } from './routes/new-recipe/new-recipe.component';
 import { ProductDataService } from './services/product-data.service';
 import { ProductListComponent } from './components/product-list/product-list.component';
-import { CategoryChoserComponent } from './components/category-choser/category-choser.component';
 import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
 import { BrowseRecipeComponent } from './routes/browse-recipe/browse-recipe.component';
 import { ParseHtmlComponent } from './routes/parse-html/parse-html.component';
@@ -30,6 +29,9 @@ import { IngredientSelectionsComponent } from './components/ingredient-selection
 import { AuthDataService } from './services/auth-data.service';
 import { CartDataService } from './services/cart-data.service';
 import { AuthEffects } from './flux/auth/auth.effect';
+import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
+import { BootStrapModule } from './UI-libs/boot-strap.module';
+import { ToastsComponent } from './components/toasts/toasts.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,6 @@ import { AuthEffects } from './flux/auth/auth.effect';
     NavBarComponent,
     NewRecipeComponent,
     ProductListComponent,
-    CategoryChoserComponent,
     RecipeFormComponent,
     BrowseRecipeComponent,
     ParseHtmlComponent,
@@ -48,6 +49,8 @@ import { AuthEffects } from './flux/auth/auth.effect';
     RegistrationComponent,
     SignOutComponent,
     IngredientSelectionsComponent,
+    MyRecipesComponent,
+    ToastsComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +65,7 @@ import { AuthEffects } from './flux/auth/auth.effect';
       HydrationEffect,
       { persistStoreEffect },
     ]),
+    BootStrapModule,
   ],
   providers: [
     AuthDataService,

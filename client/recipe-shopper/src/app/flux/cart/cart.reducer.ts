@@ -17,22 +17,25 @@ export const CartReducers = createReducer(
   on(CartActions.addToCart, (state, { cartItem }) => {
     const newCart = [...state.cartItems, cartItem];
 
+    // Get the subtotal to add to the cart's total
     const itemTotal = cartItem.ingredients
       .map((item) => item.total!)
       .reduce((acc, val) => acc + val, 0);
 
-    console.log(itemTotal);
+    console.debug(itemTotal);
 
     return { ...state, cartItems: newCart, total: state.total + itemTotal };
   }),
   on(CartActions.removeFromCart, (state, { index }) => {
     const newCart = [...state.cartItems];
 
-    const newTotal = newCart
+    // Get the subtotal of the removed recipe  
+    const totalToRemove = newCart
       .splice(index, 1)[0]
       .ingredients.map((item) => item.total!)
       .reduce((acc, val) => acc + val, 0);
-    return { ...state, cartItems: newCart, total: state.total - newTotal };
+
+    return { ...state, cartItems: newCart, total: state.total - totalToRemove };
   }),
   on(CartActions.emptyCart, (state) => {
     return { ...state, ...cartInitialState };

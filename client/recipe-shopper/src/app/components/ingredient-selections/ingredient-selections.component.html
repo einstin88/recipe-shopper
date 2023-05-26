@@ -1,35 +1,82 @@
-<p>Ingredients:</p>
-<div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+<h3 class="section-title">Pick the ingredients you need for this recipe:</h3>
+
+<div class="d-flex">
+  <ngb-alert *ngIf="errorMsg" [dismissible]="false" type="danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ errorMsg }}
+  </ngb-alert>
+</div>
+
 <form [formGroup]="ingredientsForm" (ngSubmit)="processForm()">
-  <table formArrayName="selectedIngredients">
-    <tr>
-      <th></th>
-      <th>Name</th>
-      <th>Pack Size</th>
-      <th>Unit Price</th>
-      <th>Quantity</th>
-      <th>Image</th>
-    </tr>
-    <tr
-      *ngFor="let ingredient of ingredientSelections.controls; index as idx"
-      [formGroupName]="idx"
+  <div class="d-flex justify-content-start">
+    <button
+      type="submit"
+      [disabled]="ingredientsForm.invalid"
+      class="btn btn-primary"
+      [ngbTooltip]="addIngredientBtn"
+      placement="right"
     >
-      <td><input type="checkbox" formControlName="selected" /></td>
-      <td>{{ ingredientSelections.at(idx).get("name")!.value }}</td>
-      <td>{{ ingredientSelections.at(idx).get("pack_size")!.value }}</td>
-      <td>{{ ingredientSelections.at(idx).get("price")!.value }}</td>
-      <td><input type="number" formControlName="quantity" /></td>
-      <td>
+      <i class="bi bi-cart-plus me-1"></i>
+      Add ingredients to basket
+    </button>
+    <ng-template #addIngredientBtn>
+      Choose <u>everything</u> or <u>only</u> the ingredients you need
+    </ng-template>
+  </div>
+
+  <div class="row d-flex align-items-center text-center mt-2">
+    <div class="col-1">Select</div>
+    <div class="col-4">Ingredient Name</div>
+    <div class="col-1">Pack Size</div>
+    <div class="col-1">Price</div>
+    <div class="col-2">Quantity</div>
+    <div class="col-2">Image</div>
+  </div>
+  <hr />
+
+  <div
+    formArrayName="selectedIngredients"
+    style="height: 66vh; overflow-y: auto; overflow-x: hidden"
+  >
+    <div
+      *ngFor="
+        let ingredient of ingredientSelections.controls;
+        index as idx;
+        even as evens
+      "
+      [formGroupName]="idx"
+      class="row d-flex align-items-center ms-1"
+      [ngClass]="{evens}"
+    >
+      <div class="col-1">
+        <input
+          type="checkbox"
+          formControlName="selected"
+          class="form-check"
+          style="height: 20px"
+        />
+      </div>
+      <div class="col-4 text-center">
+        {{ ingredientSelections.at(idx).get("name")!.value }}
+      </div>
+      <div class="col-1">
+        {{ ingredientSelections.at(idx).get("pack_size")!.value }}
+      </div>
+      <div class="col-1">
+        {{ ingredientSelections.at(idx).get("price")!.value }}
+      </div>
+      <div class="col-2">
+        <input
+          type="number"
+          id="quantity"
+          formControlName="quantity"
+          class="form-control"
+        />
+        <label for=""></label>
+      </div>
+      <div class="col-3">
         <img [src]="ingredientSelections.at(idx).get('img')!.value" alt="" />
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <button type="submit" [disabled]="ingredientsForm.invalid">
-          Add ingredient(s) to cart
-        </button>
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
+  </div>
 </form>

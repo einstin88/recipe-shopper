@@ -18,10 +18,19 @@ spec:
       labels:
         app: "server-auth-1"
     spec:
-      serviceAccountName: google-services
+      volumes:
+        - name: service-key
+          secret:
+            secretName: google-services-credential
       containers:
         - name: "project-auth-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-auth:0.0.2"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-auth:0.0.4"
+          volumeMounts:
+            - mountPath: /var/secrets/google
+              name: service-key
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/var/secrets/google/key.json"
           ports:
             - containerPort: 8080
           readinessProbe:

@@ -53,7 +53,7 @@ public class RecipeService {
      * @param recipe
      */
     @Transactional(rollbackFor = { RecipeTransactionException.class })
-    public void insertNewRecipe(Recipe<Ingredient> recipe) {
+    public String insertNewRecipe(Recipe<Ingredient> recipe) {
 
         // Check if recipe by the same user exists already, else throw error
         repo.findRecipeByNameCreator(recipe.recipeName(), recipe.recipeCreator())
@@ -80,6 +80,7 @@ public class RecipeService {
                     RecipeTransactionException.class);
 
         // If function runs up to this point, recipe is sucessfully update
+        return recipe.recipeId();
     }
 
     /**

@@ -94,6 +94,6 @@ public class ProductRepository {
         return template.query(
                 SQL_FIND_PRODUCTS,
                 DataClassRowMapper.newInstance(Product.class),
-                category, limit, offset);
+                category);
     }
 }

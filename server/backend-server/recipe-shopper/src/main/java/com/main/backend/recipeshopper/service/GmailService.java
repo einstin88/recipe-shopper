@@ -60,8 +60,7 @@ public class GmailService {
             Session session = Session.getDefaultInstance(new Properties());
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress("recipee-cart@recipee-shopping.com"));
-            // TODO: change to-> toEmail
-            message.addRecipient(RecipientType.TO, new InternetAddress("pelie.888888@gmail.com"));
+            message.addRecipient(RecipientType.TO, new InternetAddress(toEmail));
             message.setSubject("Cart Summary: %s".formatted(username));
             message.setContent(generateMail(cart, username), "text/html; charset=UTF-8");
 

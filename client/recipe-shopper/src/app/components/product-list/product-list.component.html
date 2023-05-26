@@ -1,26 +1,83 @@
-<app-category-choser (category)="updateCategory($event)"></app-category-choser>
+<h3 style="color: navy">
+  Pick a product category to add ingredients to your recipe
+</h3>
 
-<table *ngIf="products.length">
-  <tr>
-    <th></th>
-    <th>Name</th>
-    <th>Pack Size</th>
-    <th>Product Image</th>
-    <th></th>
-  </tr>
-  <tr *ngFor="let product of products; index as idx">
-    <td>{{ idx + offset + 1 }}</td>
-    <td>{{ product.name }}</td>
-    <td>{{ product.pack_size }}</td>
-    <td><img [src]="product.img" /></td>
-    <td><button type="button" (click)="addIngredient(product)">Add</button></td>
-  </tr>
-</table>
-<div *ngIf="category">
-  <button type="button" (click)="updateProductList(offset - limit)">
-    Prev
-  </button>
-  <button type="button" (click)="updateProductList(offset + limit)">
-    Next
-  </button>
+<div class="d-flex flex-wrap justify-content-center mb-2">
+  <div *ngFor="let category of categories" class="m-1">
+    <button
+      class="btn btn-outline-secondary shadow"
+      (click)="updateCategory(category)"
+    >
+      {{ category | titlecase }}
+    </button>
+  </div>
 </div>
+<hr />
+
+<ng-container *ngIf="isLoading">
+  <div class="spinner-border text-info" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</ng-container>
+
+<ng-template #err>
+  <ngb-alert type="danger" [dismissible]="false">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ errorMsg ? errorMsg : "No Products" }}
+  </ngb-alert>
+</ng-template>
+
+<ng-container *ngIf="products.length || !errorMsg; else err">
+  <div class="row mb-3 text-center" style="color: navy">
+    <div class="col-1"></div>
+    <div class="col-4"><b>Product Name</b></div>
+    <div class="col-2"><b>Pack Size</b></div>
+    <div class="col-2"><b>Product Image</b></div>
+    <div class="col-2"></div>
+  </div>
+
+  <div style="height: 62vh; overflow-y: auto; overflow-x: hidden">
+    <div
+      *ngFor="let product of products; index as idx; even as evens"
+      class="row mb-2"
+      [ngClass]="{ evens }"
+    >
+      <div class="col-1 align-self-center text-center">
+        {{ idx + offset + 1 }}
+      </div>
+      <div class="col-4 align-self-center">{{ product.name }}</div>
+      <div class="col-2 align-self-center text-center">
+        {{ product.pack_size }}
+      </div>
+      <div class="col-3 align-self-center"><img [src]="product.img" /></div>
+      <div class="col-2 align-self-center">
+        <button
+          type="button"
+          (click)="addIngredient(product)"
+          class="btn btn-primary"
+        >
+          <i class="bi bi-plus-lg me-1" style="font-size: large"></i>
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="position-relative">
+    <div class="mt-2 btn-group postion-absolute start-50 translate-middle-x">
+      <button
+        type="button"
+        (click)="updateProductList(offset - limit)"
+        class="btn btn-outline-primary"
+      >
+        Prev
+      </button>
+      <button
+        type="button"
+        (click)="updateProductList(offset + limit)"
+        class="btn btn-primary"
+      >
+        Next
+      </button>
+    </div>
+  </div> -->
+</ng-container>

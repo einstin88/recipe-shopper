@@ -1,7 +1,11 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../model/product.model';
-import { Subject, firstValueFrom, tap } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import { Category } from '../model/category.model';
 import { EP_GET_PRODUCTS, EP_PARSE_HTML } from '../utils/urls';
 
@@ -28,19 +32,15 @@ export class ProductDataService {
    *
    * @returns Promise with a list of products in the chosen {@link category}
    */
-  getProducts(category: Category | '', limit: number, offset: number) {
-    if (!category) {
-      this.products.next([]);
-      return;
-    }
-
+  getProducts(category: Category, limit: number, offset: number) {
     const url = EP_GET_PRODUCTS + category;
     const params = new HttpParams().appendAll({ limit, offset });
 
-    return firstValueFrom(
-      this.http
-        .get<Product[]>(url, { params })
-        .pipe(tap((products) => this.products.next(products)))
+    return firstValueFrom(this.http.get<Product[]>(url, { params })).catch(
+      (error: HttpErrorResponse) => {
+        console.error(`Error response: ${error.message}`);
+        throw new Error(`${error.status}: ${error.statusText}`);
+      }
     );
   }
 
@@ -48,7 +48,7 @@ export class ProductDataService {
    * @description API call to backend for parsing products from the submitted Html
    *
    * @param payload - the multi-part category and file to send to backend for parsing
-   * @returns {Promise<void>} A void promise. No callback handling required.
+   * @returns A void promise. No callback handling required.
    */
   parseHtml(payload: FormData) {
     const url = EP_PARSE_HTML;

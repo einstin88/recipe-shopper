@@ -1,10 +1,26 @@
-<app-recipe-form [newIngredients]="ingredientToAdd" [recipeId]="''">
-  <button type="button" (click)="processForm()" [disabled]="isValid$ | async">
-    Add Recipe!
-  </button>
-</app-recipe-form>
+<div class="row">
+  <div class="col m-2 mt-0">
+    <app-recipe-form
+      [newIngredients]="ingredientToAdd"
+      [recipeId]="''"
+      [recipeCreator]="recipeCreator"
+    >
+      <button
+        type="button"
+        (click)="processForm()"
+        [disabled]="isInvalid"
+        class="btn mt-2"
+        [ngClass]="{
+          'btn-outline-secondary': isInvalid,
+          'btn-primary': !isInvalid
+        }"
+      >
+        Add Recipe!
+      </button>
+    </app-recipe-form>
+  </div>
 
-<hr />
-
-<app-product-list (addProduct)="addIngredient($event)">
-</app-product-list>
+  <div class="col m-2 mt-0">
+    <app-product-list (addProduct)="addIngredient($event)"> </app-product-list>
+  </div>
+</div>

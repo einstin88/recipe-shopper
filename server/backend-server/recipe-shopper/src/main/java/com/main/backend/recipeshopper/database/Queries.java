@@ -36,13 +36,11 @@ public class Queries {
             SELECT *
             FROM recipe_shopper.products
             WHERE category = ?
-            LIMIT ? OFFSET ?
                 """;
 
     public static final String SQL_FIND_RECIPES = """
             SELECT *
             FROM recipe_shopper.recipes
-            LIMIT ? OFFSET ?
                 """;
 
     public static final String SQL_FIND_RECIPE_INGREDIENTS = """

@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -34,7 +33,7 @@ public class RecipeRepository {
                     rs.getString("recipe_name"),
                     rs.getString("recipe_creator"),
                     rs.getString("procedures"),
-                    findRecipeIngredients(rs.getString("recipe_id")).toList(),
+                    findRecipeIngredients(rs.getString("recipe_id")),
                     rs.getTimestamp("timeStamp").toLocalDateTime());
         }
     }
@@ -52,8 +51,7 @@ public class RecipeRepository {
     public List<Recipe<Ingredient>> findRecipes(Integer offset, Integer limit) {
         return template.query(
                 SQL_FIND_RECIPES,
-                new RecipeRowMapper(),
-                limit, offset);
+                new RecipeRowMapper());
     }
 
     /**
@@ -144,8 +142,8 @@ public class RecipeRepository {
      * @param recipeId - Unique 11 alphanumeric characters
      * @return
      */
-    public Stream<Ingredient> findRecipeIngredients(String recipeId) {
-        return template.queryForStream(
+    public List<Ingredient> findRecipeIngredients(String recipeId) {
+        return template.query(
                 SQL_FIND_RECIPE_INGREDIENTS,
                 DataClassRowMapper.newInstance(Ingredient.class),
                 recipeId);

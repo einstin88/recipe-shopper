@@ -16,6 +16,7 @@ spec:
       labels:
         app: "server-auth-1"
     spec:
+      serviceAccountName: google-services
       containers:
         - name: "project-auth-1"
           image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-auth:0.0.1"

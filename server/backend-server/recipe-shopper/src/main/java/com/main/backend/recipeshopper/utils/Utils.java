@@ -28,15 +28,9 @@ public class Utils {
                 .build().toString();
     }
 
-    // TODO: Function is not used, to be deleted
-    /**
-     * @deprecated
-     * @param errMsg
-     * @return
-     */
-    public static String createErrorResponseMsg(String errMsg) {
+    public static String createJsonRepsone(String key, String msg) {
         return Json.createObjectBuilder()
-                .add("error", errMsg)
+                .add(key, msg)
                 .build().toString();
     }
 

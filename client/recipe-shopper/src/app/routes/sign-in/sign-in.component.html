@@ -1,25 +1,74 @@
-<h3>Sign In</h3>
-<div *ngIf="errorMsg">
-  <p class="error">
-    {{ errorMsg }}
-  </p>
-  <p><a routerLink="/registration">Register</a> for a new account instead?</p>
+<div class="d-flex flex-column">
+  <div class="align-self-center border border-dark rounded-4 forms">
+    <h3 style="color: navy">Sign In to Recipee Shopping</h3>
+
+    <ngb-alert
+      *ngIf="redirectPath.length > 1"
+      type="info"
+      [dismissible]="false"
+      class="m-2"
+    >
+      Sign in to view recipe
+    </ngb-alert>
+
+    <div *ngIf="errorMsg">
+      <ngb-alert type="danger" [dismissible]="false">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        {{ errorMsg }}
+      </ngb-alert>
+      <ngb-alert *ngIf="errorStatus == 400" type="info" [dismissible]="false">
+        <a routerLink="/registration" class="alert-link">Register</a> for a new
+        account to start Recipee Shopping!
+      </ngb-alert>
+    </div>
+
+    <form [formGroup]="signinForm" (ngSubmit)="processForm()">
+      <div class="form-floating m-1 mt-3">
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          placeholder="username"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': validateFormInput('username') }"
+        />
+        <label for="username">Username</label>
+        <div *ngIf="validateFormInput('username')" class="invalid-feedback">
+          Min. 4 characters
+        </div>
+      </div>
+
+      <div class="form-floating m-1">
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': validateFormInput('password') }"
+        />
+        <label for="password">Password</label>
+        <div *ngIf="validateFormInput('password')" class="invalid-feedback">
+          Min. 4 characters
+        </div>
+      </div>
+      <div class="m-2 d-flex flex-column">
+        <button
+          type="submit"
+          [disabled]="signinForm.invalid"
+          class="btn align-self-center"
+          [ngClass]="{
+            'btn-outline-secondary': signinForm.invalid,
+            'btn-outline-primary': signinForm.valid
+          }"
+        >
+          <span
+            *ngIf="isLoading"
+            class="spinner-border spinner-border-sm text-primary"
+          ></span>
+          Log In
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
-<form [formGroup]="signinForm" (ngSubmit)="processForm()">
-  <table>
-    <tr>
-      <td>Username:</td>
-      <td><input type="text" formControlName="username" /></td>
-    </tr>
-    <tr>
-      <td>Password:</td>
-      <td><input type="password" formControlName="password" /></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <button type="submit" [disabled]="signinForm.invalid">Log In</button>
-      </td>
-    </tr>
-  </table>
-</form>

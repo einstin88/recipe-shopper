@@ -31,7 +31,6 @@ public class CartController {
         log.debug(">>> Checking out cart: {}", cart);
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        // log.debug(">>> Token: {}", token.getTokenAttributes());
 
         String username = token.getName();
         String email = (String) token.getTokenAttributes().get("email");

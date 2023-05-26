@@ -1,70 +1,110 @@
-<table *ngIf="cartItems.length; else emptyMsg">
-  <tr>
-    <th rowspan="2">Recipe Name</th>
-    <th rowspan="2">Recipe Creator</th>
-    <th colspan="5">Ingredients</th>
-    <th rowspan="2"></th>
-  </tr>
-  <tr>
-    <th>Name</th>
-    <th>Pack Size</th>
-    <th>Unit Price</th>
-    <th>Quantity</th>
-    <th>Total</th>
-  </tr>
-  <tr *ngFor="let item of cartItems; index as idx">
-    <td>
-      {{ item.recipeName }}
-    </td>
-    <td>{{ item.recipeCreator }}</td>
-    <td>
-      <ul>
-        <li *ngFor="let ingredient of item.ingredients">
-          {{ ingredient.name }}
-        </li>
-      </ul>
-    </td>
-    <td>
-      <div *ngFor="let ingredient of item.ingredients">
-        {{ ingredient.pack_size }}
+<div class="container">
+  <h2 class="d-flex align-self-center" style="color: navy">
+    Your Basket Summary
+  </h2>
+</div>
+
+<div *ngIf="cartItems.length; else emptyMsg" class="container">
+  <div class="row border-bottom border-primary">
+    <div class="row text-center">
+      <div class="col-2 align-self-center">Recipe Name</div>
+      <div class="col-2 align-self-center">Recipe Creator</div>
+
+      <div class="col text-center border-end border-start border-info">
+        <div class="row border-bottom border-primary">
+          <div class="col">Ingredients</div>
+        </div>
+        <div class="row">
+          <div class="col-4">Name</div>
+          <div class="col">Pack Size</div>
+          <div class="col">Unit Price</div>
+          <div class="col">Quantity</div>
+          <div class="col">Total</div>
+        </div>
       </div>
-    </td>
-    <td>
-      <div *ngFor="let ingredient of item.ingredients">
-        {{ ingredient.price }}
+      <div class="col-1 align-self-center" style="color: red">Remove</div>
+    </div>
+  </div>
+
+  <div
+    *ngFor="let item of cartItems; index as idx"
+    class="row border-bottom border-dark"
+  >
+    <div class="row text-center align-items-center">
+      <div class="col-2">
+        <a [routerLink]="['/recipe/view', item.recipeId]">
+          {{ item.recipeName | titlecase }}</a
+        >
       </div>
-    </td>
-    <td>
-      <div *ngFor="let ingredient of item.ingredients">
-        {{ ingredient.quantity }}
+      <div class="col-2">
+        <a [routerLink]="['/recipes', item.recipeCreator]">
+          {{ item.recipeCreator }}
+        </a>
       </div>
-    </td>
-    <td>
-      <div *ngFor="let ingredient of item.ingredients">
-        {{ ingredient.total }}
+
+      <div class="col text-center">
+        <div
+          *ngFor="let ingredient of item.ingredients; odd as odds"
+          class="row border-end border-start border-info align-items-center"
+          [ngClass]="{odds}"
+        >
+          <div class="col-4">{{ ingredient.name }}</div>
+          <div class="col">{{ ingredient.pack_size }}</div>
+          <div class="col">{{ ingredient.price }}</div>
+          <div class="col">{{ ingredient.quantity }}</div>
+          <div class="col">{{ ingredient.total }}</div>
+        </div>
       </div>
-    </td>
-    <td><button type="button" (click)="removeItem(idx)">X</button></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>TOTAL: </td>
-    <td>{{ cartTotal}}</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><button type="button" (click)="checkOut()">Send Summary</button></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td><button type="button" (click)="emptyCart()">Empty Cart</button></td>
-    <td></td>
-  </tr>
-</table>
-<ng-template #emptyMsg>No items in the cart yet</ng-template>
+
+      <div class="col-1 align-items-center">
+        <button type="button" (click)="removeItem(idx)" class="btn">
+          <i
+            class="bi bi-dash-circle"
+            style="color: red; font-size: larger"
+          ></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row align-items-center mt-2">
+    <div class="col"></div>
+    <div class="col-1 me-2"><b> TOTAL </b></div>
+    <div class="col-1 me-3">
+      {{ cartTotal | currency : "" : "symbol" }}
+    </div>
+    <div class="col-1"></div>
+  </div>
+
+  <div class="d-flex justify-content-end mt-3">
+    <button
+      type="button"
+      (click)="checkOut()"
+      ngbTooltip="Receive an email of your cart"
+      class="btn btn-primary"
+    >
+      Send Summary
+    </button>
+    <button
+      type="button"
+      (click)="emptyCart()"
+      ngbTooltip="Clear out everything"
+      class="btn btn-warning ms-3"
+    >
+      Empty Cart
+    </button>
+  </div>
+</div>
+
+<ng-template #emptyMsg>
+  <div class="container d-flex">
+    <ngb-alert
+      type="warning"
+      [dismissible]="false"
+      class="d-flex align-items-center"
+    >
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      No items in the cart yet
+    </ngb-alert>
+  </div>
+</ng-template>

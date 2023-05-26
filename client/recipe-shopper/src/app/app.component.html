@@ -1,3 +1,10 @@
 <app-nav-bar></app-nav-bar>
-<h1>{{ title }}</h1>
-<router-outlet></router-outlet>
+<div class="outlet ms-5 me-3">
+  <app-toasts
+    class="position-fixed end-0 me-2"
+    aria-live="polite"
+    aria-atomic="true"
+  ></app-toasts>
+
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,16 @@
+.navs {
+  background: linear-gradient(to right, #7581c5, #2f44b8);
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.nav-titles {
+  color: navy;
+}
+
+.router-titles {
+  color: blanchedalmond;
+}

@@ -12,7 +12,6 @@ import { JWT } from '../model/jwt.model';
 import { firstValueFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AuthActions } from '../flux/auth/auth.action';
-import { selectCurrentUser } from '../flux/auth/auth.selector';
 
 @Injectable({
   providedIn: 'root',
@@ -50,10 +49,11 @@ export class AuthDataService {
         this.store.dispatch(AuthActions.loginSuccess({ jwt }));
       })
       .catch((error: HttpErrorResponse) => {
-        console.error('--- Login error: ', error.message);
+        console.error('--- Login error: ', error.error);
 
         this.store.dispatch(AuthActions.loginFailure());
-        throw new Error(`${error.status}: Bad response from server`);
+        throw error 
+        // throw new Error(`${error.status}: Bad response from server`);
       });
   }
 

@@ -16,24 +16,28 @@ export class BrowseRecipeComponent {
   recipes!: Recipe[];
   limit: number = 10;
   offset: number = 0;
-  resultsLoading: string = 'Loading...';
+
+  errorMsg: string = '';
+  isLoading: boolean = false;
 
   ngOnInit(): void {
     this.fetchRecipes();
   }
 
-  /**
-   * @description Function to initiate API call to fetch {@link Recipe}s from the back end
-   */
+  // Function to initiate API call to fetch {@link Recipe}s from the back end
   private fetchRecipes() {
+    this.isLoading = true;
     this.svc
       .getRecipes(this.limit, this.offset)
       .then((recipes) => {
         this.recipes = recipes;
-        this.resultsLoading = '';
       })
-      .catch(() => {
-        this.resultsLoading = 'Error communicating with server.';
+      .catch((err: Error) => {
+        // this.errorMsg = 'Error communicating with server.';
+        this.errorMsg = err.message;
+      })
+      .finally(() => {
+        this.isLoading = false;
       });
   }
 }

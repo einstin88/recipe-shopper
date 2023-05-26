@@ -1,15 +1,15 @@
 spring:
-  # Docker
+  # Docker secrets config
   # https://stackoverflow.com/questions/70007676/how-to-handle-docker-secrets-in-application-properties-files
   config:
     import: optional:configtree:/run/secrets/
+
   # Redis
   redis:
     host: ${REDISHOST}
     port: ${REDISPORT}
     database: 0
-    # user: ${REDISUSER}
-    # password: ${REDISPASSWORD}
+
   # MySQL
   datasource:
     url: ${MYSQL_URL_AUTH}

@@ -9,15 +9,16 @@ import { ViewCartComponent } from './routes/view-cart/view-cart.component';
 import { SignInComponent } from './routes/sign-in/sign-in.component';
 import { RegistrationComponent } from './routes/registration/registration.component';
 import { SignOutComponent } from './routes/sign-out/sign-out.component';
-import { AuthGuard } from './routes/auth.guard';
-import { AnonymousGuard } from './routes/anonymous.guard';
+import { AuthGuard } from './route-guards/auth.guard';
+import { AnonymousGuard } from './route-guards/anonymous.guard';
+import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: SignInComponent,
     title: 'Log In Page',
-    canMatch: [AnonymousGuard]
+    canMatch: [AnonymousGuard],
   },
   {
     path: 'logout',
@@ -29,7 +30,7 @@ const routes: Routes = [
     path: 'registration',
     component: RegistrationComponent,
     title: 'Register Account',
-    canMatch: [AnonymousGuard]
+    canMatch: [AnonymousGuard],
   },
   {
     path: 'cart/view',
@@ -59,8 +60,17 @@ const routes: Routes = [
     component: ViewRecipeComponent,
     canActivate: [AuthGuard],
   },
-  { path: '', component: BrowseRecipeComponent, title: 'Browse Recipes' },
-  { path: '**', redirectTo: '/', pathMatch: 'full' },
+  {
+    path: 'recipes/:userName',
+    component: MyRecipesComponent,
+    title: 'My Recipes',
+  },
+  {
+    path: 'recipes',
+    component: BrowseRecipeComponent,
+    title: 'Browse Recipes',
+  },
+  { path: '**', redirectTo: '/recipes', pathMatch: 'full' },
 ];
 
 @NgModule({
