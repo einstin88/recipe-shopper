@@ -10,9 +10,15 @@
       type="submit"
       [disabled]="ingredientsForm.invalid"
       class="btn btn-primary"
+      [ngbTooltip]="addIngredientBtn"
+      placement="right"
     >
+      <i class="bi bi-cart-plus me-1"></i>
       Add ingredients to basket
     </button>
+    <ng-template #addIngredientBtn>
+      Choose <u>everything</u> or <u>only</u> the ingredients you need
+    </ng-template>
   </div>
 
   <div class="row d-flex align-items-center text-center mt-2">
@@ -40,7 +46,12 @@
       [ngClass]="{evens}"
     >
       <div class="col-1">
-        <input type="checkbox" formControlName="selected" class="form-check" />
+        <input
+          type="checkbox"
+          formControlName="selected"
+          class="form-check"
+          style="height: 20px"
+        />
       </div>
       <div class="col-4 text-center">
         {{ ingredientSelections.at(idx).get("name")!.value }}

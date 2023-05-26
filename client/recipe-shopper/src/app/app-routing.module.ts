@@ -61,14 +61,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'recipes',
-    component: BrowseRecipeComponent,
-    title: 'Browse Recipes',
-  },
-  {
     path: 'recipes/:userName',
     component: MyRecipesComponent,
     title: 'My Recipes',
+  },
+  {
+    path: 'recipes',
+    component: BrowseRecipeComponent,
+    title: 'Browse Recipes',
   },
   { path: '**', redirectTo: '/recipes', pathMatch: 'full' },
 ];

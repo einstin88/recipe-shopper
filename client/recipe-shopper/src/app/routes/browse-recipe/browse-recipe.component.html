@@ -1,4 +1,4 @@
-<h2>Click on any recipes to view the ingredients you can add to your basket</h2>
+<!-- <h2 style="color: navy;">Click on any recipes to view the ingredients you can add to your basket</h2> -->
 
 <div *ngIf="isLoading" class="spinner-border text-info" role="status">
   <span class="visually-hidden">Loading...</span>
@@ -11,8 +11,9 @@
   >
     <div
       *ngFor="let recipe of recipes"
-      class="card shadow-lg p-2 mt-3 me-5 mb-3 recipe-cards"
       [routerLink]="['/recipe/view', recipe.recipeId]"
+      ngbTooltip="Click to view the ingredients you can add to your cart"
+      class="card shadow-lg p-2 mt-3 me-5 mb-3 recipe-cards"
     >
       <div class="card-body">
         <h4 class="card-title recipe-name">
@@ -59,6 +60,7 @@
 <ng-template #err>
   <div class="d-flex flex-column">
     <div class="alert alert-danger align-self-start">
+      <i class="bi bi-exclamation-triangle me-2"></i>
       {{ errorMsg }}
     </div>
   </div>

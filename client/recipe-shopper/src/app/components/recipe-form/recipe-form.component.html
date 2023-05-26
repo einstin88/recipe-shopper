@@ -3,7 +3,6 @@
 <div *ngIf="recipeError" class="error">
   {{ recipeError }}
 </div>
-{{ recipeForm.statusChanges | async }}
 <ng-container *ngIf="!loading; else loadingMsg">
   <form [formGroup]="recipeForm">
     <div class="form-floating m-1 ms-0">
@@ -62,7 +61,7 @@
         </div>
         <hr />
 
-        <div style="height: 27vh; overflow-y: auto; overflow-x: hidden">
+        <div style="height: 26vh; overflow-y: auto; overflow-x: hidden">
           <div
             *ngFor="
               let ingredient of recipeIngredients.controls;
@@ -88,12 +87,11 @@
               />
             </div>
             <div class="col-1 align-self-center">
-              <button
-                type="button"
-                (click)="removeIngredient(idx)"
-                class="btn btn-outline-danger"
-              >
-                X
+              <button type="button" (click)="removeIngredient(idx)" class="btn">
+                <i
+                  class="bi bi-trash3"
+                  style="color: red; font-size: larger"
+                ></i>
               </button>
             </div>
           </div>
@@ -101,7 +99,13 @@
       </div>
     </ng-container>
     <ng-template #emptyMsg>
-      <h4 class="m-1 mt-3">Please add at least one ingredient..</h4>
+      <h4
+        class="m-1 mt-3"
+        ngbTooltip="Add ingredients from the right-side panel"
+        placement="top"
+      >
+        Please add at least one ingredient to your recipe..
+      </h4>
     </ng-template>
   </form>
 </ng-container>

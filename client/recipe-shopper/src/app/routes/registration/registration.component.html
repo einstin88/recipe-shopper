@@ -1,11 +1,12 @@
 <div class="d-flex flex-column">
   <div class="align-self-center border border-dark rounded-4 forms">
-    <h3>Register a new account</h3>
+    <h3 style="color: navy">Register a new account</h3>
     <div *ngIf="errorMsg" class="alert alert-danger col col-md-3">
+      <i class="bi bi-exclamation-triangle me-2"></i>
       {{ errorMsg }}
     </div>
+
     <form [formGroup]="registrationForm" (ngSubmit)="processform()">
-      <!--  -->
       <div class="form-floating m-1">
         <input
           type="text"
@@ -20,7 +21,7 @@
           Min. 4 characters
         </div>
       </div>
-      <!--  -->
+
       <div class="form-floating m-1">
         <input
           type="password"
@@ -36,7 +37,7 @@
           Min. 4 characters
         </div>
       </div>
-      <!--  -->
+
       <div class="form-floating m-1">
         <input
           type="password"
@@ -57,7 +58,7 @@
           Password does not match
         </div>
       </div>
-      <!--  -->
+
       <div class="form-floating m-1">
         <input
           type="text"
@@ -72,7 +73,7 @@
           Required
         </div>
       </div>
-      <!--  -->
+
       <div class="form-floating m-1">
         <input
           type="text"
@@ -87,7 +88,7 @@
           Required
         </div>
       </div>
-      <!--  -->
+
       <div class="form-floating m-1">
         <input
           type="email"
@@ -102,7 +103,7 @@
           Invalid email
         </div>
       </div>
-      <!--  -->
+
       <div class="m-2 d-flex flex-column">
         <button
           type="submit"
@@ -122,5 +123,26 @@
         </button>
       </div>
     </form>
+    <small>Disclaimer: </small>
+    <ul class="text-muted">
+      <li>
+        <small>This app has not been security tested.</small>
+      </li>
+      <li>
+        <small>Please don't register with your real password.</small>
+      </li>
+      <li>
+        <small>Use an easy to remember one instead.</small>
+      </li>
+      <li>
+        <small>Use a non-main email address when registering</small>
+      </li>
+      <li>
+        <small>To test receiving email</small>
+      </li>
+      <li>
+        <small>SQL connection uses HTTPS and OAuth2 authorization</small>
+      </li>
+    </ul>
   </div>
 </div>

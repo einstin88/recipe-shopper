@@ -1,8 +1,24 @@
 import { NgModule } from '@angular/core';
-import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbAlertModule,
+  NgbDropdownModule,
+  NgbModalModule,
+  NgbPaginationModule,
+  NgbToastModule,
+  NgbTooltipModule,
+  NgbTypeaheadModule,
+} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [],
-  exports: [NgbToastModule],
+  exports: [
+    NgbAlertModule,
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbPaginationModule,
+    NgbToastModule,
+    NgbTooltipModule,
+    NgbTypeaheadModule,
+  ],
 })
 export class BootStrapModule {}
