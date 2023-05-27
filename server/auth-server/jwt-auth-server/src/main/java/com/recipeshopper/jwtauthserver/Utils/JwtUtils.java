@@ -57,7 +57,7 @@ public class JwtUtils {
             return new Token(keyPair.toPublicJWK().toJSONObject(), tokenString);
 
         } catch (JOSEException e) {
-            log.error("--- Token generation error for user: ", username);
+            log.error("--- Token generation error for user: {} - {}", username, e.getMessage());
             throw new TokenTransactionException(e.getMessage());
         }
 

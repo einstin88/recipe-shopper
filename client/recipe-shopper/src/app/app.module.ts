@@ -32,6 +32,7 @@ import { AuthEffects } from './flux/auth/auth.effect';
 import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
 import { BootStrapModule } from './UI-libs/boot-strap.module';
 import { ToastsComponent } from './components/toasts/toasts.component';
+import { RecipesDisplayComponent } from './components/recipes-display/recipes-display.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ToastsComponent } from './components/toasts/toasts.component';
     IngredientSelectionsComponent,
     MyRecipesComponent,
     ToastsComponent,
+    RecipesDisplayComponent,
   ],
   imports: [
     BrowserModule,

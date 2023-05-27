@@ -62,7 +62,7 @@ export class UpdateRecipeComponent
 
   processForm() {
     const formData = this.recipeForm.recipeData;
-    console.info('>>> Submitted form', formData);
+    console.debug('>>> Submitted form', formData);
 
     this.recipeSvc
       .updateRecipe(formData)

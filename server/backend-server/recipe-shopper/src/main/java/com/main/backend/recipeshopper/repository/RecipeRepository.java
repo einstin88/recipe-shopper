@@ -54,6 +54,17 @@ public class RecipeRepository {
                 new RecipeRowMapper());
     }
 
+    public List<Recipe<Ingredient>> findRecipes(
+            Integer offset, Integer limit, String username) {
+
+        template.setResultsMapCaseInsensitive(false);
+
+        return template.query(
+                SQL_FIND_USER_RECIPES,
+                new RecipeRowMapper(),
+                username);
+    }
+
     /**
      * 
      * @param name

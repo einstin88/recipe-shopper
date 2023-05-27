@@ -16,7 +16,7 @@ export class CartDataService {
       total,
     };
 
-    console.log(payload);
+    console.debug(payload);
 
     return firstValueFrom(
       this.http.post<void>(EP_CART_CHECKOUT, payload)

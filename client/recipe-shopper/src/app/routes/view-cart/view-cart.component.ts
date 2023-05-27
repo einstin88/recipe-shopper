@@ -7,6 +7,7 @@ import { cartSelector } from 'src/app/flux/cart/cart.selector';
 import { State } from 'src/app/flux/reducers';
 import { CartItem } from 'src/app/model/cart-item.model';
 import { CartDataService } from 'src/app/services/cart-data.service';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 /**
  * @description A component associated with a router path for viewing items in the cart
@@ -17,9 +18,9 @@ import { CartDataService } from 'src/app/services/cart-data.service';
 })
 export class ViewCartComponent implements OnInit, OnDestroy {
   constructor(
-    private router: Router,
+    private store: Store<State>,
     private svc: CartDataService,
-    private store: Store<State>
+    private toastSvc: ToastNotificationService
   ) {}
 
   cartItems!: CartItem[];
@@ -43,12 +44,15 @@ export class ViewCartComponent implements OnInit, OnDestroy {
   }
 
   checkOut() {
-    console.log('checkout')
+    console.log('checkout');
     this.svc
       .checkOut(this.cartItems, this.cartTotal)
       .then(() => {
-        this.store.dispatch(CartActions.emptyCart());
-        // this.router.navigate(['/']);
+        this.emptyCart();
+        this.toastSvc.show(
+          'Email Summary',
+          'A summary of your cart has been sent to your registered e-mail.'
+        );
       })
       .catch((err: Error) => (this.errMsg = err.message));
   }

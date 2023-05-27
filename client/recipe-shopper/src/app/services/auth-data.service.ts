@@ -22,7 +22,7 @@ export class AuthDataService {
   registerUser(newUser: User) {
     return firstValueFrom(this.http.post<JWT>(EP_REGISTER_USER, newUser))
       .then((jwt) => {
-        console.info('>>> Token: ', jwt);
+        console.debug('>>> Token: ', jwt);
         this.store.dispatch(AuthActions.registrationSuccess({ jwt }));
       })
       .catch((error: HttpErrorResponse) => {

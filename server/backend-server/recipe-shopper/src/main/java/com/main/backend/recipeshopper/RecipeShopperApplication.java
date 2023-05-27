@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-// TODO Uncomment to enable scheduled task to run
 @EnableScheduling
 public class RecipeShopperApplication {
 
