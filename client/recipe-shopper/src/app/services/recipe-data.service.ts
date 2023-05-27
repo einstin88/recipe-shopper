@@ -34,12 +34,17 @@ export class RecipeDataService {
    * @param offset The starting index of recipe result to retrieve
    * @returns Promise with a {@link Recipe}[]
    */
-  getRecipes(limit: number, offset: number) {
+  getRecipes(limit: number, offset: number, username: string = '') {
     const headers = new HttpHeaders().set('Accept', this.#Content_JSON);
     const params = new HttpParams().appendAll({ limit, offset });
 
+    let url = EP_GET_RECIPES;
+    if (username) {
+      url += `/${username}`;
+    }
+
     return firstValueFrom(
-      this.http.get<Recipe[]>(EP_GET_RECIPES, { headers, params })
+      this.http.get<Recipe[]>(url, { headers, params })
     ).catch((error: HttpErrorResponse) => {
       console.error(`Error response: ${error.message}`);
       throw new Error(`${error.status}: ${error.statusText}`);
@@ -67,11 +72,12 @@ export class RecipeDataService {
    * @description Posts a new recipe to be saved by the backend
    */
   postNewRecipe(newRecipe: Recipe) {
-    return firstValueFrom(this.http.post<RecipeId>(EP_POST_RECIPE, newRecipe))
-      .catch((error: HttpErrorResponse) => {
-        console.error(`Error response: ${error.message}`);
-        throw new Error(`${error.status}: ${error.error}`);
-      });
+    return firstValueFrom(
+      this.http.post<RecipeId>(EP_POST_RECIPE, newRecipe)
+    ).catch((error: HttpErrorResponse) => {
+      console.error(`Error response: ${error.message}`);
+      throw new Error(`${error.status}: ${error.error}`);
+    });
   }
 
   /**

@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: "project-scrapper-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper:0.0.5"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper:0.0.6"
           ports:
             - containerPort: 8000
           readinessProbe:

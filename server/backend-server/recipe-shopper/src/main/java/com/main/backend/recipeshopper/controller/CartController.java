@@ -35,6 +35,7 @@ public class CartController {
         String username = token.getName();
         String email = (String) token.getTokenAttributes().get("email");
         log.debug(">>> Email is: {}", email);
+        
         svc.sendEmail(cart, username, email);
 
         return ResponseEntity.ok().build();

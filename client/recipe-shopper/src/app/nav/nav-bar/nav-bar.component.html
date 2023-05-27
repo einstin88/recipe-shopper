@@ -15,7 +15,7 @@
       <li class="nav-item">
         <a
           class="nav-link me-2"
-          routerLink="/recipes"
+          routerLink="/recipes/all"
           [routerLinkActive]="['btn', 'btn-outline-light']"
           [routerLinkActiveOptions]="{ exact: true }"
           ngbTooltip="View recipes from everyone"
@@ -31,7 +31,7 @@
       <li class="nav-item" *ngIf="isLoggedIn">
         <a
           class="nav-link me-2"
-          [routerLink]="['/recipes', currentUser]"
+          [routerLink]="['/recipes/view', currentUser]"
           [routerLinkActive]="['btn', 'btn-outline-light']"
           ngbTooltip="View all of your creations"
           placement="bottom"

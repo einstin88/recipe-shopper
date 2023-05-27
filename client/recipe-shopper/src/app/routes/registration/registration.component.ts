@@ -48,7 +48,7 @@ export class RegistrationComponent implements OnInit {
     this.isLoading = true;
 
     const newUser = this.registrationForm.value as User;
-    console.info('>>> New User: ', newUser);
+    console.debug('>>> New User: ', newUser);
 
     this.svc
       .registerUser(newUser)

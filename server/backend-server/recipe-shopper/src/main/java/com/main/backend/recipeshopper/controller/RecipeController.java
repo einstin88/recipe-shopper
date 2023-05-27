@@ -32,8 +32,6 @@ public class RecipeController {
 
         /**
          * Test Endpoint 0: test point for server health check
-         * 
-         * @return message from server if it's running
          */
         @GetMapping(path = Urls.URL_HEALTH, produces = MediaType.TEXT_PLAIN_VALUE)
         public ResponseEntity<String> healthCheck() {
@@ -44,11 +42,6 @@ public class RecipeController {
 
         /**
          * Endpoint 3 (GET): Retrieves the list of recipes
-         * 
-         * @param limit  (Integer, default = 10) Max number of results
-         * @param offset (Integer, default = 0) Starting index of the results to
-         *               retrieve
-         * @return List of recipes
          */
         @GetMapping(path = Urls.URL_RECIPES)
         public ResponseEntity<List<Recipe<Ingredient>>> getRecipeList(
@@ -61,11 +54,19 @@ public class RecipeController {
                                 .ok(recipeSvc.getRecipeList(limit, offset));
         }
 
+        @GetMapping(path = Urls.URL_RECIPES + "/{username}")
+        public ResponseEntity<List<Recipe<Ingredient>>> getUserRecipeList(
+                        @PathVariable String username,
+                        @RequestParam(defaultValue = "10") Integer limit,
+                        @RequestParam(defaultValue = "0") Integer offset) {
+
+                log.info(">>> Requesting recipes of '{}'", username);
+
+                return ResponseEntity.ok(recipeSvc.getRecipeList(null, null, username));
+        }
+
         /**
          * Endpoint 4 (GET): Retrieves a recipe by its ID
-         * 
-         * @param recipeId (String, mandatory)
-         * @return A {@link Recipe} object
          */
         @GetMapping(path = Urls.URL_RECIPE_VIEW + "/{recipeId}")
         public ResponseEntity<Recipe<Ingredient>> getRecipeById(

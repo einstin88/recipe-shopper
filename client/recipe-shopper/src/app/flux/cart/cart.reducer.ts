@@ -29,7 +29,7 @@ export const CartReducers = createReducer(
   on(CartActions.removeFromCart, (state, { index }) => {
     const newCart = [...state.cartItems];
 
-    // Get the subtotal of the removed recipe  
+    // Get the subtotal of the removed recipe
     const totalToRemove = newCart
       .splice(index, 1)[0]
       .ingredients.map((item) => item.total!)

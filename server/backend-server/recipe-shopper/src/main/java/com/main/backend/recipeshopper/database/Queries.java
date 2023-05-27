@@ -43,6 +43,12 @@ public class Queries {
             FROM recipe_shopper.recipes
                 """;
 
+    public static final String SQL_FIND_USER_RECIPES = """
+            SELECT *
+            FROM recipes
+            WHERE recipe_creator = ?
+                """;
+
     public static final String SQL_FIND_RECIPE_INGREDIENTS = """
             SELECT pdt.product_id,
                 pdt.name,
