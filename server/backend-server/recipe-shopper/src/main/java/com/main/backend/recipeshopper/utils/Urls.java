@@ -7,6 +7,7 @@ public class Urls {
     public static final String URL_PARSE_HTML = "/parse-html";
     public static final String URL_PARSE_URL = "/parse-url";
     public static final String URL_PRODUCTS = "/products";
+    public static final String URL_PRODUCTS_BY_NAME = "/products/search";
 
     public static final String URL_RECIPES = "/recipes";
     public static final String URL_RECIPE_NEW = URL_PREFIX_RECIPE + "/new";

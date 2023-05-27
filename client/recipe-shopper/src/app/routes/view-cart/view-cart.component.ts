@@ -44,7 +44,6 @@ export class ViewCartComponent implements OnInit, OnDestroy {
   }
 
   checkOut() {
-    console.log('checkout');
     this.svc
       .checkOut(this.cartItems, this.cartTotal)
       .then(() => {

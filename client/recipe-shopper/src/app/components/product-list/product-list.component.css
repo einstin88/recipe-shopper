@@ -7,3 +7,20 @@ img {
   background-color: beige;
 }
 
+.search-tabs {
+  transition: filter 0.4s;
+}
+
+.search-tabs:hover {
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.4)) brightness(80%);
+}
+
+.tab-active {
+  color: white;
+  background-color: darkorchid;
+}
+
+.tab-inactive {
+  color: black;
+  background-color: lavender;
+}

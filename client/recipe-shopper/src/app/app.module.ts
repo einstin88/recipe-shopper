@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -33,6 +33,7 @@ import { MyRecipesComponent } from './routes/my-recipes/my-recipes.component';
 import { BootStrapModule } from './UI-libs/boot-strap.module';
 import { ToastsComponent } from './components/toasts/toasts.component';
 import { RecipesDisplayComponent } from './components/recipes-display/recipes-display.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,12 @@ import { RecipesDisplayComponent } from './components/recipes-display/recipes-di
       { persistStoreEffect },
     ]),
     BootStrapModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [
     AuthDataService,

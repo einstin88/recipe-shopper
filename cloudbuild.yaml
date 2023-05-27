@@ -10,16 +10,16 @@ steps:
 
   # 3 - Deploy images to cluster
   # gke-deploy is a wrapper for 'kubectl apply'
-  # - name: "gcr.io/cloud-builders/gke-deploy"
-  #   args:
-  #     - run
-  #     - --filename=k8s-manifests/deployments/
-  #     - --location=asia-southeast1
-  #     - --cluster=recipee-cluster-1
-  #     - -R
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - run
+      - --filename=k8s-manifests/deployments/
+      - --location=asia-southeast1
+      - --cluster=recipee-cluster-1
+      - -R
 
 substitutions:
-  _APP_VERSION: 0.0.6
+  _APP_VERSION: 0.0.7
 
 # Global vars for CI pipeline
 options:

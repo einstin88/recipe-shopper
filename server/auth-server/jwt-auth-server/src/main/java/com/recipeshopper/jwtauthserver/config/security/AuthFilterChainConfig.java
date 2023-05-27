@@ -41,7 +41,7 @@ public class AuthFilterChainConfig {
         // @formatter:off
         security
             .cors(withDefaults())
-            .csrf(CsrfConfigurer::disable) // TODO: use csrf for POST methods
+            .csrf(CsrfConfigurer::disable) 
             .authorizeHttpRequests(requests -> {
                 requests
                     .requestMatchers(HttpMethod.GET, 
@@ -49,7 +49,7 @@ public class AuthFilterChainConfig {
                         EP_SIGN_IN_DEFAULT,
                         "/auth/key-uri/**"
                             ).permitAll()
-                    .requestMatchers(HttpMethod.POST, 
+                    .requestMatchers(HttpMethod.POST,
                         EP_REGISTER
                             ).permitAll()
                     .requestMatchers("/error").permitAll()

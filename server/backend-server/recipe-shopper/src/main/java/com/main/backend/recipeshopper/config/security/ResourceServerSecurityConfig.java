@@ -47,7 +47,7 @@ public class ResourceServerSecurityConfig {
             .cors(Customizer.withDefaults())
             // CSRF protection not necessary since JWT is used
             .csrf(CsrfConfigurer::disable)
-            // Define endpoints to protect
+            // Define endpoints to protect/ whitelist
             .authorizeHttpRequests(requests -> {
                 requests
                     .requestMatchers(HttpMethod.GET, 

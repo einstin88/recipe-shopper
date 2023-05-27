@@ -1,4 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
+import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { Category } from 'src/app/model/category.model';
 import { Product } from 'src/app/model/product.model';
@@ -29,6 +30,8 @@ export class ProductListComponent implements OnInit {
 
   errorMsg: string = '';
   isLoading: boolean = false;
+  isCollapse: boolean = false;
+  isSearchInvalid: boolean = false;
 
   ngOnInit(): void {
     this.chosenCategory = this.categories.at(0)!;
@@ -63,13 +66,22 @@ export class ProductListComponent implements OnInit {
     this.loadProducts();
   }
 
+  processProductSearch(queryString: string) {
+    // console.debug(queryString);
+
+    if (queryString.length > 2) {
+      this.isSearchInvalid = false;
+      this.loadProducts(queryString);
+    } else this.isSearchInvalid = true;
+  }
+
   /**
    * @description Function that initiates the API call to fetch the product list
    */
-  private loadProducts() {
+  private loadProducts(queryString: string = '') {
     this.isLoading = true;
     this.svc
-      .getProducts(this.chosenCategory, this.limit, this.offset)
+      .getProducts(this.chosenCategory, this.limit, this.offset, queryString)
       .then((products) => {
         this.errorMsg = '';
         this.products = products;

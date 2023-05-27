@@ -84,7 +84,7 @@ public class AuthenticationController {
                         log.debug(">>> Log in failed");
                         return ResponseEntity
                                         .badRequest()
-                                        .body("User not found");
+                                        .body("Wrong username/password");
                 }
 
                 // No log-in page. This error status should be handled by front-end/load balancer

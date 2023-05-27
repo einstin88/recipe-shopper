@@ -90,4 +90,8 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+
+    public static String formatSqlQuery(String query) {
+        return "%" + query + "%";
+    }
 }

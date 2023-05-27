@@ -38,6 +38,12 @@ public class Queries {
             WHERE category = ?
                 """;
 
+    public static final String SQL_FIND_PRODUCTS_BY_NAME = """
+            SELECT *
+            FROM recipe_shopper.products
+            WHERE name LIKE ?
+                """;
+
     public static final String SQL_FIND_RECIPES = """
             SELECT *
             FROM recipe_shopper.recipes

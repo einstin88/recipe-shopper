@@ -93,4 +93,14 @@ public class ProductController {
                                 .ok(productSvc.getProductListByCategory(category, limit, offset));
         }
 
+        @GetMapping(path = Urls.URL_PRODUCTS_BY_NAME)
+        public ResponseEntity<List<Product>> getProductsByName(
+                        @RequestParam String productName) {
+
+                log.debug(">>> Product name search: {}", productName);
+
+                return ResponseEntity.ok(
+                                productSvc.getProductListByName(productName));
+        }
+
 }

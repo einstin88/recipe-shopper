@@ -19,8 +19,7 @@ public class ScheduleTask {
     @Autowired
     ProductService svc;
 
-// TODO Uncomment to enable scheduled task to run
-// @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 4320, initialDelay = 2)
+    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 4320, initialDelay = 2)
     public void scheduleScraping() {
         log.info(">>> Running scheduled product scrapping...");
         for (String category : Constants.PRODUCT_CATEGORIES) {
@@ -30,7 +29,7 @@ public class ScheduleTask {
             } catch (JsonParsingException e) {
                 log.error("--- Error parsing: {}", category);
             } catch (DjangoBadResponseException e) {
-                log.error("--- Django server error for {}: {}", category, e.getMessage());
+                log.error("--- Django server error for {}", category);
             } catch (ProductUpsertException e) {
                 log.error("--- Product upsert error for {}: {}", category, e.getMessage());
 

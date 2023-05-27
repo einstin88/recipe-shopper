@@ -7,7 +7,11 @@ import { Injectable } from '@angular/core';
 import { Product } from '../model/product.model';
 import { Subject, firstValueFrom } from 'rxjs';
 import { Category } from '../model/category.model';
-import { EP_GET_PRODUCTS, EP_PARSE_HTML } from '../utils/urls';
+import {
+  EP_GET_PRODUCTS,
+  EP_GET_PRODUCTS_BY_NAME,
+  EP_PARSE_HTML,
+} from '../utils/urls';
 
 /**
  * @description Service to handle API calls related to {@link Product} transactions
@@ -32,9 +36,21 @@ export class ProductDataService {
    *
    * @returns Promise with a list of products in the chosen {@link category}
    */
-  getProducts(category: Category, limit: number, offset: number) {
-    const url = EP_GET_PRODUCTS + category;
-    const params = new HttpParams().appendAll({ limit, offset });
+  getProducts(
+    category: Category,
+    limit: number,
+    offset: number,
+    queryString: string
+  ) {
+    let url: string = '';
+    let params = new HttpParams().appendAll({ limit, offset });
+
+    if (queryString) {
+      url = EP_GET_PRODUCTS_BY_NAME;
+      params = params.append('productName', queryString);
+    } else {
+      url = EP_GET_PRODUCTS + category;
+    }
 
     return firstValueFrom(this.http.get<Product[]>(url, { params })).catch(
       (error: HttpErrorResponse) => {

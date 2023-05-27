@@ -24,7 +24,11 @@ export const CartReducers = createReducer(
 
     console.debug(itemTotal);
 
-    return { ...state, cartItems: newCart, total: state.total + itemTotal };
+    return {
+      ...state,
+      cartItems: newCart,
+      total: roundTotal(state.total + itemTotal),
+    };
   }),
   on(CartActions.removeFromCart, (state, { index }) => {
     const newCart = [...state.cartItems];
@@ -35,9 +39,17 @@ export const CartReducers = createReducer(
       .ingredients.map((item) => item.total!)
       .reduce((acc, val) => acc + val, 0);
 
-    return { ...state, cartItems: newCart, total: state.total - totalToRemove };
+    return {
+      ...state,
+      cartItems: newCart,
+      total: roundTotal(state.total - totalToRemove),
+    };
   }),
   on(CartActions.emptyCart, (state) => {
     return { ...state, ...cartInitialState };
   })
 );
+
+function roundTotal(value: number) {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}

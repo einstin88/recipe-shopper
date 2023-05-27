@@ -84,7 +84,7 @@ export class NewRecipeComponent
         );
       })
       .catch((err: HttpErrorResponse) => {
-        console.log('error', err);
+        console.error('error', err);
         this.recipeForm.recipeErr = err.error;
       });
   }

@@ -111,13 +111,6 @@ public class ProductService {
 
     /**
      * Retrieve the products within a given category
-     * 
-     * @param category - the category to retrieve products from
-     * @param limit    - max number of results to be returned as response
-     * @param offset   - for pagination
-     * @return List of product in the given category
-     * 
-     * @throws IncorrectRequestException
      */
     public List<Product> getProductListByCategory(
             String category, Integer limit, Integer offset) {
@@ -127,14 +120,15 @@ public class ProductService {
         return repo.findProductsByCategory(category, limit, offset);
     }
 
+    public List<Product> getProductListByName(String name) {
+        return repo.findProductsByName(
+                Utils.formatSqlQuery(name));
+    }
+
     /**
      * Internal use.
      * An abstracted function to check if the supplied category is one of the
      * accepted categories.
-     * 
-     * @param category - the category received by the controller that requires
-     *                 checking
-     * @throws IncorrectRequestException
      */
     private void validateCategory(String category) {
         if (!PRODUCT_CATEGORIES.contains(category)) {
@@ -150,13 +144,6 @@ public class ProductService {
      * An abstracted function to handle API call to Django scrapper server and
      * marshalling the Json response to a List of Product to be inserted into the
      * DB.
-     * 
-     * @param category - the category associated with the products to be scraped
-     * @param request  - a request entity that will be used for the API call
-     * @return List of Product
-     * @throws DjangoBadResponseException represents any unexpected response from
-     *                                    Django backend
-     * @throws ProductUpsertException
      */
     private List<Product> handleDjangoCallback(
             String category, RequestEntity<?> request) {

@@ -60,9 +60,9 @@ public class ProductRepository {
     /**
      * Finds a product in the DB that matches the 3 criterion
      * 
-     * @param name - product name
+     * @param name      - product name
      * @param pack_size - unit measure of one pack the product
-     * @param category - product's category
+     * @param category  - product's category
      * @return Product or empty Optional object
      */
     public Optional<Product> findProductByName(
@@ -95,5 +95,12 @@ public class ProductRepository {
                 SQL_FIND_PRODUCTS,
                 DataClassRowMapper.newInstance(Product.class),
                 category);
+    }
+
+    public List<Product> findProductsByName(String queryString) {
+        return template.query(
+                SQL_FIND_PRODUCTS_BY_NAME,
+                DataClassRowMapper.newInstance(Product.class),
+                queryString);
     }
 }

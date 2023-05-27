@@ -2,6 +2,7 @@ export const URL_PREFIX_API = '/api';
 export const URL_PREFIX_AUTH = '/auth';
 
 export const EP_GET_PRODUCTS = URL_PREFIX_API + '/products/';
+export const EP_GET_PRODUCTS_BY_NAME = URL_PREFIX_API + '/products/search';
 export const EP_PARSE_HTML = URL_PREFIX_API + '/parse-html';
 
 export const EP_GET_RECIPES = URL_PREFIX_API + '/recipes';

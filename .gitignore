@@ -1,5 +1,4 @@
 .vscode/
-*.sql
 *.rdb
 recipeee-gmail.json
 /secrets
