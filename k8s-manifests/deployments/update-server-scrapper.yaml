@@ -7,7 +7,7 @@ metadata:
   labels:
     app: "server-scrapper-1"
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: "server-scrapper-1"
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: "project-scrapper-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper:0.0.6"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-scrapper@sha256:2ccbf7d86008f40c65bdbb91a2cf9c46d3fcf4a73cad8e7b6ac1e3bd789a32a7"
           ports:
             - containerPort: 8000
           readinessProbe:
@@ -49,7 +49,7 @@ spec:
     kind: "Deployment"
     name: "server-scrapper-1"
     apiVersion: "apps/v1"
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 3
   metrics:
     - type: "Resource"

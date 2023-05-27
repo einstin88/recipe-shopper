@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: "project-frontend-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-frontend@sha256:7ee6b782c754d2133a0cc55eab087b4a6dd0a59559a3a859d0542c0abaa6f650"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-frontend:0.0.6"
           ports:
             - containerPort: 80
           resources:

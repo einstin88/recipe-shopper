@@ -45,7 +45,7 @@ public class Queries {
 
     public static final String SQL_FIND_USER_RECIPES = """
             SELECT *
-            FROM recipes
+            FROM recipe_shopper.recipes
             WHERE recipe_shopper.recipe_creator = ?
                 """;
 
