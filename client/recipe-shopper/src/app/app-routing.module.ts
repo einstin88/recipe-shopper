@@ -61,16 +61,16 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'recipes/:userName',
+    path: 'recipes/view/:username',
     component: MyRecipesComponent,
-    title: 'My Recipes',
+    canActivate: []
   },
   {
-    path: 'recipes',
+    path: 'recipes/all',
     component: BrowseRecipeComponent,
     title: 'Browse Recipes',
   },
-  { path: '**', redirectTo: '/recipes', pathMatch: 'full' },
+  { path: '**', redirectTo: '/recipes/all', pathMatch: 'full' },
 ];
 
 @NgModule({

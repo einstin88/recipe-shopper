@@ -33,6 +33,13 @@ public class RecipeService {
         return repo.findRecipes(offset, limit);
     }
 
+    public List<Recipe<Ingredient>> getRecipeList(
+            Integer limit, Integer offset, String username) {
+        log.info(">>> Retrieving {}'s recipes from DB...", username);
+
+        return repo.findRecipes(offset, limit, username);
+    }
+
     /**
      * 
      * @param recipeId
@@ -130,7 +137,7 @@ public class RecipeService {
             throw Utils.generateServerError(
                     "Failed to update new ingredients",
                     RecipeTransactionException.class);
-                    
+
         // If function runs up to this point, recipe has been successfully updated
     }
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { RecipesDisplayComponent } from 'src/app/components/recipes-display/recipes-display.component';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
 
@@ -9,20 +10,23 @@ import { RecipeDataService } from 'src/app/services/recipe-data.service';
   templateUrl: './browse-recipe.component.html',
   styleUrls: ['./browse-recipe.component.css'],
 })
-export class BrowseRecipeComponent {
+export class BrowseRecipeComponent implements OnInit, AfterViewInit {
   constructor(private svc: RecipeDataService) {}
 
+  @ViewChild(RecipesDisplayComponent)
+  recipeDisplay!: RecipesDisplayComponent;
+
   // Variables
-  recipes!: Recipe[];
   limit: number = 10;
   offset: number = 0;
 
-  errorMsg: string = '';
   isLoading: boolean = false;
 
   ngOnInit(): void {
     this.fetchRecipes();
   }
+
+  ngAfterViewInit(): void {}
 
   // Function to initiate API call to fetch {@link Recipe}s from the back end
   private fetchRecipes() {
@@ -30,11 +34,10 @@ export class BrowseRecipeComponent {
     this.svc
       .getRecipes(this.limit, this.offset)
       .then((recipes) => {
-        this.recipes = recipes;
+        this.recipeDisplay.recipeList = recipes;
       })
       .catch((err: Error) => {
-        // this.errorMsg = 'Error communicating with server.';
-        this.errorMsg = err.message;
+        this.recipeDisplay.errMsg = err.message;
       })
       .finally(() => {
         this.isLoading = false;

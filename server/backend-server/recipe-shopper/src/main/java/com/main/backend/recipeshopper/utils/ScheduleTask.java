@@ -19,10 +19,8 @@ public class ScheduleTask {
     @Autowired
     ProductService svc;
 
-    /**
-     * 
-     */
-    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 4320, initialDelay = 2)
+// TODO Uncomment to enable scheduled task to run
+// @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 4320, initialDelay = 2)
     public void scheduleScraping() {
         log.info(">>> Running scheduled product scrapping...");
         for (String category : Constants.PRODUCT_CATEGORIES) {

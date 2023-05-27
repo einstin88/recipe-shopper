@@ -57,7 +57,10 @@ export class IngredientSelectionsComponent implements OnInit {
     )
       .filter((item) => item.selected == true)
       .map((item) => {
-        return { ...item, total: item.quantity * item.price };
+        const total =
+          Math.round((item.quantity * item.price + Number.EPSILON) * 100) / 100;
+
+        return { ...item, total };
       });
 
     if (!cartItem.length) {
