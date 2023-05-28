@@ -1,23 +1,31 @@
 package com.main.backend.recipeshopper.service;
 
-import java.net.URI;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.google.api.client.http.FileContent;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpContent;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.MultipartContent;
+import com.google.api.client.http.UrlEncodedContent;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.IdTokenCredentials;
+import com.google.auth.oauth2.IdTokenProvider;
 import com.main.backend.recipeshopper.exceptions.DjangoBadResponseException;
 import com.main.backend.recipeshopper.exceptions.IncorrectRequestException;
 import com.main.backend.recipeshopper.exceptions.ProductUpsertException;
@@ -44,8 +52,6 @@ public class ProductService {
      * for products from a given category via an external Django-served backend.
      * Results are saved to the DB.
      * 
-     * @param category - the category of products to scrape from the site
-     * @return List of product scraped from the URL of the given category
      * @throws IncorrectRequestException
      * @throws DjangoBadResponseException
      * @throws ProductUpsertException
@@ -56,30 +62,42 @@ public class ProductService {
         validateCategory(category);
 
         // Build URL for API call to Django
-        URI url = UriComponentsBuilder
+        String url = UriComponentsBuilder
                 .fromHttpUrl(DJANGO_URL)
                 .path(Urls.URL_PARSE_URL)
                 .queryParam("category", category)
-                .build().toUri();
-        log.debug(">>> API URL to call: {}", url.toString());
+                .build().toString();
+        log.debug(">>> API URL to call: {}", url);
 
-        // Build request entity
-        RequestEntity<Void> request = RequestEntity
-                .get(url)
-                .accept(MediaType.APPLICATION_JSON)
-                .build();
+        // Build Oauth2 Request to Scrapper server
+        try {
+            GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 
-        // Call API
-        return handleDjangoCallback(category, request);
+            IdTokenCredentials token = IdTokenCredentials.newBuilder()
+                    .setIdTokenProvider((IdTokenProvider) credentials)
+                    .setTargetAudience(url)
+                    .build();
+
+            GenericUrl genericUrl = new GenericUrl(url);
+            HttpCredentialsAdapter adapter = new HttpCredentialsAdapter(token);
+            HttpTransport transport = new NetHttpTransport();
+            HttpRequest request = transport
+                    .createRequestFactory(adapter)
+                    .buildGetRequest(genericUrl)
+                    .setReadTimeout(0);
+
+            // Call API
+            return handleDjangoCallback(category, request);
+
+        } catch (IOException e) {
+            throw new IncorrectRequestException(e.getMessage());
+        }
     }
 
     /**
      * A function called by the controller to scrape for products from the given
      * html file via an external Django backend. Results are saved on DB.
      * 
-     * @param category - the category of products that the uploaded html represents
-     * @param file     - the manually saved html file to parse for products
-     * @return List of product scraped from the URL of the given category
      * @throws IncorrectRequestException
      * @throws DjangoBadResponseException
      * @throws ProductUpsertException
@@ -90,23 +108,50 @@ public class ProductService {
         validateCategory(category);
 
         // Build URL for API call to Django
-        URI url = UriComponentsBuilder
+        String url = UriComponentsBuilder
                 .fromHttpUrl(DJANGO_URL)
                 .pathSegment(Urls.URL_PARSE_HTML)
-                .build().toUri();
+                .build().toString();
 
-        // Build body as form-data
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("category", category);
-        body.add("file", file);
+        try {
+            GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 
+            IdTokenCredentials token = IdTokenCredentials.newBuilder()
+                    .setIdTokenProvider((IdTokenProvider) credentials)
+                    .setTargetAudience(url)
+                    .build();
+
+            // Build body as form-data
+            MultiValueMap<String, Object> part = new LinkedMultiValueMap<>();
+            part.add("category", category);
+            // body.add("file", file);
+
+            HttpContent body = new MultipartContent()
+                    .setContentParts(List.of(
+                            new UrlEncodedContent(part),
+                            new FileContent(MediaType.TEXT_HTML_VALUE, file.getFile())));
+
+            GenericUrl genericUrl = new GenericUrl(url);
+            HttpCredentialsAdapter adapter = new HttpCredentialsAdapter(token);
+            HttpTransport transport = new NetHttpTransport();
+            HttpRequest request = transport
+                    .createRequestFactory(adapter)
+                    .buildPostRequest(genericUrl, body)
+                    .setReadTimeout(0);
+
+            // Call API
+            return handleDjangoCallback(category, request);
+
+        } catch (IOException e) {
+            throw new IncorrectRequestException(e.getMessage());
+        }
+
+        // ---- Rest Template method -----
         // Build request entity (content type is set implicitly)
-        RequestEntity<MultiValueMap<String, Object>> request = RequestEntity
-                .post(url)
-                .accept(MediaType.APPLICATION_JSON)
-                .body(body);
-
-        return handleDjangoCallback(category, request);
+        // RequestEntity<MultiValueMap<String, Object>> request = RequestEntity
+        // .post(url)
+        // .accept(MediaType.APPLICATION_JSON)
+        // .body(body);
     }
 
     /**
@@ -146,30 +191,40 @@ public class ProductService {
      * DB.
      */
     private List<Product> handleDjangoCallback(
-            String category, RequestEntity<?> request) {
+            String category, HttpRequest request) {
 
         // Make API call and handle any errors
-        ResponseEntity<String> response;
-        RestTemplate client = new RestTemplate();
         try {
-            response = client.exchange(request, String.class);
+            HttpResponse response = request.execute();
 
             // Check response status code and content exists
-            if (response.getStatusCode() != HttpStatus.OK)
+            if (response.getStatusCode() != 200)
                 throw Utils.generateServerError(
-                        "Django backend responded with status: %s",
+                        "Django backend responded with status: %d",
                         DjangoBadResponseException.class,
-                        response.getStatusCode().toString());
+                        response.getStatusCode());
 
-            if (!response.hasBody())
+            if (response.getContent() == null)
                 throw Utils.generateServerError(
-                        "Missing response body fron Django backend...",
+                        "Missing response body fron Django server...",
                         DjangoBadResponseException.class);
 
-            // Else, log the response and let the logic flow through
-            // log.debug(">>> Response: \n" + response.getBody());
+            // Parse response into products
+            List<Product> products = Utils.parseForProducts(response.parseAsString())
+                    .peek(product -> {
+                        if (!repo.upsertProduct(product, category))
+                            throw Utils.generateServerError(
+                                    "Failed to upsert category-%s product: %s",
+                                    ProductUpsertException.class,
+                                    category, product);
+                    })
+                    .toList();
 
-        } catch (RestClientException e) {
+            log.debug(">>> Products saved to DB: {}", products.size());
+
+            return products;
+
+        } catch (IOException e) {
             // Handle unexpected errors from API call
             throw Utils.generateServerError(
                     "Request URL is invalid or Django backend is down: %s",
@@ -177,19 +232,5 @@ public class ProductService {
                     e.getMessage());
         }
 
-        // Parse response into products
-        List<Product> products = Utils.parseForProducts(response.getBody())
-                .peek(product -> {
-                    if (!repo.upsertProduct(product, category))
-                        throw Utils.generateServerError(
-                                "Failed to upsert category-%s product: %s",
-                                ProductUpsertException.class,
-                                category, product);
-                })
-                .toList();
-
-        log.debug(">>> Products saved to DB: {}", products.size());
-
-        return products;
     }
 }

@@ -31,7 +31,7 @@ steps:
       - asia-southeast1
 
 substitutions:
-  _APP_VERSION: 0.0.9
+  _APP_VERSION: 0.1.0
 
 # Global vars for CI pipeline
 options:

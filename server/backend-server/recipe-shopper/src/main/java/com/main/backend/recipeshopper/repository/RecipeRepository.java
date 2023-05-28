@@ -43,10 +43,6 @@ public class RecipeRepository {
 
     /**
      * Retrieves a list of recipes from the 'recipes' and 'recipe_ingredients' table
-     * 
-     * @param offset
-     * @param limit
-     * @return List of {@link Recipe}
      */
     public List<Recipe<Ingredient>> findRecipes(Integer offset, Integer limit) {
         return template.query(
@@ -67,9 +63,6 @@ public class RecipeRepository {
 
     /**
      * 
-     * @param name
-     * @param creator
-     * @return
      */
     public Optional<Recipe<Ingredient>> findRecipeByNameCreator(String name, String creator) {
         try {
@@ -86,8 +79,6 @@ public class RecipeRepository {
 
     /**
      * 
-     * @param recipeId
-     * @return
      */
     public Optional<Recipe<Ingredient>> findRecipeById(String recipeId) {
         try {
@@ -104,8 +95,6 @@ public class RecipeRepository {
 
     /**
      * 
-     * @param recipe
-     * @return
      */
     public Boolean insertRecipe(Recipe<Ingredient> recipe) {
         return template.update(
@@ -118,9 +107,6 @@ public class RecipeRepository {
 
     /**
      * 
-     * @param recipeId - Unique 11 alphanumeric characters
-     * @param products
-     * @return
      */
     public Boolean insertRecipeIngredients(
             String recipeId, List<Ingredient> products) {
@@ -150,8 +136,6 @@ public class RecipeRepository {
 
     /**
      * 
-     * @param recipeId - Unique 11 alphanumeric characters
-     * @return
      */
     public List<Ingredient> findRecipeIngredients(String recipeId) {
         return template.query(
@@ -162,8 +146,6 @@ public class RecipeRepository {
 
     /**
      * 
-     * @param recipe
-     * @return
      */
     public Boolean updateRecipe(Recipe<Ingredient> recipe) {
         return template.update(
@@ -176,8 +158,6 @@ public class RecipeRepository {
 
     /**
      * 
-     * @param productId - Unique 11 alphanumeric characters
-     * @return (Boolean) true if exactly ONE row is deleted
      */
     public Boolean deleteIngredient(String productId) {
         return template.update(
