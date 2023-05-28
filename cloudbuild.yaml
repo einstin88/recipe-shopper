@@ -1,22 +1,22 @@
 steps:
   # For CI/CD on Google Cloud Build & GKE
   # 1 - Build images
-  - name: "gcr.io/cloud-builders/docker"
-    args: ["compose", "-f", "docker-compose.yml", "build"]
+  # - name: "gcr.io/cloud-builders/docker"
+  #   args: ["compose", "-f", "docker-compose.yml", "build"]
 
   # 2- Push images to private repository
-  - name: "gcr.io/cloud-builders/docker"
-    args: ["compose", "push"]
+  # - name: "gcr.io/cloud-builders/docker"
+  #   args: ["compose", "push"]
 
   # 3 - Deploy images to cluster
   # gke-deploy is a wrapper for 'kubectl apply'
-  - name: "gcr.io/cloud-builders/gke-deploy"
-    args:
-      - run
-      - --filename=k8s-manifests/deployments/
-      - --location=asia-southeast1
-      - --cluster=recipee-cluster-1
-      - -R
+  # - name: "gcr.io/cloud-builders/gke-deploy"
+  #   args:
+  #     - run
+  #     - --filename=k8s-manifests/deployments/
+  #     - --location=asia-southeast1
+  #     - --cluster=recipee-cluster-1
+  #     - -R
 
   # 4 - Deploy update to scrapper service on Cloud Run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -26,7 +26,7 @@ steps:
       - deploy
       - server-scrapper-1
       - --image
-      - "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper/${_APP_VERSION}"
+      - "asia-southeast1-docker.pkg.dev/$PROJECT_ID/recipee-shopping/project-scrapper:${_APP_VERSION}"
       - --region
       - asia-southeast1
 
