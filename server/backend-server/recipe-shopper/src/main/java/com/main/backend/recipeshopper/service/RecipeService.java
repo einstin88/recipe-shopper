@@ -32,7 +32,7 @@ public class RecipeService {
 
     public List<Recipe<Ingredient>> getRecipeList(
             Integer limit, Integer offset, String username) {
-        log.info(">>> Retrieving {}'s recipes from DB...", username);
+        log.debug(">>> Retrieving {}'s recipes from DB...", username);
 
         return repo.findRecipes(offset, limit, username);
     }

@@ -1,22 +1,22 @@
 steps:
   # For CI/CD on Google Cloud Build & GKE
   # 1 - Build images
-  # - name: "gcr.io/cloud-builders/docker"
-  #   args: ["compose", "-f", "docker-compose.yml", "build"]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["compose", "-f", "docker-compose.yml", "build"]
 
   # 2- Push images to private repository
-  # - name: "gcr.io/cloud-builders/docker"
-  #   args: ["compose", "push"]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["compose", "push"]
 
   # 3 - Deploy images to cluster
   # gke-deploy is a wrapper for 'kubectl apply'
-  # - name: "gcr.io/cloud-builders/gke-deploy"
-  #   args:
-  #     - run
-  #     - --filename=k8s-manifests/deployments/
-  #     - --location=asia-southeast1
-  #     - --cluster=recipee-cluster-1
-  #     - -R
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - run
+      - --filename=k8s-manifests/deployments/
+      - --location=asia-southeast1
+      - --cluster=recipee-cluster-1
+      - -R
 
   # 4 - Deploy update to scrapper service on Cloud Run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -31,7 +31,7 @@ steps:
       - asia-southeast1
 
 substitutions:
-  _APP_VERSION: 0.0.8
+  _APP_VERSION: 0.0.9
 
 # Global vars for CI pipeline
 options:

@@ -73,7 +73,7 @@ public class GmailService {
             Message response = service.users().messages().send(
                     "me", email).execute();
 
-            log.debug(">>> Response: {}", response.toPrettyString());
+            log.info(">>> Response: {}", response.toPrettyString());
 
         } catch (IOException e) {
             log.error("--- Error sending email: {}", e.getMessage());
