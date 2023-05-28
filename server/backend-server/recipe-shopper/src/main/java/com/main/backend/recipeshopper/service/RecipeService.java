@@ -23,9 +23,6 @@ public class RecipeService {
 
     /**
      * 
-     * @param limit
-     * @param offset
-     * @return
      */
     public List<Recipe<Ingredient>> getRecipeList(Integer limit, Integer offset) {
         log.debug(">>> Retrieving recipes from DB...");
@@ -42,8 +39,6 @@ public class RecipeService {
 
     /**
      * 
-     * @param recipeId
-     * @return
      */
     public Recipe<Ingredient> getRecipeById(String recipeId) {
         return repo.findRecipeById(recipeId)
@@ -57,7 +52,6 @@ public class RecipeService {
 
     /**
      * 
-     * @param recipe
      */
     @Transactional(rollbackFor = { RecipeTransactionException.class })
     public String insertNewRecipe(Recipe<Ingredient> recipe) {
@@ -92,7 +86,6 @@ public class RecipeService {
 
     /**
      * 
-     * @param recipe
      */
     @Transactional(rollbackFor = { RecipeTransactionException.class })
     public void updateRecipe(Recipe<Ingredient> recipe) {

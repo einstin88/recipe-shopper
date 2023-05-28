@@ -16,6 +16,7 @@ export const Categories: Category[] = [
   "pasta",
   "rice",
   "sake-soju",
+  "salt-sugar",
   "spice-paste",
   "tofu",
   "toppings",

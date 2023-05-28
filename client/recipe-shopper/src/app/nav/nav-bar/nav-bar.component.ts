@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { selectCurrentUser } from 'src/app/flux/auth/auth.selector';
 import { selectCartItems } from 'src/app/flux/cart/cart.selector';
+import { State } from 'src/app/flux/reducers';
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,7 +11,7 @@ import { selectCartItems } from 'src/app/flux/cart/cart.selector';
   styleUrls: ['./nav-bar.component.css'],
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-  constructor(private store: Store) {}
+  constructor(private store: Store<State>) {}
 
   cartCount!: number;
   currentUser!: string;

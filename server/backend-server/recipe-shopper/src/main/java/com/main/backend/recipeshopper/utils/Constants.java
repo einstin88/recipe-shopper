@@ -19,6 +19,7 @@ public class Constants {
             "pasta",
             "rice",
             "sake-soju",
+            "salt-sugar",
             "spice-paste",
             "tofu",
             "toppings",

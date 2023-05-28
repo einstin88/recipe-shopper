@@ -75,6 +75,7 @@ services:
     ports:
       - "8010:8080"
 
+  # Scrapper server will be deployed outside of the cluster to reduce performance impact
   scrapper:
     build:
       context: ./server/python-server/web_scrapper_server

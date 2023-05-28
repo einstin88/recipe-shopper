@@ -16,6 +16,7 @@ export type Category =
   | 'nuts-seeds'
   | 'pasta'
   | 'rice'
+  | 'salt-sugar'
   | 'sake-soju'
   | 'spice-paste'
   | 'tofu'

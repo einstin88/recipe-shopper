@@ -15,6 +15,7 @@ SS_URLS = {
     'pasta': 'https://shengsiong.com.sg/rice-noodles-pasta/pasta',
     'rice': 'https://shengsiong.com.sg/rice-noodles-pasta/rice',
     'sake-soju': 'https://shengsiong.com.sg/alcohol/soju-sake-umeshu',
+    'salt-sugar': 'https://shengsiong.com.sg/cooking-baking-needs/salt-sugar-sweetener',
     'spice-paste': 'https://shengsiong.com.sg/cooking-baking-needs/spices-paste-powder',
     'tofu': 'https://shengsiong.com.sg/dairy-chilled-eggs/tofu-beancurd',
     'toppings': 'https://shengsiong.com.sg/cooking-baking-needs/toppings',

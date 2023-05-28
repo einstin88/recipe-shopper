@@ -10,6 +10,7 @@ import { CartIngredient } from 'src/app/model/cart-ingredient.model';
 import { CartItem } from 'src/app/model/cart-item.model';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeDataService } from 'src/app/services/recipe-data.service';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 /**
  * @description A component associated with a router path for displaying a single recipe with its details
@@ -24,7 +25,8 @@ export class ViewRecipeComponent implements OnInit, OnDestroy {
     private router: Router,
     private svc: RecipeDataService,
     private title: Title,
-    private store: Store<State>
+    private store: Store<State>,
+    private toastSvc: ToastNotificationService
   ) {}
 
   currentUser!: string;
@@ -81,6 +83,13 @@ export class ViewRecipeComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(CartActions.addToCart({ cartItem }));
 
-    this.router.navigate(['/']);
+    this.toastSvc.show(
+      'Cart Update',
+      `${cartItem.ingredients.length} item(s) added to your cart: `,
+      '/cart/view',
+      'View cart'
+    );
+
+    // this.router.navigate(['/']);
   }
 }

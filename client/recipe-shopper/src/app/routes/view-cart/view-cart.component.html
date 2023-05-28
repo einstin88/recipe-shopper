@@ -83,6 +83,10 @@
       ngbTooltip="Receive an email of your cart"
       class="btn btn-primary"
     >
+      <span
+        *ngIf="isSendingEmail"
+        class="spinner-border spinner-border-sm text-info"
+      ></span>
       Send Summary
     </button>
     <button

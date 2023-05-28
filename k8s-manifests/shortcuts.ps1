@@ -15,3 +15,7 @@ kubectl replace -f k8s-manifests\setups\setup-ingress.yaml
 
 # Bash shell with redis-cli
 kubectl run -i --tty busybox --image=busybox -- sh
+
+# Invoke scrapper url
+Invoke-WebRequest -H `
+"Authorization: Bearer $(gcloud auth print-identity-token)" `

@@ -21,12 +21,20 @@
       </tr>
       <tr data-th-each="item, it: ${cart.cartItems}" data-th-object="${item}">
         <td data-th-text="${it.count}"></td>
-        <td data-th-text="*{recipeName}"></td>
+        <td>
+          <a
+            data-th-href="@{http://www.recipee-shopping.com/recipe/view/{recipeID} (recipeID=${item.recipeId})}"
+            data-th-text="*{recipeName}"
+          ></a>
+        </td>
         <td data-th-text="*{recipeCreator}"></td>
         <td>
           <ul>
             <li data-th-each="ingredient : *{ingredients}">
-              <a data-th-href="@{https://shengsiong.com.sg{productUrl} (productUrl=${ingredient.url})}" data-th-text="${ingredient.name}"></a>
+              <a
+                data-th-href="@{https://shengsiong.com.sg{productUrl} (productUrl=${ingredient.url})}"
+                data-th-text="${ingredient.name}"
+              ></a>
             </li>
           </ul>
         </td>

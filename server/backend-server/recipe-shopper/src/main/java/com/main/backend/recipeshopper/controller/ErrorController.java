@@ -15,12 +15,7 @@ import com.main.backend.recipeshopper.exceptions.RecipeTransactionException;
 public class ErrorController {
         /**
          * Generate error responses for exception types:
-         * {@link DjangoBadResponseException},
-         * {@link ProductUpsertException},
-         * {@link RecipeTransactionException}
          * 
-         * @param err - the thrown exception instance belonging to a subclass of
-         *            RuntimeException
          * @return Response status 500 with error message
          */
         // @formatter:off
@@ -37,11 +32,6 @@ public class ErrorController {
 
         /**
          * Generate error responses for exception type(s):
-         * {@link IncorrectRequestException}
-         * {@link AccessDeniedException}
-         * 
-         * @param err - the thrown exception instance belonging to a subclass of
-         *            RuntimeException
          * @return Response status 400 with error message
          */
         // @formatter:off

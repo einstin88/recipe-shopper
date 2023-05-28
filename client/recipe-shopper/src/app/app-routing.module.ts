@@ -63,7 +63,7 @@ const routes: Routes = [
   {
     path: 'recipes/view/:username',
     component: MyRecipesComponent,
-    canActivate: []
+    canActivate: [AuthGuard]
   },
   {
     path: 'recipes/all',

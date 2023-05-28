@@ -1,9 +1,10 @@
 <app-nav-bar></app-nav-bar>
 <div class="outlet ms-5 me-3">
   <app-toasts
-    class="position-fixed end-0 me-2"
+    class="position-absolute end-0 me-2"
     aria-live="polite"
     aria-atomic="true"
+    style="z-index: 5;"
   ></app-toasts>
 
   <router-outlet></router-outlet>

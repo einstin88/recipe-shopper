@@ -60,7 +60,7 @@ public class RecipeController {
                         @RequestParam(defaultValue = "10") Integer limit,
                         @RequestParam(defaultValue = "0") Integer offset) {
 
-                log.info(">>> Requesting recipes of '{}'", username);
+                log.debug(">>> Requesting recipes of '{}'", username);
 
                 return ResponseEntity.ok(recipeSvc.getRecipeList(null, null, username));
         }
@@ -84,9 +84,6 @@ public class RecipeController {
          * - Errors will be handled by {@link ErrorController} and rollback any DB
          * transactions
          * 
-         * @see RecipeService
-         * 
-         * @param recipe - mapped {@link Recipe} object
          * @return Response status 201
          */
         @PostMapping(path = Urls.URL_RECIPE_NEW, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -106,7 +103,6 @@ public class RecipeController {
          * - Errors will be handled by {@link ErrorController} and rollback any DB
          * transactions
          * 
-         * @param recipe - mapped {@link Recipe} object
          * @return Response status 202
          */
         @PutMapping(path = Urls.URL_RECIPE_UPDATE, consumes = MediaType.APPLICATION_JSON_VALUE)

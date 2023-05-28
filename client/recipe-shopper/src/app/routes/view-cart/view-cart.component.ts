@@ -27,6 +27,7 @@ export class ViewCartComponent implements OnInit, OnDestroy {
   cartTotal!: number;
 
   errMsg!: string;
+  isSendingEmail: boolean = false;
 
   sub$!: Subscription;
 
@@ -44,6 +45,7 @@ export class ViewCartComponent implements OnInit, OnDestroy {
   }
 
   checkOut() {
+    this.isSendingEmail = true;
     this.svc
       .checkOut(this.cartItems, this.cartTotal)
       .then(() => {
@@ -53,7 +55,8 @@ export class ViewCartComponent implements OnInit, OnDestroy {
           'A summary of your cart has been sent to your registered e-mail.'
         );
       })
-      .catch((err: Error) => (this.errMsg = err.message));
+      .catch((err: Error) => (this.errMsg = err.message))
+      .finally(() => (this.isSendingEmail = false));
   }
 
   emptyCart() {

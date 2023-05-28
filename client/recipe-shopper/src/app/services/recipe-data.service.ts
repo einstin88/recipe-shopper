@@ -47,7 +47,7 @@ export class RecipeDataService {
       this.http.get<Recipe[]>(url, { headers, params })
     ).catch((error: HttpErrorResponse) => {
       console.error(`Error response: ${error.message}`);
-      throw new Error(`${error.status}: ${error.statusText}`);
+      throw new Error(`${error.status}: ${error.error}`);
     });
   }
 
@@ -63,7 +63,7 @@ export class RecipeDataService {
     return firstValueFrom(this.http.get<Recipe>(url)).catch(
       (error: HttpErrorResponse) => {
         console.error(`Error response: ${error.message}`);
-        throw new Error(`${error.status}: ${error.statusText}`);
+        throw new Error(`${error.status}: ${error.error}`);
       }
     );
   }
