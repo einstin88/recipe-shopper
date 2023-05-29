@@ -34,7 +34,6 @@ export class AuthEffects {
           map(() => AuthActions.logoutSuccess()),
           catchError((err: HttpErrorResponse) => {
             // Hacky way to bypass expired token for now
-            // console.log('logout ran here')
             if (err.status == 500 || err.status == 403 || err.status == 401)
               return of(AuthActions.logoutSuccess());
 

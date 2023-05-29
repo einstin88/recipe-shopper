@@ -92,12 +92,13 @@ public class AppUserAuthenticationService implements UserDetailsService {
             String errMsg, Class<T> exceptionClass, Object... args) {
 
         errMsg = errMsg.formatted(args);
-        log.debug("--- {}", errMsg);
+        log.error("--- {}", errMsg);
 
         try {
             throw exceptionClass
                     .getConstructor(String.class)
                     .newInstance(errMsg);
+
         } catch (InstantiationException e) {
             log.error("Internal Error! {}", e.getMessage());
         } catch (IllegalAccessException e) {

@@ -19,25 +19,6 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     private toastSvc: ToastNotificationService
   ) {
     store.select(selectJwt).subscribe((token) => {
-      if (token) {
-        const decodedToken = decodeJwt(token);
-
-        const expiry = decodedToken.exp!;
-        console.debug('Time difference: ', expiry * 1000 - Date.now());
-
-        if (expiry * 1000 - Date.now() < 0) {
-          store.dispatch(AuthActions.logoutSuccess());
-          toastSvc.show('Session Expired', 'Please sign in again.');
-          return;
-        }
-
-        if (expiry * 1000 - Date.now() <= 600000)
-          toastSvc.show(
-            'Session expiring soon',
-            'Less than 10 mins remaining in your current session. After that you will be automatically logged out.'
-          );
-      }
-
       this.jwt = token;
     });
   }
@@ -49,6 +30,24 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     if (this.jwt) {
+      const decodedToken = decodeJwt(this.jwt);
+
+      const expiry = decodedToken.exp!;
+      console.debug('Time difference: ', expiry * 1000 - Date.now());
+
+      if (expiry * 1000 - Date.now() < 0) {
+        this.toastSvc.show('Session Expired', 'Please sign in again.');
+        this.store.dispatch(AuthActions.logoutSuccess());
+        
+        return next.handle(request);
+      }
+
+      if (expiry * 1000 - Date.now() <= 600000)
+        this.toastSvc.show(
+          'Session expiring soon',
+          'Less than 10 mins remaining in your current session. After that you will be automatically logged out.'
+        );
+
       const setHeaders = { Authorization: `Bearer ${this.jwt}` };
       const authRequest = request.clone({ setHeaders });
 

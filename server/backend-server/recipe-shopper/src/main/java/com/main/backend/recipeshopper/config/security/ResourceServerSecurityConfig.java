@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
@@ -38,6 +39,9 @@ public class ResourceServerSecurityConfig {
 
     @Autowired
     private JwtDecoder jwtDecoder;
+
+    @Autowired
+    AccessDeniedFilter accessDeniedFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
@@ -70,12 +74,14 @@ public class ResourceServerSecurityConfig {
             })
             // Setup this Rest server as OAuth resource server
             .oauth2ResourceServer(oauth2 -> {
-                oauth2.jwt(jwt -> {
-                    jwt
-                        .authenticationManager(new ProviderManager(jwtAuthProvider))
-                        .decoder(jwtDecoder);
-                });
+                oauth2
+                    .jwt(jwt -> {
+                        jwt
+                            .authenticationManager(new ProviderManager(jwtAuthProvider))
+                            .decoder(jwtDecoder);
+                    });
             })
+            .addFilterAt(accessDeniedFilter, BearerTokenAuthenticationFilter.class)
             ;
             // @formatter: on
 

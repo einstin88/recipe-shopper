@@ -24,7 +24,7 @@ spec:
             secretName: google-services-credential
       containers:
         - name: "project-backend-1"
-          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend:0.1.0"
+          image: "asia-southeast1-docker.pkg.dev/recipe-shopper-5d242/recipee-shopping/project-backend:0.1.1"
           volumeMounts:
             - mountPath: /var/secrets/google
               name: service-key
